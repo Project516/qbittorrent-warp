@@ -69,8 +69,11 @@ jobs:
           sha="$(git rev-parse HEAD)"
           echo "sha=${sha}" >> "$GITHUB_OUTPUT"
 
-          # If HEAD is already published, there is nothing new to release.
-          if existing="$(git describe --exact-match --match 'v*' HEAD 2>/dev/null)"; then
+          # If HEAD is already published, there is nothing new to release. The
+          # release tags are lightweight (created by "gh release create"), so
+          # "git describe" needs --tags to see them; without it the guard never
+          # fires and the same commit would be re-released under a bumped W.
+          if existing="$(git describe --tags --exact-match --match 'v*' HEAD 2>/dev/null)"; then
             echo "HEAD is already released as ${existing}; nothing to do."
             echo "skip=true" >> "$GITHUB_OUTPUT"
             exit 0
