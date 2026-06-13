@@ -1,6 +1,6 @@
 /*
  * qBittorrent-WARP fork.
- * Embedded, self-contained Cloudflare WARP tunnel engine.
+ * Self-contained Cloudflare WARP tunnel engine.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 #pragma once
 
 #include <QObject>
+#include <QString>
 
 #include "base/path.h"
 
@@ -27,15 +28,22 @@ class QProcess;
 
 namespace BitTorrent::Warp
 {
-    // Manages the embedded, userspace Cloudflare WARP tunnel so the application
-    // is fully self-contained: no shell scripts, no root, no kernel interface
-    // and no system changes. Everything lives in the portable profile directory.
+    // Manages the userspace Cloudflare WARP tunnel so the application is fully
+    // self-contained: no shell scripts, no root, no kernel interface and no
+    // system changes. Everything lives in the portable profile directory.
     //
-    // On first run it registers a free WARP account and generates a WireGuard
-    // profile (bundled wgcf), then runs a userspace WireGuard -> SOCKS5 engine
-    // (bundled wireproxy) on the local SOCKS5 endpoint that libtorrent is routed
-    // through (see warpconfig.h). The helper binaries are embedded in the
-    // executable and extracted into the profile directory on first run.
+    // The tunnel relies on two upstream tools: wgcf (registers a free WARP
+    // account and generates a WireGuard profile) and wireproxy (a userspace
+    // WireGuard -> SOCKS5 proxy). Rather than ship opaque prebuilt binaries, the
+    // engine downloads them on first run from their official GitHub releases at
+    // pinned versions and verifies each one against a hard-coded SHA-256 before
+    // it is ever executed. The downloads land in the portable profile directory
+    // and are reused on subsequent runs.
+    //
+    // On first run it then registers a free WARP account and generates a
+    // WireGuard profile (wgcf), and runs the userspace WireGuard -> SOCKS5 engine
+    // (wireproxy) on the local SOCKS5 endpoint that libtorrent is routed through
+    // (see warpconfig.h).
     class Engine final : public QObject
     {
         Q_OBJECT
@@ -47,14 +55,26 @@ namespace BitTorrent::Warp
         explicit Engine(const Path &baseDir, QObject *parent = nullptr);
         ~Engine() override;
 
-        // Extract helpers, ensure a WARP profile exists, and start the tunnel.
+        // Fetch and verify helpers, ensure a WARP profile exists, and start the tunnel.
         void start();
         // Stop the tunnel process.
         void stop();
 
     private:
-        bool extractHelper(const QString &resourcePath, const Path &dest);
-        bool extractHelpers();
+        // A pinned upstream helper to fetch and verify before use.
+        struct HelperSpec
+        {
+            Path dest;              // final on-disk binary inside the profile
+            QString url;            // upstream release download URL
+            QString downloadSha256; // SHA-256 of the downloaded artifact (verified before unpacking)
+            QString binarySha256;   // SHA-256 of the final binary on disk (verified before execution)
+            QString archiveMember;  // empty: the artifact is the binary; otherwise the member to extract from the .tar.gz
+        };
+
+        bool ensureHelpers();
+        bool ensureHelper(const HelperSpec &spec);
+        bool downloadToFile(const QString &url, const Path &dest, int timeoutMs);
+        static QString fileSha256(const Path &file);
         bool ensureProfile();
         bool writeWireproxyConfig();
         void launchProxy();

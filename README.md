@@ -7,11 +7,12 @@ through Cloudflare WARP. The peer, tracker (HTTP and UDP), DHT and uTP sockets
 are routed through the WARP tunnel, and a kill switch pauses all transfers
 whenever the tunnel is unavailable.
 
-It is self-contained: a single binary with no setup. On first run it registers a
-free WARP account and starts a bundled userspace WireGuard tunnel by itself. No
-shell scripts, no root, no kernel interface and no system changes are required.
-All configuration, data and the bundled engine live in a portable `profile`
-folder beside the binary; nothing is written to system locations.
+It is self-contained: a single binary with no setup. On first run it fetches and
+verifies its tunnel helpers, registers a free WARP account and starts a userspace
+WireGuard tunnel by itself. No shell scripts, no root, no kernel interface and no
+system changes are required. All configuration, data and the engine live in a
+portable `profile` folder beside the binary; nothing is written to system
+locations.
 
 This fork exists for privacy. It is not intended for, and does not condone,
 copyright infringement.
@@ -21,10 +22,15 @@ they are published (see *Updating to a new qBittorrent release*). The exact base
 release is whatever the git history is currently rebased onto.
 
 ### What the fork changes:
-* An embedded WARP engine is bundled into the binary. On first run it extracts
-  its helpers into the profile folder, registers a free Cloudflare WARP account
-  and runs a userspace WireGuard tunnel that exposes a local SOCKS5 endpoint
-  (default `127.0.0.1:40000`). It is supervised by the app and shut down on exit.
+* A self-contained WARP engine is built in. On first run it downloads its two
+  helper tools (wgcf and wireproxy) from their official upstream releases at
+  pinned versions, verifies each one against a hard-coded SHA-256 before running
+  it, registers a free Cloudflare WARP account and runs a userspace WireGuard
+  tunnel that exposes a local SOCKS5 endpoint (default `127.0.0.1:40000`).
+  The helpers are stored in the profile folder and reused on later runs. The
+  engine is supervised by the app and shut down on exit. The pinned versions,
+  download URLs, checksums and licenses are listed in
+  [warp/THIRD-PARTY-NOTICES.md](warp/THIRD-PARTY-NOTICES.md).
 * libtorrent is routed through that SOCKS5 endpoint with remote hostname
   resolution enabled, so peer, tracker, DHT and DNS traffic all go through the
   tunnel. Routing is locked and cannot be overridden from the GUI, the Web UI or
@@ -56,7 +62,7 @@ The fork-specific code is in `src/base/bittorrent/warpconfig.{h,cpp}`,
 * The default SOCKS5 path resolves hostnames through the tunnel, so DNS does not
   leak. The manual interface fallback (`QBT_WARP_MODE=interface`) does not bind
   the resolver, so use it only with system DNS already routed through WARP.
-* The bundled engine and the optional helper scripts are Linux-only. The
+* The engine helpers and the optional helper scripts are Linux-only. The
   in-client enforcement itself is cross-platform.
 
 ### Installation:
@@ -83,19 +89,23 @@ Configure and build:
 
 Add `-DGUI=OFF` to build `qbittorrent-nox` (headless, Web UI only).
 
-The build embeds the prebuilt Linux engine helpers from `warp/engine/` (wgcf and
-wireproxy) into the binary; no extra build steps are needed.
+The engine helpers (wgcf and wireproxy) are not bundled. The binary downloads
+them from their official upstream releases on first run and verifies each one
+against a pinned SHA-256 before running it, so the build needs no extra steps.
+The pinned versions, URLs, checksums and licenses are in
+[warp/THIRD-PARTY-NOTICES.md](warp/THIRD-PARTY-NOTICES.md).
 
 ### Usage:
 Run the binary. There is nothing to configure:
 
     ./qbittorrent
 
-On the first launch it registers a free Cloudflare WARP account, starts the
-bundled tunnel and creates a `profile` folder beside the binary holding all
-configuration, data and the engine. Subsequent launches reuse them. The log
-shows the progress:
+On the first launch it downloads and verifies the engine helpers, registers a
+free Cloudflare WARP account, starts the tunnel and creates a `profile` folder
+beside the binary holding all configuration, data and the engine. Subsequent
+launches reuse them. The log shows the progress:
 
+    [WARP] Fetching engine helper (first run only): https://github.com/...
     [WARP] Registering a free Cloudflare WARP account (first run only)...
     [WARP] Userspace WARP tunnel engine started; SOCKS5 on 127.0.0.1:40000.
     [WARP] Tunnel restored. Resuming BitTorrent traffic.
@@ -115,7 +125,7 @@ On start-up the log shows a line beginning with `[WARP]` describing the active
 configuration.
 
 ### Advanced (optional):
-The bundled engine makes the helper scripts in `warp/` unnecessary for normal
+The built-in engine makes the helper scripts in `warp/` unnecessary for normal
 use. They remain for advanced setups: `warp-provision.sh` provisions WARP with an
 external `wgcf`/`wireproxy`, and `qbt-warp-netns.sh` runs the client inside a
 network namespace whose only route is WARP (the strongest, fully kernel-level

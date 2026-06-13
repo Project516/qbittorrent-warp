@@ -289,7 +289,7 @@ Application::Application(int &argc, char **argv)
 
     const auto portableProfilePath = Path(QCoreApplication::applicationDirPath()) / DEFAULT_PORTABLE_MODE_PROFILE_DIR;
     // qBittorrent-WARP: default to portable mode so that all configuration, data
-    // and the bundled WARP engine live beside the binary and nothing is written
+    // and the WARP engine live beside the binary and nothing is written
     // to system locations. An explicit --profile still wins, and if the
     // application directory is not writable (e.g. a system install) we fall back
     // to the normal per-user locations.
@@ -881,10 +881,11 @@ int Application::exec()
     adjustThreadPriority();
 #endif
 
-    // qBittorrent-WARP: bring up the embedded, userspace Cloudflare WARP tunnel
-    // before networking starts. It registers a free WARP account on first run and
-    // runs a bundled userspace WireGuard -> SOCKS5 engine entirely inside the
-    // portable profile directory (no scripts, no root, no system changes). The
+    // qBittorrent-WARP: bring up the self-contained, userspace Cloudflare WARP
+    // tunnel before networking starts. On first run it downloads and verifies its
+    // helpers and registers a free WARP account, then runs a userspace
+    // WireGuard -> SOCKS5 engine entirely inside the portable profile directory
+    // (no scripts, no root, no system changes). The
     // session kill switch keeps all BitTorrent traffic paused until the tunnel's
     // SOCKS5 endpoint is reachable.
     if (BitTorrent::Warp::isEnforced())

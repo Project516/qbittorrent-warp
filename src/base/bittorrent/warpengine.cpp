@@ -1,6 +1,6 @@
 /*
  * qBittorrent-WARP fork.
- * Embedded, self-contained Cloudflare WARP tunnel engine.
+ * Self-contained Cloudflare WARP tunnel engine.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,17 @@
 #include <chrono>
 
 #include <QByteArray>
+#include <QCryptographicHash>
+#include <QEventLoop>
 #include <QFile>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QProcess>
+#include <QSaveFile>
 #include <QStringList>
 #include <QTimer>
+#include <QUrl>
 
 #include "base/global.h"
 #include "base/logger.h"
@@ -34,17 +41,30 @@
 
 using namespace std::chrono_literals;
 
-// Qt resources compiled into a static library are not auto-registered unless
-// something references them. Force initialization explicitly. This helper must
-// live in the global namespace so Q_INIT_RESOURCE resolves the generated symbol.
-static void initWarpResources()
-{
-    Q_INIT_RESOURCE(warpengine);
-}
-
 namespace
 {
     const int MAX_RESTARTS = 5;
+
+    // Pinned upstream engine helpers. They are downloaded from their official
+    // GitHub releases on first run and verified against these SHA-256 sums before
+    // they are ever executed. Bump the version, URL and checksums together when
+    // updating; the checksums come from each release's published checksums.txt.
+    //
+    // wgcf 2.2.31 - MIT - https://github.com/ViRb3/wgcf
+    const QString WGCF_URL =
+        u"https://github.com/ViRb3/wgcf/releases/download/v2.2.31/wgcf_2.2.31_linux_amd64"_s;
+    const QString WGCF_SHA256 =
+        u"69147e1a517c66129edd8ac8cb60484d6c9515178d7b4a2f95e3c925f225572a"_s;
+
+    // wireproxy 1.1.2 - ISC - https://github.com/pufferffish/wireproxy
+    const QString WIREPROXY_URL =
+        u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.2/wireproxy_linux_amd64.tar.gz"_s;
+    // SHA-256 of the downloaded .tar.gz (from the release's checksums.txt)...
+    const QString WIREPROXY_ARCHIVE_SHA256 =
+        u"b7dcff8f6e9d3410364e432aff24154eaa8db8206e0c6faac35d6c6ab06dac51"_s;
+    // ...and of the single binary it contains, verified after extraction.
+    const QString WIREPROXY_BINARY_SHA256 =
+        u"b5a729f3606753ce4d4bfeb0f56d522e4aa0908aff8c7d55960fd4301cc58b11"_s;
 }
 
 namespace BitTorrent::Warp
@@ -68,15 +88,13 @@ namespace BitTorrent::Warp
 
     void Engine::start()
     {
-        initWarpResources();
-
-        LogMsg(tr("[WARP] Starting embedded Cloudflare WARP engine in \"%1\".").arg(m_baseDir.toString()), Log::INFO);
+        LogMsg(tr("[WARP] Starting Cloudflare WARP engine in \"%1\".").arg(m_baseDir.toString()), Log::INFO);
 
         Utils::Fs::mkpath(m_binDir);
 
-        if (!extractHelpers())
+        if (!ensureHelpers())
         {
-            LogMsg(tr("[WARP] Failed to unpack the bundled WARP engine. The kill switch will keep traffic blocked."), Log::CRITICAL);
+            LogMsg(tr("[WARP] Could not obtain the verified WARP engine helpers. The kill switch will keep traffic blocked."), Log::CRITICAL);
             return;
         }
 
@@ -112,38 +130,142 @@ namespace BitTorrent::Warp
         m_proxy = nullptr;
     }
 
-    bool Engine::extractHelper(const QString &resourcePath, const Path &dest)
+    QString Engine::fileSha256(const Path &file)
     {
-        QFile res(resourcePath);
-        if (!res.open(QIODevice::ReadOnly))
+        QFile f(file.toString());
+        if (!f.open(QIODevice::ReadOnly))
+            return {};
+
+        QCryptographicHash hash(QCryptographicHash::Sha256);
+        if (!hash.addData(&f))
+            return {};
+
+        return QString::fromLatin1(hash.result().toHex());
+    }
+
+    bool Engine::downloadToFile(const QString &url, const Path &dest, const int timeoutMs)
+    {
+        QNetworkAccessManager nam;
+        QNetworkRequest request {QUrl(url)};
+        request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+        request.setHeader(QNetworkRequest::UserAgentHeader, u"qBittorrent-WARP"_s);
+
+        QNetworkReply *reply = nam.get(request);
+
+        QEventLoop loop;
+        QTimer timer;
+        timer.setSingleShot(true);
+        bool timedOut = false;
+        connect(&timer, &QTimer::timeout, &loop, [reply, &timedOut]()
         {
-            LogMsg(tr("[WARP] Missing embedded resource: %1").arg(resourcePath), Log::CRITICAL);
+            timedOut = true;
+            reply->abort();
+        });
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        timer.start(timeoutMs);
+        loop.exec();
+
+        if (timedOut)
+        {
+            LogMsg(tr("[WARP] Timed out downloading %1.").arg(url), Log::CRITICAL);
+            reply->deleteLater();
             return false;
         }
-        const QByteArray data = res.readAll();
-        res.close();
-
-        // Skip rewriting if the on-disk copy already matches.
-        if (dest.exists() && (QFile(dest.toString()).size() == data.size()))
-            return true;
-
-        QFile out(dest.toString());
-        if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        if (reply->error() != QNetworkReply::NoError)
         {
-            LogMsg(tr("[WARP] Cannot write helper: %1").arg(dest.toString()), Log::CRITICAL);
+            LogMsg(tr("[WARP] Download failed for %1: %2").arg(url, reply->errorString()), Log::CRITICAL);
+            reply->deleteLater();
+            return false;
+        }
+
+        const QByteArray data = reply->readAll();
+        reply->deleteLater();
+
+        QSaveFile out(dest.toString());
+        if (!out.open(QIODevice::WriteOnly))
+        {
+            LogMsg(tr("[WARP] Cannot write %1.").arg(dest.toString()), Log::CRITICAL);
             return false;
         }
         out.write(data);
-        out.close();
-        out.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
-            | QFile::ReadGroup | QFile::ExeGroup | QFile::ReadOther | QFile::ExeOther);
+        if (!out.commit())
+        {
+            LogMsg(tr("[WARP] Failed to save %1.").arg(dest.toString()), Log::CRITICAL);
+            return false;
+        }
         return true;
     }
 
-    bool Engine::extractHelpers()
+    bool Engine::ensureHelper(const HelperSpec &spec)
     {
-        return extractHelper(u":/warp/wgcf"_s, m_wgcf)
-            && extractHelper(u":/warp/wireproxy"_s, m_wireproxy);
+        // Reuse the binary from a previous run if it is present and still verifies.
+        if (spec.dest.exists() && (fileSha256(spec.dest) == spec.binarySha256))
+            return true;
+
+        LogMsg(tr("[WARP] Fetching engine helper (first run only): %1").arg(spec.url), Log::INFO);
+
+        const Path downloadPath {spec.dest.toString() + u".download"_s};
+        if (!downloadToFile(spec.url, downloadPath, 180000))
+            return false;
+
+        const QString gotSha = fileSha256(downloadPath);
+        if (gotSha != spec.downloadSha256)
+        {
+            LogMsg(tr("[WARP] Checksum mismatch for %1 (expected %2, got %3); refusing to use it.")
+                .arg(spec.url, spec.downloadSha256, gotSha), Log::CRITICAL);
+            Utils::Fs::removeFile(downloadPath);
+            return false;
+        }
+
+        if (spec.archiveMember.isEmpty())
+        {
+            // The downloaded artifact is the binary itself.
+            Utils::Fs::removeFile(spec.dest);
+            if (!Utils::Fs::renameFile(downloadPath, spec.dest))
+            {
+                LogMsg(tr("[WARP] Failed to install %1.").arg(spec.dest.toString()), Log::CRITICAL);
+                Utils::Fs::removeFile(downloadPath);
+                return false;
+            }
+        }
+        else
+        {
+            // Extract the single member from the verified tarball into the bin dir.
+            Utils::Fs::removeFile(spec.dest);
+            const bool extracted = runBlocking(Path(u"tar"_s),
+                {u"-xzf"_s, downloadPath.toString(), u"-C"_s, m_binDir.toString(), spec.archiveMember}, 60000);
+            Utils::Fs::removeFile(downloadPath);
+            if (!extracted || !spec.dest.exists())
+            {
+                LogMsg(tr("[WARP] Failed to unpack %1.").arg(spec.url), Log::CRITICAL);
+                return false;
+            }
+        }
+
+        QFile::setPermissions(spec.dest.toString(),
+            QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
+            | QFile::ReadGroup | QFile::ExeGroup | QFile::ReadOther | QFile::ExeOther);
+
+        // Final defence: verify the on-disk binary before it is ever executed.
+        const QString binSha = fileSha256(spec.dest);
+        if (binSha != spec.binarySha256)
+        {
+            LogMsg(tr("[WARP] Verification of %1 failed (expected %2, got %3); refusing to use it.")
+                .arg(spec.dest.toString(), spec.binarySha256, binSha), Log::CRITICAL);
+            Utils::Fs::removeFile(spec.dest);
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Engine::ensureHelpers()
+    {
+        const HelperSpec wgcf {m_wgcf, WGCF_URL, WGCF_SHA256, WGCF_SHA256, {}};
+        const HelperSpec wireproxy {m_wireproxy, WIREPROXY_URL, WIREPROXY_ARCHIVE_SHA256,
+            WIREPROXY_BINARY_SHA256, u"wireproxy"_s};
+
+        return ensureHelper(wgcf) && ensureHelper(wireproxy);
     }
 
     bool Engine::runBlocking(const Path &program, const QStringList &args, const int timeoutMs)
