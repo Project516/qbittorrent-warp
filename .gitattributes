@@ -11,3 +11,6 @@ test/testdata/crlf.txt text eol=crlf
 
 # disable line endings conversions
 src/base/3rdparty/expected.hpp -text
+
+# qBittorrent-WARP: bundled engine helpers are executables; never line-convert them
+warp/engine/** binary
