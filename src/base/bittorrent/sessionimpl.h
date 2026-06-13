@@ -556,6 +556,12 @@ namespace BitTorrent
         void initializeNativeSession();
         lt::settings_pack loadLTSettings() const;
         void applyNetworkInterfacesSettings(lt::settings_pack &settingsPack) const;
+        // WARP fork: force libtorrent's proxy settings onto the Cloudflare WARP
+        // SOCKS5 endpoint (with DNS routed through WARP) when in use.
+        void applyWarpProxy(lt::settings_pack &settingsPack) const;
+        // WARP fork: kill switch - pause/resume the native session as the WARP
+        // tunnel goes down/comes back up.
+        void checkWarpHealth();
         void configurePeerClasses();
         void initMetrics();
         void applyBandwidthLimits();
@@ -792,6 +798,10 @@ namespace BitTorrent
 
         QString m_additionalTrackersFromURL;
         QTimer *m_updateTrackersFromURLTimer = nullptr;
+
+        // WARP fork: kill-switch watchdog and current pause state.
+        QTimer *m_warpWatchdog = nullptr;
+        bool m_warpPaused = false;
 
         bool m_isRestored = false;
         bool m_isPaused = isStartPaused();

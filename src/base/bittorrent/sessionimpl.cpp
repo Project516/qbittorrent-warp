@@ -113,6 +113,7 @@
 #include "tracker.h"
 #include "trackerentry.h"
 #include "trackerentrystatus.h"
+#include "warpconfig.h"
 
 using namespace std::chrono_literals;
 using namespace BitTorrent;
@@ -689,6 +690,18 @@ SessionImpl::SessionImpl(QObject *parent)
         updateTrackersFromFile();
         updateTrackersFromURL();
         m_updateTrackersFromURLTimer->start();
+    }
+
+    // WARP fork: start the kill-switch watchdog. While the WARP tunnel is
+    // unavailable, all BitTorrent traffic is paused so nothing leaks around it.
+    if (Warp::isEnforced())
+    {
+        LogMsg(tr("[WARP] qBittorrent-WARP routing enforcement is ACTIVE. %1").arg(Warp::describe()), Log::INFO);
+        m_warpWatchdog = new QTimer(this);
+        m_warpWatchdog->setInterval(5s);
+        connect(m_warpWatchdog, &QTimer::timeout, this, &SessionImpl::checkWarpHealth);
+        m_warpWatchdog->start();
+        checkWarpHealth();
     }
 }
 
@@ -2169,7 +2182,46 @@ lt::settings_pack SessionImpl::loadLTSettings() const
         break;
     }
 
+    // WARP fork: override any proxy/leak-related settings last so they win over
+    // the user-derived values set above.
+    if (Warp::isEnforced())
+        applyWarpProxy(settingsPack);
+
     return settingsPack;
+}
+
+void SessionImpl::applyWarpProxy(lt::settings_pack &settingsPack) const
+{
+    // Never let the client touch the local LAN / router: these operate on the
+    // real (non-WARP) network. WARP has no inbound, so port mapping is useless,
+    // and Local Service Discovery would broadcast torrent activity on the LAN.
+    settingsPack.set_bool(lt::settings_pack::enable_upnp, false);
+    settingsPack.set_bool(lt::settings_pack::enable_natpmp, false);
+    settingsPack.set_bool(lt::settings_pack::enable_lsd, false);
+
+    if (Warp::useSocks())
+    {
+        settingsPack.set_int(lt::settings_pack::proxy_type, lt::settings_pack::socks5);
+        settingsPack.set_str(lt::settings_pack::proxy_hostname, Warp::socksHost().toStdString());
+        settingsPack.set_int(lt::settings_pack::proxy_port, Warp::socksPort());
+        settingsPack.set_str(lt::settings_pack::proxy_username, {});
+        settingsPack.set_str(lt::settings_pack::proxy_password, {});
+        // Route EVERYTHING through WARP - peers, tracker announces and, crucially,
+        // hostname resolution - so DNS does not leak around the tunnel.
+        settingsPack.set_bool(lt::settings_pack::proxy_peer_connections, true);
+        // (tracker connections already use the proxy by default in libtorrent)
+        settingsPack.set_bool(lt::settings_pack::proxy_hostnames, true);
+        // Refuse any connection that would bypass the proxy.
+        settingsPack.set_bool(lt::settings_pack::anonymous_mode, true);
+    }
+    else
+    {
+        // Interface-bind path: no proxy. Egress is bound to the WARP interface in
+        // applyNetworkInterfacesSettings(). NOTE: libtorrent does not bind its
+        // hostname resolver to that interface, so use the netns wrapper (or route
+        // system DNS through WARP) to avoid DNS leaks in this mode.
+        settingsPack.set_int(lt::settings_pack::proxy_type, lt::settings_pack::none);
+    }
 }
 
 void SessionImpl::applyNetworkInterfacesSettings(lt::settings_pack &settingsPack) const
@@ -2237,7 +2289,15 @@ void SessionImpl::applyNetworkInterfacesSettings(lt::settings_pack &settingsPack
     settingsPack.set_str(lt::settings_pack::listen_interfaces, finalEndpoints.toStdString());
     LogMsg(tr("Trying to listen on the following list of IP addresses: \"%1\"").arg(finalEndpoints));
 
-    settingsPack.set_str(lt::settings_pack::outgoing_interfaces, outgoingInterfaces.join(u',').toStdString());
+    QString outgoing = outgoingInterfaces.join(u',');
+    if (Warp::isEnforced() && Warp::useSocks())
+    {
+        // The WARP SOCKS5 proxy listens on loopback; binding egress to the WARP
+        // interface IP would break the connection to it. Let the proxy carry
+        // egress instead (the listener above stays pinned to the WARP interface).
+        outgoing.clear();
+    }
+    settingsPack.set_str(lt::settings_pack::outgoing_interfaces, outgoing.toStdString());
     m_listenInterfaceConfigured = true;
 }
 
@@ -3466,6 +3526,32 @@ void SessionImpl::configureListeningInterface()
     configureDeferred();
 }
 
+void SessionImpl::checkWarpHealth()
+{
+    if (!Warp::isEnforced() || !Warp::killSwitchEnabled())
+        return;
+
+    const bool healthy = Warp::isHealthy();
+    if (!healthy && !m_warpPaused)
+    {
+        m_warpPaused = true;
+        LogMsg(tr("[WARP] Tunnel is DOWN. Kill switch engaged: pausing all BitTorrent traffic. %1")
+            .arg(Warp::describe()), Log::CRITICAL);
+        if (m_nativeSession)
+            m_nativeSession->pause();
+    }
+    else if (healthy && m_warpPaused)
+    {
+        m_warpPaused = false;
+        LogMsg(tr("[WARP] Tunnel restored. Resuming BitTorrent traffic. %1")
+            .arg(Warp::describe()), Log::INFO);
+        // Re-bind to the (now available) WARP interface and re-apply the proxy.
+        configureListeningInterface();
+        if (m_nativeSession)
+            m_nativeSession->resume();
+    }
+}
+
 int SessionImpl::globalDownloadSpeedLimit() const
 {
     // Unfortunately the value was saved as KiB instead of B.
@@ -3739,11 +3825,22 @@ void SessionImpl::setSSLPort(const int port)
 
 QString SessionImpl::networkInterface() const
 {
+    // WARP fork: all binding is locked to the WARP interface regardless of any
+    // stored configuration. This is what forces listen_interfaces and
+    // outgoing_interfaces onto the WARP tunnel.
+    if (Warp::isEnforced())
+        return Warp::interfaceName();
     return m_networkInterface;
 }
 
 void SessionImpl::setNetworkInterface(const QString &iface)
 {
+    if (Warp::isEnforced())
+    {
+        LogMsg(tr("[WARP] Network interface is locked to \"%1\"; ignoring requested change.")
+            .arg(Warp::interfaceName()), Log::WARNING);
+        return;
+    }
     if (iface != networkInterface())
     {
         m_networkInterface = iface;
@@ -3753,21 +3850,34 @@ void SessionImpl::setNetworkInterface(const QString &iface)
 
 QString SessionImpl::networkInterfaceName() const
 {
+    if (Warp::isEnforced())
+        return Warp::interfaceName();
     return m_networkInterfaceName;
 }
 
 void SessionImpl::setNetworkInterfaceName(const QString &name)
 {
+    if (Warp::isEnforced())
+        return;
     m_networkInterfaceName = name;
 }
 
 QString SessionImpl::networkInterfaceAddress() const
 {
+    // WARP fork: bind to all addresses of the WARP interface.
+    if (Warp::isEnforced())
+        return {};
     return m_networkInterfaceAddress;
 }
 
 void SessionImpl::setNetworkInterfaceAddress(const QString &address)
 {
+    if (Warp::isEnforced())
+    {
+        LogMsg(tr("[WARP] Network interface address is managed by WARP; ignoring requested change.")
+            , Log::WARNING);
+        return;
+    }
     if (address != networkInterfaceAddress())
     {
         m_networkInterfaceAddress = address;

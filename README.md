@@ -1,44 +1,123 @@
-qBittorrent - A BitTorrent client in Qt
-------------------------------------------
+qBittorrent-WARP - qBittorrent routed through Cloudflare WARP
+-------------------------------------------------------------
 
-[![GitHub Actions CI Status](https://github.com/qbittorrent/qBittorrent/actions/workflows/ci_ubuntu.yaml/badge.svg)](https://github.com/qbittorrent/qBittorrent/actions)
-[![Coverity Status](https://scan.coverity.com/projects/5494/badge.svg)](https://scan.coverity.com/projects/5494)
-********************************
 ### Description:
-qBittorrent is a bittorrent client programmed in C++ / Qt that uses
-libtorrent (sometimes called libtorrent-rasterbar) by Arvid Norberg.
+qBittorrent-WARP is a fork of qBittorrent that forces all BitTorrent traffic
+through Cloudflare WARP. The peer, tracker (HTTP and UDP), DHT and uTP sockets
+are bound to the WARP tunnel, and a kill switch pauses all transfers whenever the
+tunnel is unavailable.
 
-It aims to be a good alternative to all other bittorrent clients
-out there. qBittorrent is fast, stable and provides unicode
-support as well as many features.
+This fork exists for privacy. It is not intended for, and does not condone,
+copyright infringement.
 
-The free [IP to Country Lite database](https://db-ip.com/db/download/ip-to-country-lite) by [DB-IP](https://db-ip.com/) is used for resolving the countries of peers. The database is licensed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/).
+It is based on qBittorrent 5.2.1 (upstream tag `release-5.2.1`).
+
+### What the fork changes:
+Routing is locked to WARP and cannot be overridden from the GUI, the Web UI or
+the configuration file while enforcement is active:
+
+* The BitTorrent listen and outgoing sockets are bound to the WARP WireGuard
+  interface (default name `warp`). If that interface is down, libtorrent does
+  not fall back to another adapter, so traffic is not leaked.
+* When SOCKS5 is in use, libtorrent is pointed at the WARP SOCKS5 endpoint
+  (default `127.0.0.1:40000`) with remote hostname resolution enabled, so DNS
+  lookups also go through the tunnel.
+* UPnP, NAT-PMP and Local Service Discovery are disabled so the client does not
+  contact the local router or announce activity on the LAN.
+* A watchdog pauses the session when the tunnel goes down and resumes it when
+  the tunnel returns.
+
+The behaviour is selected at runtime with environment variables (see Usage). The
+fork-specific code is in `src/base/bittorrent/warpconfig.{h,cpp}` and the hooks
+in `src/base/bittorrent/sessionimpl.cpp`.
+
+### Limitations:
+* WARP does not support inbound connections or port forwarding. The client is
+  connect-only: it can reach peers that accept incoming connections, but remote
+  peers cannot connect to it. Transfers still work, with a smaller peer set.
+* In interface mode, libtorrent's hostname resolver is not bound to the tunnel.
+  Use SOCKS5 mode, or run inside the supplied network namespace, to prevent DNS
+  leaks.
+* Running BitTorrent over the free WARP tier may conflict with Cloudflare's
+  terms of service.
+* WARP hides your address from peers and trackers and your traffic from the
+  local network and ISP. It is not an anonymity network; Cloudflare can see your
+  traffic at its edge.
+* The WARP provisioning and isolation scripts are Linux-only. The in-client
+  enforcement itself is cross-platform.
 
 ### Installation:
+The build dependencies are the same as upstream qBittorrent (Qt 6, libtorrent
+2.0, Boost, OpenSSL, zlib) plus CMake and Ninja. Refer to the [INSTALL](INSTALL)
+file for the full list and platform notes.
 
-Refer to the [INSTALL](INSTALL) file.
+Fedora:
 
-### Public key:
-Starting from v3.3.4 all source tarballs and binaries are signed.<br />
-The key currently used is 4096R/[5B7CC9A2](https://pgp.mit.edu/pks/lookup?op=get&search=0x6E4A2D025B7CC9A2) with fingerprint `D8F3DA77AAC6741053599C136E4A2D025B7CC9A2`.<br />
-You can also download it from [here](https://github.com/qbittorrent/qBittorrent/raw/master/5B7CC9A2.asc).<br />
-**PREVIOUSLY** the following key was used to sign the v3.3.4 source tarballs and v3.3.4 Windows installer **only**: 4096R/[520EC6F6](https://pgp.mit.edu/pks/lookup?op=get&search=0xA1ACCAE4520EC6F6) with fingerprint `F4A5FD201B117B1C2AB590E2A1ACCAE4520EC6F6`.<br />
+    sudo dnf install -y gcc-c++ cmake ninja-build openssl-devel zlib-devel \
+        zlib-ng-compat-static boost-devel qt6-qtbase-devel qt6-qtbase-private-devel \
+        qt6-qttools-devel qt6-qtsvg-devel rb_libtorrent-devel
+
+Debian / Ubuntu:
+
+    sudo apt install -y build-essential cmake ninja-build libssl-dev zlib1g-dev \
+        libboost-dev qt6-base-dev qt6-base-private-dev qt6-tools-dev libqt6svg6-dev \
+        libtorrent-rasterbar-dev
+
+Configure and build:
+
+    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+    cmake --build build
+
+Add `-DGUI=OFF` to build `qbittorrent-nox` (headless, Web UI only).
+
+### Usage:
+WARP must be provisioned first. The scripts in `warp/` use
+[wgcf](https://github.com/ViRb3/wgcf) to create a free WARP WireGuard profile
+and, optionally, a SOCKS5 endpoint:
+
+    cd warp
+    ./warp-provision.sh            # generate warp/warp.conf
+    ./warp-provision.sh --socks    # also expose SOCKS5 on 127.0.0.1:40000
+
+For leak-proof isolation, run the client inside the WARP network namespace. The
+namespace has no route other than WARP, and its resolver is set to Cloudflare,
+so nothing (including DNS) can leave the tunnel:
+
+    sudo ./qbt-warp-netns.sh       # qbittorrent-nox; Web UI at http://10.213.213.2:8080
+    sudo ./qbt-warp-netns.sh --gui # GUI client
+
+Alternatively, run the client directly and select the enforcement mode:
+
+    QBT_WARP_MODE=both      qbittorrent   # SOCKS5 when reachable, else interface (default)
+    QBT_WARP_MODE=socks5    qbittorrent
+    QBT_WARP_MODE=interface qbittorrent
+
+Environment variables:
+
+    QBT_WARP_MODE         interface | socks5 | both    (default: both)
+    QBT_WARP_INTERFACE    WARP interface name           (default: warp)
+    QBT_WARP_SOCKS_HOST   SOCKS5 host                   (default: 127.0.0.1)
+    QBT_WARP_SOCKS_PORT   SOCKS5 port                   (default: 40000)
+    QBT_WARP_KILLSWITCH   0 to disable the kill switch  (default: 1)
+    QBT_WARP_DISABLE      1 to disable enforcement entirely (development only)
+
+On start-up the log shows a line beginning with `[WARP]` describing the active
+configuration.
+
+### Updating to a new qBittorrent release:
+The fork is a small set of changes applied on top of an upstream release tag. To
+move it onto a newer release, run:
+
+    warp/update-from-upstream.sh                 # rebase onto the latest release-* tag
+    warp/update-from-upstream.sh release-5.3.0   # or onto a specific tag
+
+Conflicts, if any, are normally confined to `src/base/bittorrent/sessionimpl.cpp`.
+Resolve them, finish the rebase, then rebuild.
 
 ### Misc:
-For more information please visit:
-https://www.qbittorrent.org
+This is an unofficial fork and is not affiliated with or endorsed by the
+qBittorrent project. Report problems with the fork to this repository, not to
+the upstream qBittorrent trackers.
 
-or our wiki here:
-https://wiki.qbittorrent.org
-
-Use the forum for troubleshooting before reporting bugs:
-https://forum.qbittorrent.org
-
-Please report any bug (or feature request) to:
-https://bugs.qbittorrent.org
-
-Official IRC channel:
-[#qbittorrent on irc.libera.chat](ircs://irc.libera.chat:6697/qbittorrent)
-
-------------------------------------------
-sledgehammer999 \<sledgehammer999@qbittorrent.org\>
+Upstream project: https://www.qbittorrent.org
+Upstream wiki:    https://wiki.qbittorrent.org
