@@ -1,0 +1,95 @@
+name: Auto-update from upstream
+
+# Tracks upstream qBittorrent and keeps the fork current without manual work.
+# On a schedule it finds the latest upstream STABLE release, opens a pull request
+# that merges it into the warp branch, and - if the merge is conflict-free -
+# merges that pull request automatically. When the merge would conflict (usually
+# only in src/base/bittorrent/sessionimpl.cpp) the pull request is left open for
+# manual resolution.
+#
+# Note: the pull request is created with the built-in GITHUB_TOKEN, so it does
+# not trigger the CI workflows (a GitHub anti-recursion rule) and is merged on
+# the no-conflict check alone. To gate the merge on CI instead, create a
+# personal access token, store it as the secret AUTOUPDATE_TOKEN and use it for
+# the checkout and gh steps below.
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"   # every Monday at 06:00 UTC
+  workflow_dispatch:        # also runnable on demand from the Actions tab
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: auto-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Sync upstream stable release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the warp branch
+        uses: actions/checkout@v6
+        with:
+          ref: warp
+          fetch-depth: 0
+
+      - name: Open and (if clean) merge the upstream update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          upstream="https://github.com/qbittorrent/qBittorrent.git"
+
+          # Latest upstream stable (non-prerelease) release tag.
+          tag="$(gh api repos/qbittorrent/qBittorrent/releases/latest --jq .tag_name)"
+          echo "Latest upstream stable release: $tag"
+
+          git remote add upstream "$upstream" 2>/dev/null || git remote set-url upstream "$upstream"
+          git fetch --no-tags upstream "refs/tags/${tag}:refs/upstream/${tag}"
+          tagsha="$(git rev-parse "refs/upstream/${tag}")"
+
+          if git merge-base --is-ancestor "$tagsha" HEAD; then
+            echo "The warp branch already contains ${tag}; nothing to do."
+            exit 0
+          fi
+
+          branch="auto-update/${tag}"
+
+          # (Re)point the update branch at the upstream release commit. Merging it
+          # into warp brings the upstream changes in; conflicts surface on the PR.
+          git push --force origin "${tagsha}:refs/heads/${branch}"
+
+          # Open the PR if one does not already exist for this branch.
+          if ! gh pr view "$branch" --json number >/dev/null 2>&1; then
+            printf '%s\n' \
+              "Automated sync of upstream qBittorrent stable \`${tag}\` into the \`warp\` branch." \
+              "" \
+              "This PR is merged automatically when it has no conflicts. If it shows conflicts, they need manual resolution (usually only in \`src/base/bittorrent/sessionimpl.cpp\`)." \
+              > pr-body.md
+            gh pr create \
+              --base warp --head "$branch" \
+              --title "Update to qBittorrent ${tag}" \
+              --body-file pr-body.md
+          fi
+
+          # GitHub computes mergeability asynchronously; wait for it to settle.
+          state="UNKNOWN"
+          for _ in $(seq 1 12); do
+            state="$(gh pr view "$branch" --json mergeable --jq .mergeable)"
+            [ "$state" != "UNKNOWN" ] && break
+            sleep 6
+          done
+          echo "Mergeable state: $state"
+
+          if [ "$state" = "MERGEABLE" ]; then
+            gh pr merge "$branch" --merge --delete-branch
+            echo "Merged ${tag} into warp."
+          else
+            echo "::warning::${tag} does not merge cleanly into warp (state: ${state}). The pull request has been left open for manual resolution."
+          fi

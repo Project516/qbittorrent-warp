@@ -133,14 +133,17 @@ isolation). Point the client at an external endpoint with the environment
 variables above.
 
 ### Updating to a new qBittorrent release:
-The fork is a small set of changes applied on top of an upstream release tag. To
-move it onto a newer release, run:
+This is handled automatically. A scheduled GitHub Actions workflow
+(`.github/workflows/auto_update.yaml`) checks weekly for the latest upstream
+stable release, opens a pull request that merges it into the `warp` branch, and
+merges that pull request on its own when there are no conflicts. When a release
+would conflict (normally only in `src/base/bittorrent/sessionimpl.cpp`) the pull
+request is left open for manual resolution. The workflow can also be run on
+demand from the Actions tab.
 
-    warp/update-from-upstream.sh                  # rebase onto the latest stable release tag
-    warp/update-from-upstream.sh release-X.Y.Z    # or onto a specific tag
-
-Conflicts, if any, are normally confined to `src/base/bittorrent/sessionimpl.cpp`.
-Resolve them, finish the rebase, then rebuild.
+The fork-specific changes are a small set of commits on top of the upstream
+release, so updates stay simple. For a manual, rebase-based update instead of a
+merge, `warp/update-from-upstream.sh` rebases the fork onto a release tag.
 
 ### Misc:
 This is an unofficial fork and is not affiliated with or endorsed by the
