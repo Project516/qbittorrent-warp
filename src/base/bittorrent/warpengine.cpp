@@ -145,12 +145,12 @@ namespace BitTorrent::Warp
 
     bool Engine::downloadToFile(const QString &url, const Path &dest, const int timeoutMs)
     {
-        QNetworkAccessManager nam;
+        QNetworkAccessManager manager;
         QNetworkRequest request {QUrl(url)};
         request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
         request.setHeader(QNetworkRequest::UserAgentHeader, u"qBittorrent-WARP"_s);
 
-        QNetworkReply *reply = nam.get(request);
+        QNetworkReply *reply = manager.get(request);
 
         QEventLoop loop;
         QTimer timer;
