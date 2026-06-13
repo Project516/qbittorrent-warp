@@ -293,7 +293,12 @@ Application::Application(int &argc, char **argv)
     // to system locations. An explicit --profile still wins, and if the
     // application directory is not writable (e.g. a system install) we fall back
     // to the normal per-user locations.
-    const bool portableModeEnabled = m_commandLineArgs.profileDir.isEmpty()
+    // "show version/help" must not create anything on disk (it would otherwise
+    // drop a profile directory next to the binary, e.g. inside a macOS .app
+    // bundle, breaking packaging/codesign).
+    const bool versionOrHelpOnly = m_commandLineArgs.showVersion || m_commandLineArgs.showHelp;
+    const bool portableModeEnabled = !versionOrHelpOnly
+        && m_commandLineArgs.profileDir.isEmpty()
         && (Utils::Fs::isDir(portableProfilePath)
             || Utils::Fs::isWritable(Path(QCoreApplication::applicationDirPath())));
     if (portableModeEnabled && !Utils::Fs::isDir(portableProfilePath))
