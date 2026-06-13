@@ -35,6 +35,8 @@ add_library(qbt_base STATIC
     bittorrent/sessionimpl.h
     bittorrent/sessionstatus.h
     bittorrent/warpconfig.h
+    bittorrent/warpengine.h
+    bittorrent/warpengine.qrc
     bittorrent/sharelimits.h
     bittorrent/speedmonitor.h
     bittorrent/sslparameters.h
@@ -150,6 +152,7 @@ add_library(qbt_base STATIC
     bittorrent/resumedatastorage.cpp
     bittorrent/sessionimpl.cpp
     bittorrent/warpconfig.cpp
+    bittorrent/warpengine.cpp
     bittorrent/speedmonitor.cpp
     bittorrent/sslparameters.cpp
     bittorrent/torrent.cpp

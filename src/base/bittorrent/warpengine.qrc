@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/warp">
+    <file alias="wgcf">../../../warp/engine/wgcf</file>
+    <file alias="wireproxy">../../../warp/engine/wireproxy</file>
+  </qresource>
+</RCC>

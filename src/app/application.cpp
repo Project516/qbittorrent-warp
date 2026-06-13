@@ -69,6 +69,8 @@
 #include "base/bittorrent/infohash.h"
 #include "base/bittorrent/session.h"
 #include "base/bittorrent/torrent.h"
+#include "base/bittorrent/warpconfig.h"
+#include "base/bittorrent/warpengine.h"
 #include "base/exceptions.h"
 #include "base/global.h"
 #include "base/logger.h"
@@ -286,7 +288,16 @@ Application::Application(int &argc, char **argv)
     Logger::initInstance();
 
     const auto portableProfilePath = Path(QCoreApplication::applicationDirPath()) / DEFAULT_PORTABLE_MODE_PROFILE_DIR;
-    const bool portableModeEnabled = m_commandLineArgs.profileDir.isEmpty() && Utils::Fs::isDir(portableProfilePath);
+    // qBittorrent-WARP: default to portable mode so that all configuration, data
+    // and the bundled WARP engine live beside the binary and nothing is written
+    // to system locations. An explicit --profile still wins, and if the
+    // application directory is not writable (e.g. a system install) we fall back
+    // to the normal per-user locations.
+    const bool portableModeEnabled = m_commandLineArgs.profileDir.isEmpty()
+        && (Utils::Fs::isDir(portableProfilePath)
+            || Utils::Fs::isWritable(Path(QCoreApplication::applicationDirPath())));
+    if (portableModeEnabled && !Utils::Fs::isDir(portableProfilePath))
+        Utils::Fs::mkpath(portableProfilePath);
     const Path profileDir = portableModeEnabled ? portableProfilePath : m_commandLineArgs.profileDir;
     Profile::initInstance(profileDir, m_commandLineArgs.configurationName,
                         (m_commandLineArgs.relativeFastresumePaths || portableModeEnabled));
@@ -864,6 +875,19 @@ int Application::exec()
     applyMemoryPriority();
     adjustThreadPriority();
 #endif
+
+    // qBittorrent-WARP: bring up the embedded, userspace Cloudflare WARP tunnel
+    // before networking starts. It registers a free WARP account on first run and
+    // runs a bundled userspace WireGuard -> SOCKS5 engine entirely inside the
+    // portable profile directory (no scripts, no root, no system changes). The
+    // session kill switch keeps all BitTorrent traffic paused until the tunnel's
+    // SOCKS5 endpoint is reachable.
+    if (BitTorrent::Warp::isEnforced())
+    {
+        auto *warpEngine = new BitTorrent::Warp::Engine(
+            specialFolderLocation(SpecialFolder::Data) / Path(u"warp"_s), this);
+        warpEngine->start();
+    }
 
     Net::ProxyConfigurationManager::initInstance();
     Net::DownloadManager::initInstance();
