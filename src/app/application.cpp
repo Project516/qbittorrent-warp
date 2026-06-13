@@ -287,7 +287,15 @@ Application::Application(int &argc, char **argv)
 
     Logger::initInstance();
 
-    const auto portableProfilePath = Path(QCoreApplication::applicationDirPath()) / DEFAULT_PORTABLE_MODE_PROFILE_DIR;
+    // qBittorrent-WARP: when running from an AppImage, applicationDirPath() points
+    // inside the read-only, ephemeral mount, which would disable portable mode and
+    // scatter data into system locations. The AppImage runtime exports the path of
+    // the real .AppImage file in $APPIMAGE, so resolve the portable folder next to
+    // that file instead, keeping the profile persistent and writable.
+    const Path portableBaseDir = qEnvironmentVariableIsSet("APPIMAGE")
+        ? Path(qEnvironmentVariable("APPIMAGE")).parentPath()
+        : Path(QCoreApplication::applicationDirPath());
+    const auto portableProfilePath = portableBaseDir / DEFAULT_PORTABLE_MODE_PROFILE_DIR;
     // qBittorrent-WARP: default to portable mode so that all configuration, data
     // and the WARP engine live beside the binary and nothing is written
     // to system locations. An explicit --profile still wins, and if the
@@ -300,7 +308,7 @@ Application::Application(int &argc, char **argv)
     const bool portableModeEnabled = !versionOrHelpOnly
         && m_commandLineArgs.profileDir.isEmpty()
         && (Utils::Fs::isDir(portableProfilePath)
-            || Utils::Fs::isWritable(Path(QCoreApplication::applicationDirPath())));
+            || Utils::Fs::isWritable(portableBaseDir));
     if (portableModeEnabled && !Utils::Fs::isDir(portableProfilePath))
         Utils::Fs::mkpath(portableProfilePath);
     const Path profileDir = portableModeEnabled ? portableProfilePath : m_commandLineArgs.profileDir;

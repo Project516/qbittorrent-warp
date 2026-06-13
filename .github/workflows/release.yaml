@@ -1,0 +1,272 @@
+name: Release
+
+# Publishes prebuilt fork binaries to the Releases page, fully automatically.
+#
+# Versioning: the fork uses the four-component scheme X.Y.Z.W that qBittorrent's
+# own version header already supports (QBT_VERSION_BUILD is the 4th field). X.Y.Z
+# is the upstream base release the fork is built on (read from version.h.in); W is
+# the fork patch number. For a given X.Y.Z, W is (highest existing vX.Y.Z.* release
+# tag) + 1, or 1 if none. So:
+#   * a new upstream release merged by auto_update.yaml (new X.Y.Z) starts at W=1;
+#   * any later fork change to the same base bumps W (X.Y.Z.2, X.Y.Z.3, ...).
+# W is injected into version.h.in only at build time and is never committed, which
+# keeps version.h.in conflict-free when merging upstream.
+#
+# Triggers:
+#   * push to warp touching source        -> release fork-side changes (W bumps);
+#   * workflow_run after "Auto-update ..." -> release upstream syncs. A merge pushed
+#     by auto_update with the built-in GITHUB_TOKEN does NOT itself fire `push`
+#     (GitHub anti-recursion), so this trigger covers that case;
+#   * workflow_dispatch                    -> on demand.
+# The dedup guard (a release tag already on HEAD) makes overlapping triggers and
+# no-op runs harmless: each commit is released at most once.
+
+on:
+  push:
+    branches: [warp]
+    paths:
+      - 'src/**'
+      - 'cmake/**'
+      - 'dist/**'
+      - 'CMakeLists.txt'
+      - '.github/workflows/release.yaml'
+  workflow_run:
+    workflows: ["Auto-update from upstream"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Compute version
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.calc.outputs.skip }}
+      version: ${{ steps.calc.outputs.version }}
+      tag: ${{ steps.calc.outputs.tag }}
+      build: ${{ steps.calc.outputs.build }}
+      sha: ${{ steps.calc.outputs.sha }}
+    steps:
+      - name: Checkout the warp branch
+        uses: actions/checkout@v6
+        with:
+          ref: warp
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Compute the fork version
+        id: calc
+        run: |
+          set -euo pipefail
+          git fetch --tags --force origin
+
+          sha="$(git rev-parse HEAD)"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+
+          # If HEAD is already published, there is nothing new to release.
+          if existing="$(git describe --exact-match --match 'v*' HEAD 2>/dev/null)"; then
+            echo "HEAD is already released as ${existing}; nothing to do."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          ver_h="src/base/version.h.in"
+          maj="$(grep -oP '(?<=#define QBT_VERSION_MAJOR )\d+' "$ver_h")"
+          min="$(grep -oP '(?<=#define QBT_VERSION_MINOR )\d+' "$ver_h")"
+          bug="$(grep -oP '(?<=#define QBT_VERSION_BUGFIX )\d+' "$ver_h")"
+          base="${maj}.${min}.${bug}"
+
+          last="$(git tag -l "v${base}.*" | sed -E "s/^v${base}\.//" | grep -E '^[0-9]+$' | sort -n | tail -1 || true)"
+          build="$(( ${last:-0} + 1 ))"
+          version="${base}.${build}"
+
+          echo "Releasing fork version ${version} (upstream base ${base}, fork patch ${build})."
+          {
+            echo "skip=false"
+            echo "build=${build}"
+            echo "version=${version}"
+            echo "tag=v${version}"
+          } >> "$GITHUB_OUTPUT"
+
+  release:
+    name: Build and publish
+    needs: prepare
+    if: needs.prepare.outputs.skip != 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      boost_path: "${{ github.workspace }}/../boost"
+      harden_flags: "-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS"
+      libtorrent_path: "${{ github.workspace }}/../libtorrent"
+      libtorrent_version: "2.0.11"
+      qt_version: "6.6.3"
+
+    steps:
+      - name: Checkout the released commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          persist-credentials: false
+
+      - name: Inject the fork patch number
+        run: |
+          set -euo pipefail
+          sed -i "s/#define QBT_VERSION_BUILD .*/#define QBT_VERSION_BUILD ${{ needs.prepare.outputs.build }}/" src/base/version.h.in
+          grep '#define QBT_VERSION_BUILD' src/base/version.h.in
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install \
+            build-essential cmake ninja-build \
+            libssl-dev zlib1g-dev
+
+      - name: Setup ccache
+        uses: Chocobo1/setup-ccache-action@v1
+        with:
+          update_packager_index: false
+          ccache_options: |
+            max_size=1G
+
+      - name: Install boost
+        run: |
+          boost_url="https://archives.boost.io/release/1.77.0/source/boost_1_77_0.tar.gz"
+          boost_url2="https://sourceforge.net/projects/boost/files/boost/1.77.0/boost_1_77_0.tar.gz"
+          set +e
+          curl -L -o "${{ runner.temp }}/boost.tar.gz" "$boost_url"
+          tar -xf "${{ runner.temp }}/boost.tar.gz" -C "${{ github.workspace }}/.."; _exitCode="$?"
+          if [ "$_exitCode" -ne "0" ]; then
+            curl -L -o "${{ runner.temp }}/boost.tar.gz" "$boost_url2"
+            tar -xf "${{ runner.temp }}/boost.tar.gz" -C "${{ github.workspace }}/.."
+          fi
+          mv "${{ github.workspace }}/.."/boost_* "${{ env.boost_path }}"
+          cd "${{ env.boost_path }}"
+          ./bootstrap.sh
+          ./b2 stage --stagedir=./ --with-headers
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.qt_version }}
+          archives: icu qtbase qtdeclarative qtsvg qttools
+          modules: qtimageformats
+          cache: true
+
+      - name: Install libtorrent
+        run: |
+          git clone \
+            --branch v${{ env.libtorrent_version }} \
+            --depth 1 \
+            --recurse-submodules \
+            https://github.com/arvidn/libtorrent.git \
+            ${{ env.libtorrent_path }}
+          cd ${{ env.libtorrent_path }}
+          CXXFLAGS="$CXXFLAGS ${{ env.harden_flags }}" \
+          cmake \
+            -B build \
+            -G "Ninja" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" \
+            -Ddeprecated-functions=OFF
+          cmake --build build
+          sudo cmake --install build
+
+      - name: Build qBittorrent
+        run: |
+          CXXFLAGS="$CXXFLAGS ${{ env.harden_flags }}" \
+          LDFLAGS="$LDFLAGS -gz" \
+          cmake \
+            -B build \
+            -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" \
+            -DCMAKE_INSTALL_PREFIX="/usr" \
+            -DGUI=ON
+          cmake --build build --target qbt_update_translations
+          cmake --build build
+          QT_QPA_PLATFORM=offscreen build/qbittorrent -v
+          QT_QPA_PLATFORM=offscreen build/qbittorrent -v \
+            | grep -F "v${{ needs.prepare.outputs.version }}" \
+            || { echo "::error::built binary does not report v${{ needs.prepare.outputs.version }}"; exit 1; }
+          DESTDIR="qbittorrent" cmake --install build
+
+      - name: Install AppImage tooling
+        run: |
+          curl \
+            -L \
+            -Z \
+            -O https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage \
+            -O https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage \
+            -O https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+          chmod +x \
+            linuxdeploy-x86_64.AppImage \
+            linuxdeploy-plugin-qt-x86_64.AppImage \
+            linuxdeploy-plugin-appimage-x86_64.AppImage
+
+      - name: Package AppImage
+        run: |
+          set -euo pipefail
+          # A GUI install already provides the .desktop file and icons under
+          # qbittorrent/usr/share, so linuxdeploy finds them on its own.
+          rm -f "${{ runner.workspace }}/Qt/${{ env.qt_version }}/gcc_64/plugins/sqldrivers/libqsqlmimer.so"
+          ./linuxdeploy-x86_64.AppImage --appdir qbittorrent --plugin qt
+          mkdir -p qbittorrent/apprun-hooks
+          rm -f qbittorrent/apprun-hooks/*
+          cp .github/workflows/helper/appimage/export_vars.sh qbittorrent/apprun-hooks/export_vars.sh
+          appimage="qBittorrent-WARP-${{ needs.prepare.outputs.version }}-x86_64.AppImage"
+          NO_APPSTREAM=1 \
+            OUTPUT="${appimage}" \
+            ./linuxdeploy-x86_64.AppImage --appdir qbittorrent --output appimage
+          sha256sum "${appimage}" > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Create the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          version: ${{ needs.prepare.outputs.version }}
+          tag: ${{ needs.prepare.outputs.tag }}
+          sha: ${{ needs.prepare.outputs.sha }}
+        run: |
+          set -euo pipefail
+          appimage="qBittorrent-WARP-${version}-x86_64.AppImage"
+
+          maj="$(grep -oP '(?<=#define QBT_VERSION_MAJOR )\d+' src/base/version.h.in)"
+          min="$(grep -oP '(?<=#define QBT_VERSION_MINOR )\d+' src/base/version.h.in)"
+          bug="$(grep -oP '(?<=#define QBT_VERSION_BUGFIX )\d+' src/base/version.h.in)"
+          base="${maj}.${min}.${bug}"
+
+          {
+            echo "Prebuilt qBittorrent-WARP \`${version}\`, based on upstream qBittorrent \`${base}\`."
+            echo
+            echo "### Install"
+            echo "Download the AppImage, make it executable and run it:"
+            echo '```'
+            echo "chmod +x ${appimage}"
+            echo "./${appimage}"
+            echo '```'
+            echo "It is self-contained and portable: a \`profile\` folder holding all"
+            echo "configuration, data and the WARP engine is created next to the AppImage"
+            echo "file. Nothing is written to system locations. Verify the download against"
+            echo "\`SHA256SUMS\` if you wish."
+            echo
+            echo "Bundled helper licenses and pinned versions are listed in"
+            echo "[warp/THIRD-PARTY-NOTICES.md](https://github.com/Project516/qbittorrent-warp/blob/warp/warp/THIRD-PARTY-NOTICES.md)."
+          } > release-notes.md
+
+          gh release create "${tag}" \
+            --target "${sha}" \
+            --title "qBittorrent-WARP ${version}" \
+            --notes-file release-notes.md \
+            --latest \
+            "${appimage}" \
+            SHA256SUMS

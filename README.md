@@ -66,9 +66,22 @@ The fork-specific code is in `src/base/bittorrent/warpconfig.{h,cpp}`,
   in-client enforcement itself is cross-platform.
 
 ### Installation:
-The build dependencies are the same as upstream qBittorrent (Qt 6, libtorrent
-2.0, Boost, OpenSSL, zlib) plus CMake and Ninja. Refer to the [INSTALL](INSTALL)
-file for the full list and platform notes.
+Prebuilt binaries are published on the
+[Releases](https://github.com/Project516/qbittorrent-warp/releases) page as a
+single self-contained AppImage. Download the latest one, make it executable and
+run it:
+
+    chmod +x qBittorrent-WARP-*-x86_64.AppImage
+    ./qBittorrent-WARP-*-x86_64.AppImage
+
+Nothing needs to be installed. A `profile` folder holding all configuration, data
+and the WARP engine is created next to the AppImage file, and nothing is written
+to system locations. A `SHA256SUMS` file is attached to each release for
+verification.
+
+To build from source instead, the build dependencies are the same as upstream
+qBittorrent (Qt 6, libtorrent 2.0, Boost, OpenSSL, zlib) plus CMake and Ninja.
+Refer to the [INSTALL](INSTALL) file for the full list and platform notes.
 
 Fedora:
 
@@ -140,6 +153,14 @@ merges that pull request on its own when there are no conflicts. When a release
 would conflict (normally only in `src/base/bittorrent/sessionimpl.cpp`) the pull
 request is left open for manual resolution. The workflow can also be run on
 demand from the Actions tab.
+
+Each change produces a new release. Versions follow the upstream release the build
+is based on plus a fork patch number, written `X.Y.Z.W`: `X.Y.Z` is the upstream
+base and `W` is incremented for each fork build of that base, so a new upstream
+release restarts `W` at 1. A scheduled workflow (`.github/workflows/release.yaml`)
+builds the AppImage and publishes it to the Releases page automatically. The
+client's built-in *Check for Updates* tracks this fork's releases and tells you
+when a newer one is available.
 
 The fork-specific changes are a small set of commits on top of the upstream
 release, so updates stay simple. For a manual, rebase-based update instead of a
