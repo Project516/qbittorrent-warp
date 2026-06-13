@@ -10,7 +10,9 @@ tunnel is unavailable.
 This fork exists for privacy. It is not intended for, and does not condone,
 copyright infringement.
 
-It is based on qBittorrent 5.2.1 (upstream tag `release-5.2.1`).
+It tracks upstream qBittorrent and is rebased onto upstream stable releases as
+they are published (see *Updating to a new qBittorrent release*). The exact base
+release is whatever the git history is currently rebased onto.
 
 ### What the fork changes:
 Routing is locked to WARP and cannot be overridden from the GUI, the Web UI or
@@ -108,8 +110,8 @@ configuration.
 The fork is a small set of changes applied on top of an upstream release tag. To
 move it onto a newer release, run:
 
-    warp/update-from-upstream.sh                 # rebase onto the latest release-* tag
-    warp/update-from-upstream.sh release-5.3.0   # or onto a specific tag
+    warp/update-from-upstream.sh                  # rebase onto the latest stable release tag
+    warp/update-from-upstream.sh release-X.Y.Z    # or onto a specific tag
 
 Conflicts, if any, are normally confined to `src/base/bittorrent/sessionimpl.cpp`.
 Resolve them, finish the rebase, then rebuild.
