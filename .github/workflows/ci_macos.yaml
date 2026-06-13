@@ -1,6 +1,9 @@
 name: CI - macOS
 
-on: [pull_request, push]
+# qBittorrent-WARP is Linux-only (the bundled WARP engine is a Linux binary) and
+# macOS runners bill at 10x, which quickly exhausts a private repo's Actions
+# minutes. Run this only on demand.
+on: workflow_dispatch
 
 permissions: {}
 

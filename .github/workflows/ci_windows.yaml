@@ -1,6 +1,9 @@
 name: CI - Windows
 
-on: [pull_request, push]
+# qBittorrent-WARP is Linux-only (the bundled WARP engine is a Linux binary) and
+# Windows runners bill at 2x. Run this only on demand to conserve a private
+# repo's Actions minutes.
+on: workflow_dispatch
 
 permissions: {}
 
