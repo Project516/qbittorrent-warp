@@ -318,3 +318,12 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
         programupdater.cpp
     )
 endif()
+
+# qBittorrent-WARP: the fork ships Linux builds and an in-client update check that
+# tracks the fork's own GitHub releases, so the updater is compiled on Linux too.
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    target_sources(qbt_gui PRIVATE
+        programupdater.h
+        programupdater.cpp
+    )
+endif()

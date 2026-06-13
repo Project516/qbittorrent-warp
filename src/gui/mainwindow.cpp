@@ -108,7 +108,7 @@
 #include "macosstatusitem/statusitem.h"
 #include "macutilities.h"
 #endif
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
 #include "programupdater.h"
 #endif
 
@@ -324,7 +324,7 @@ MainWindow::MainWindow(IGUIApplication *app, const WindowState initialState, con
     connect(m_ui->actionMinimize, &QAction::triggered, this, &MainWindow::minimizeWindow);
     connect(m_ui->actionUseAlternativeSpeedLimits, &QAction::triggered, this, &MainWindow::toggleAlternativeSpeeds);
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     connect(m_ui->actionCheckForUpdates, &QAction::triggered, this, [this]() { checkProgramUpdate(true); });
 
     // trigger an early check on startup
@@ -858,7 +858,7 @@ void MainWindow::cleanup()
     m_preventTimer->stop();
     delete m_pwr;
 
-#if (defined(Q_OS_WIN) || defined(Q_OS_MACOS))
+#if (defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX))
     if (m_programUpdateTimer)
         m_programUpdateTimer->stop();
 #endif
@@ -1446,7 +1446,7 @@ void MainWindow::loadPreferences()
     // Torrent properties
     m_propertiesWidget->reloadPreferences();
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     if (pref->isUpdateCheckEnabled())
     {
         if (!m_programUpdateTimer)
@@ -1671,7 +1671,7 @@ void MainWindow::on_actionDownloadFromURL_triggered()
     }
 }
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
 void MainWindow::handleUpdateCheckFinished(ProgramUpdater *updater, const bool invokedByUser)
 {
     m_ui->actionCheckForUpdates->setEnabled(true);
@@ -1690,7 +1690,7 @@ void MainWindow::handleUpdateCheckFinished(ProgramUpdater *updater, const bool i
     {
         const QString msg {tr("A new version is available.") + u"<br/>"
             + tr("Do you want to download %1?").arg(newVersion.toString()) + u"<br/><br/>"
-            + u"<a href=\"https://www.qbittorrent.org/news\">%1</a>"_s.arg(tr("Open changelog..."))};
+            + u"<a href=\"https://github.com/Project516/qbittorrent-warp/releases\">%1</a>"_s.arg(tr("Open changelog..."))};
         auto *msgBox = new QMessageBox {QMessageBox::Question, tr("qBittorrent Update Available"), msg
             , (QMessageBox::Yes | QMessageBox::No), this};
         msgBox->setAttribute(Qt::WA_DeleteOnClose);
@@ -1901,7 +1901,7 @@ void MainWindow::refreshTrayIconTooltip()
     }
 }
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
 void MainWindow::checkProgramUpdate(const bool invokedByUser)
 {
     if (m_programUpdateTimer)

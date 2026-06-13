@@ -322,6 +322,10 @@ void OptionsDialog::loadBehaviorTabOptions()
 
 #if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS))
     m_ui->groupFileAssociation->setVisible(false);
+#endif
+    // qBittorrent-WARP: the in-client update check is enabled on Linux too, so the
+    // matching preference stays visible there; only hide it where it does nothing.
+#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX))
     m_ui->checkProgramUpdates->setVisible(false);
 #endif
 
@@ -351,7 +355,7 @@ void OptionsDialog::loadBehaviorTabOptions()
     m_ui->checkAssociateMagnetLinks->setEnabled(!m_ui->checkAssociateMagnetLinks->isChecked());
 #endif
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     m_ui->checkProgramUpdates->setChecked(pref->isUpdateCheckEnabled());
 #endif
 
@@ -437,7 +441,7 @@ void OptionsDialog::loadBehaviorTabOptions()
     connect(m_ui->checkAssociateMagnetLinks, &QAbstractButton::toggled, this, &ThisType::enableApplyButton);
 #endif
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     connect(m_ui->checkProgramUpdates, &QAbstractButton::toggled, this, &ThisType::enableApplyButton);
 #endif
 
@@ -545,7 +549,7 @@ void OptionsDialog::saveBehaviorTabOptions() const
     }
 #endif
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     pref->setUpdateCheckEnabled(m_ui->checkProgramUpdates->isChecked());
 #endif
 

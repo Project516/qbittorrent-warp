@@ -319,7 +319,7 @@ public:
     void setIgnoreSSLErrors(bool enabled);
     Path getPythonExecutablePath() const;
     void setPythonExecutablePath(const Path &path);
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     bool isUpdateCheckEnabled() const;
     void setUpdateCheckEnabled(bool enabled);
 #endif

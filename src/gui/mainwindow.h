@@ -255,7 +255,7 @@ private:
     SettingValue<bool> m_storeDownloadTrackerFavicon;
     CachedSettingValue<Log::MsgTypes> m_storeExecutionLogTypes;
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     void checkProgramUpdate(bool invokedByUser);
     void handleUpdateCheckFinished(ProgramUpdater *updater, bool invokedByUser);
 
