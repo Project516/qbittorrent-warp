@@ -13,6 +13,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       actions: write
       security-events: write
 
@@ -106,7 +107,7 @@ jobs:
       # to avoid scanning 3rdparty codebases, initialize it just before building qbt
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
-        if: startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON')
+        if: ${{ !github.event.repository.private && startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON') }}
         with:
           config-file: ./.github/workflows/helper/codeql/cpp.yaml
           languages: cpp
@@ -137,7 +138,7 @@ jobs:
 
       - name: Run CodeQL analysis
         uses: github/codeql-action/analyze@v4
-        if: startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON')
+        if: ${{ !github.event.repository.private && startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON') }}
         with:
           category: ${{ github.base_ref || github.ref_name }}
 

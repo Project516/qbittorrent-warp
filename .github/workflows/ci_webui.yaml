@@ -13,6 +13,7 @@ jobs:
     name: Check
     runs-on: ubuntu-slim
     permissions:
+      contents: read
       security-events: write
 
     defaults:
@@ -42,22 +43,22 @@ jobs:
         run: npm test
 
       - name: Lint code
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && !github.event.repository.private }}
         run: npm run lint
 
       - name: Format code
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && !github.event.repository.private }}
         run: |
           npm run format
           git diff --exit-code
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && !github.event.repository.private }}
         with:
           config-file: .github/workflows/helper/codeql/js.yaml
           languages: javascript
 
       - name: Run CodeQL analysis
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && !github.event.repository.private }}
         uses: github/codeql-action/analyze@v4

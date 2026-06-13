@@ -13,6 +13,7 @@ jobs:
     name: Build (${{ matrix.libtorrent.version }}, ${{ matrix.config.arch }})
     runs-on: ${{ matrix.config.os }}
     permissions:
+      contents: read
       actions: write
 
     strategy:
