@@ -230,7 +230,14 @@ jobs:
           NO_APPSTREAM=1 \
             OUTPUT="${appimage}" \
             ./linuxdeploy-x86_64.AppImage --appdir qbittorrent --output appimage
-          sha256sum "${appimage}" > SHA256SUMS
+          # Ship the AppImage inside a zip: GitHub downloads and some browsers drop
+          # the executable bit on raw .AppImage files (and a few mail/AV filters
+          # block them outright). zip stores the Unix permissions, so unzip on Linux
+          # restores the exec bit. The checksum covers the zip, i.e. the asset users
+          # actually download.
+          zip="${appimage}.zip"
+          zip -j "${zip}" "${appimage}"
+          sha256sum "${zip}" > SHA256SUMS
           cat SHA256SUMS
 
       - name: Create the GitHub release
@@ -242,6 +249,7 @@ jobs:
         run: |
           set -euo pipefail
           appimage="qBittorrent-WARP-${version}-x86_64.AppImage"
+          zip="${appimage}.zip"
 
           maj="$(grep -oP '(?<=#define QBT_VERSION_MAJOR )\d+' src/base/version.h.in)"
           min="$(grep -oP '(?<=#define QBT_VERSION_MINOR )\d+' src/base/version.h.in)"
@@ -252,8 +260,9 @@ jobs:
             echo "Prebuilt qBittorrent-WARP \`${version}\`, based on upstream qBittorrent \`${base}\`."
             echo
             echo "### Install"
-            echo "Download the AppImage, make it executable and run it:"
+            echo "Download the zip, extract the AppImage, make it executable and run it:"
             echo '```'
+            echo "unzip ${zip}"
             echo "chmod +x ${appimage}"
             echo "./${appimage}"
             echo '```'
@@ -271,5 +280,5 @@ jobs:
             --title "qBittorrent-WARP ${version}" \
             --notes-file release-notes.md \
             --latest \
-            "${appimage}" \
+            "${zip}" \
             SHA256SUMS
