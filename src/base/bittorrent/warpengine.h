@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <QElapsedTimer>
 #include <QObject>
 #include <QString>
 
@@ -89,6 +90,7 @@ namespace BitTorrent::Warp
         const Path m_wireproxyConf;
 
         QProcess *m_proxy = nullptr;
+        QElapsedTimer m_proxyUptime;
         int m_restartCount = 0;
         bool m_stopping = false;
     };

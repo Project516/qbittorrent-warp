@@ -293,8 +293,20 @@ namespace BitTorrent::Warp
 
     bool Engine::ensureProfile()
     {
+        // A profile left behind by an interrupted first run can exist but be
+        // empty or truncated. Feeding that to wireproxy yields a tunnel that
+        // never comes up, which the kill switch then turns into permanently
+        // blocked traffic. Treat anything without a WireGuard [Interface] section
+        // as missing so it is regenerated cleanly.
         if (m_profileConf.exists())
-            return true;
+        {
+            QFile profile(m_profileConf.toString());
+            if (profile.open(QIODevice::ReadOnly | QIODevice::Text) && profile.readAll().contains("[Interface]"))
+                return true;
+
+            LogMsg(tr("[WARP] The stored WARP profile is missing or invalid; regenerating it."), Log::WARNING);
+            Utils::Fs::removeFile(m_profileConf);
+        }
 
         LogMsg(tr("[WARP] Registering a free Cloudflare WARP account (first run only)..."), Log::INFO);
         if (!m_accountConf.exists())
@@ -319,12 +331,15 @@ namespace BitTorrent::Warp
         conf.append(u"\n[Socks5]\nBindAddress = %1:%2\n"_s
             .arg(Warp::socksHost(), QString::number(Warp::socksPort())).toUtf8());
 
-        QFile out(m_wireproxyConf.toString());
+        // Write atomically: a crash mid-write must not leave wireproxy a
+        // truncated config to choke on.
+        QSaveFile out(m_wireproxyConf.toString());
         if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
             return false;
         out.write(conf);
-        out.close();
-        out.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+        if (!out.commit())
+            return false;
+        QFile::setPermissions(m_wireproxyConf.toString(), QFile::ReadOwner | QFile::WriteOwner);
         return true;
     }
 
@@ -336,6 +351,13 @@ namespace BitTorrent::Warp
         {
             if (m_stopping)
                 return;
+
+            // A tunnel that ran healthily for a while before dying is a transient
+            // blip, not a crash loop, so refill the restart budget. Without this
+            // the few lifetime restarts would eventually be exhausted by the odd
+            // hiccup and the kill switch would then block traffic permanently.
+            if (m_proxyUptime.isValid() && (m_proxyUptime.elapsed() > 60000))
+                m_restartCount = 0;
 
             if (m_restartCount >= MAX_RESTARTS)
             {
@@ -350,10 +372,14 @@ namespace BitTorrent::Warp
             QTimer::singleShot(3s, this, [this]()
             {
                 if (!m_stopping && m_proxy)
+                {
+                    m_proxyUptime.restart();
                     m_proxy->start(m_wireproxy.toString(), {u"-c"_s, m_wireproxyConf.toString()});
+                }
             });
         });
 
+        m_proxyUptime.start();
         m_proxy->start(m_wireproxy.toString(), {u"-c"_s, m_wireproxyConf.toString()});
         LogMsg(tr("[WARP] Userspace WARP tunnel engine started; SOCKS5 on %1:%2.")
             .arg(Warp::socksHost(), QString::number(Warp::socksPort())), Log::INFO);
