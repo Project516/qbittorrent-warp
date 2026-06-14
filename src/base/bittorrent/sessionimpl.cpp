@@ -778,6 +778,10 @@ void SessionImpl::setDHTBootstrapNodes(const QString &nodes)
 
 bool SessionImpl::isDHTEnabled() const
 {
+    // WARP fork: DHT is UDP and cannot traverse the TCP-only tunnel, so it is
+    // force-disabled under enforcement; report that, not the stored preference.
+    if (Warp::isEnforced())
+        return false;
     return m_isDHTEnabled;
 }
 
@@ -2205,6 +2209,15 @@ void SessionImpl::applyWarpProxy(lt::settings_pack &settingsPack) const
     settingsPack.set_bool(lt::settings_pack::enable_upnp, false);
     settingsPack.set_bool(lt::settings_pack::enable_natpmp, false);
     settingsPack.set_bool(lt::settings_pack::enable_lsd, false);
+
+    // DHT and uTP are UDP; the SOCKS5 tunnel is TCP-only, so neither can be
+    // carried through WARP. Disable them outright instead of leaving libtorrent to
+    // silently suppress them, so nothing ever tries to leave as unproxied UDP.
+    // Peer Exchange stays enabled: it rides existing, already-tunnelled peer
+    // connections and makes no traffic of its own.
+    settingsPack.set_bool(lt::settings_pack::enable_dht, false);
+    settingsPack.set_bool(lt::settings_pack::enable_incoming_utp, false);
+    settingsPack.set_bool(lt::settings_pack::enable_outgoing_utp, false);
 
     if (Warp::useSocks())
     {
