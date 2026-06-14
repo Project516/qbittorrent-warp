@@ -1698,7 +1698,9 @@ void SessionImpl::endStartup(ResumeSessionContext *context)
     context->deleteLater();
     connect(context, &QObject::destroyed, this, [this]
     {
-        if (!m_isPaused)
+        // WARP fork: do not lift the startup pause while the kill switch has
+        // traffic blocked; the watchdog resumes once the tunnel is up.
+        if (!m_isPaused && !m_warpPaused)
             m_nativeSession->resume();
 
         if (m_refreshEnqueued)
@@ -2212,12 +2214,16 @@ void SessionImpl::applyWarpProxy(lt::settings_pack &settingsPack) const
 
     // DHT and uTP are UDP; the SOCKS5 tunnel is TCP-only, so neither can be
     // carried through WARP. Disable them outright instead of leaving libtorrent to
-    // silently suppress them, so nothing ever tries to leave as unproxied UDP.
-    // Peer Exchange stays enabled: it rides existing, already-tunnelled peer
-    // connections and makes no traffic of its own.
+    // silently suppress them, so nothing ever tries to leave as unproxied UDP, and
+    // force TCP on so the TCP-only proxy always has a working transport even when
+    // the user selected the uTP-only protocol. Peer Exchange stays enabled: it
+    // rides existing, already-tunnelled peer connections and makes no traffic of
+    // its own.
     settingsPack.set_bool(lt::settings_pack::enable_dht, false);
     settingsPack.set_bool(lt::settings_pack::enable_incoming_utp, false);
     settingsPack.set_bool(lt::settings_pack::enable_outgoing_utp, false);
+    settingsPack.set_bool(lt::settings_pack::enable_incoming_tcp, true);
+    settingsPack.set_bool(lt::settings_pack::enable_outgoing_tcp, true);
 
     if (Warp::useSocks())
     {
@@ -3574,7 +3580,8 @@ void SessionImpl::checkWarpHealth()
             .arg(Warp::describe()), Log::INFO);
         // Re-bind to the (now available) WARP interface and re-apply the proxy.
         configureListeningInterface();
-        if (m_nativeSession)
+        // Respect an explicit user pause: only the kill switch's own pause is lifted.
+        if (m_nativeSession && !m_isPaused)
             m_nativeSession->resume();
     }
 }
@@ -4428,7 +4435,10 @@ void SessionImpl::resume()
 {
     if (m_isPaused)
     {
-        if (isRestored())
+        // WARP fork: while the kill switch has traffic blocked, record the user's
+        // intent but keep the session paused; the watchdog resumes it once the
+        // tunnel is back.
+        if (isRestored() && !m_warpPaused)
             m_nativeSession->resume();
 
         m_isPaused = false;
