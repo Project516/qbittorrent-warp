@@ -31,7 +31,7 @@ on:
       - 'CMakeLists.txt'
       - '.github/workflows/release.yaml'
   workflow_run:
-    workflows: ["Auto-update from upstream", "Update WARP engine helpers"]
+    workflows: ["Auto-update from upstream"]
     types: [completed]
   workflow_dispatch:
 

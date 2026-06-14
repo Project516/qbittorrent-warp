@@ -1,22 +1,20 @@
 name: Update WARP engine helpers
 
-# Keeps the bundled Cloudflare WARP engine helpers current without manual work,
-# the same way auto_update.yaml tracks upstream qBittorrent. The fork does not
-# ship the helpers; it pins their versions, download URLs and SHA-256 sums in
+# Keeps the bundled Cloudflare WARP engine helpers current with minimal manual
+# work, in the spirit of auto_update.yaml. The fork does not ship the helpers; it
+# pins their versions, download URLs and SHA-256 sums in
 # src/base/bittorrent/warpengine.cpp and the client downloads and verifies them
 # at runtime (see warp/THIRD-PARTY-NOTICES.md). On a schedule this finds the
-# latest release of each helper, reads the published checksums, runs the
-# binaries once on the runner, rewrites the pins, and opens a pull request that
-# is merged automatically when it is clean.
+# latest release of each helper, reads the published checksums, runs the binaries
+# once on the runner, rewrites the pins, and opens a pull request.
+#
+# The pull request is left open for review: these helpers carry all torrent
+# traffic, so a person approves each bump. Merging it is a normal push to warp,
+# which is what triggers release.yaml to publish a build with the new pins.
 #
 # Helpers tracked:
 #   * wgcf      - ViRb3/wgcf            (the asset is the linux/amd64 binary)
 #   * wireproxy - pufferffish/wireproxy (the asset is a .tar.gz of the binary)
-#
-# Like auto_update.yaml the merge uses the built-in GITHUB_TOKEN, so it does not
-# itself trigger CI; release.yaml picks the change up through its workflow_run
-# trigger and publishes a build with the new pins compiled in. To gate the merge
-# on CI instead, leave the pull request for manual review (see the merge step).
 
 on:
   schedule:
@@ -124,7 +122,7 @@ jobs:
               "* wgcf: \`${cur_wgcf}\` -> \`${wgcf_ver}\`" \
               "* wireproxy: \`${cur_wp}\` -> \`${wp_ver}\`" \
               "" \
-              "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. It is merged automatically when it has no conflicts." \
+              "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. Review the version and checksum changes, then merge to publish a build with the new pins." \
               > "${work}/pr-body.md"
             gh pr create \
               --base warp --head "$branch" \
@@ -132,18 +130,4 @@ jobs:
               --body-file "${work}/pr-body.md"
           fi
 
-          # GitHub computes mergeability asynchronously; wait for it to settle.
-          state="UNKNOWN"
-          for _ in $(seq 1 12); do
-            state="$(gh pr view "$branch" --json mergeable --jq .mergeable)"
-            [ "$state" != "UNKNOWN" ] && break
-            sleep 6
-          done
-          echo "Mergeable state: $state"
-
-          if [ "$state" = "MERGEABLE" ]; then
-            gh pr merge "$branch" --merge --delete-branch
-            echo "Merged the helper bump into warp."
-          else
-            echo "::warning::the helper bump does not merge cleanly (state: ${state}); leaving the pull request open for review."
-          fi
+          echo "Opened a pull request for review: $(gh pr view "$branch" --json url --jq .url)"
