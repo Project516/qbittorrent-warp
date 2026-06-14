@@ -3,73 +3,35 @@ qBittorrent-WARP - qBittorrent routed through Cloudflare WARP
 
 ### Description:
 qBittorrent-WARP is a fork of qBittorrent that forces all BitTorrent traffic
-through Cloudflare WARP. The peer, tracker (HTTP and UDP), DHT and uTP sockets
-are routed through the WARP tunnel, and a kill switch pauses all transfers
-whenever the tunnel is unavailable.
+through Cloudflare WARP. Peer connections, tracker announces and their DNS go
+through the tunnel, and a kill switch pauses all transfers whenever the tunnel is
+unavailable.
 
 It is self-contained: a single binary with no setup. On first run it fetches and
 verifies its tunnel helpers, registers a free WARP account and starts a userspace
-WireGuard tunnel by itself. No shell scripts, no root, no kernel interface and no
-system changes are required. All configuration, data and the engine live in a
-portable `profile` folder beside the binary; nothing is written to system
-locations.
+WireGuard tunnel by itself - no shell scripts, no root, no system changes. All
+configuration, data and the engine live in a portable `profile` folder beside the
+binary.
 
 This fork exists for privacy. It is not intended for, and does not condone,
 copyright infringement.
 
-It tracks upstream qBittorrent and is rebased onto upstream stable releases as
-they are published (see *Updating to a new qBittorrent release*). The exact base
-release is whatever the git history is currently rebased onto.
-
 ### What the fork changes:
-* A self-contained WARP engine is built in. On first run it downloads its two
-  helper tools (wgcf and wireproxy) from their official upstream releases at
-  pinned versions, verifies each one against a hard-coded SHA-256 before running
-  it, registers a free Cloudflare WARP account and runs a userspace WireGuard
-  tunnel that exposes a local SOCKS5 endpoint (default `127.0.0.1:40000`).
-  The helpers are stored in the profile folder and reused on later runs. The
-  engine is supervised by the app and shut down on exit. The pinned versions,
-  download URLs, checksums and licenses are listed in
-  [warp/THIRD-PARTY-NOTICES.md](warp/THIRD-PARTY-NOTICES.md).
-* libtorrent is routed through that SOCKS5 endpoint with remote hostname
-  resolution enabled, so peer, tracker, DHT and DNS traffic all go through the
-  tunnel. Routing is locked and cannot be overridden from the GUI, the Web UI or
-  the configuration file.
-* A watchdog pauses all BitTorrent traffic whenever the tunnel is unavailable
-  (including before it has finished connecting) and resumes once it is up, so
-  nothing leaks around the tunnel.
-* UPnP, NAT-PMP and Local Service Discovery are disabled so the client does not
-  contact the local router or announce activity on the LAN.
-* Portable by default: configuration, data, logs and the engine are stored in a
-  `profile` folder next to the binary instead of system locations.
+* Routes libtorrent through a self-contained userspace WARP tunnel (SOCKS5), with
+  DNS resolved through the tunnel. Routing is locked and cannot be overridden from
+  the GUI, the Web UI or the configuration file.
+* Fails closed: a kill switch pauses traffic whenever the tunnel is down, and the
+  client never falls back to a direct connection.
+* Disables everything that touches the local network or leaks identity - UPnP,
+  NAT-PMP, Local Service Discovery, DHT and uTP - and forces anonymous mode on.
+* Portable: configuration, data, logs and the engine live in a `profile` folder
+  beside the binary, not in system locations.
 
-By default all egress is routed through the SOCKS5 endpoint, and the client stays
-pointed at it even while it is unreachable, so a dropped tunnel makes connections
-fail rather than leak to a direct route. Setups that provide a real `warp`
-WireGuard interface (such as the `qbt-warp-netns.sh` wrapper) can switch to
-interface binding with `QBT_WARP_MODE` (see below); a named-but-down interface
-also fails closed.
-The fork-specific code is in `src/base/bittorrent/warpconfig.{h,cpp}`,
-`src/base/bittorrent/warpengine.{h,cpp}` and the hooks in
-`src/base/bittorrent/sessionimpl.cpp`.
-
-### Limitations:
-* WARP does not support inbound connections or port forwarding. The client is
-  connect-only: it can reach peers that accept incoming connections, but remote
-  peers cannot connect to it. Transfers still work, with a smaller peer set.
-* Running BitTorrent over the free WARP tier may conflict with Cloudflare's
-  terms of service.
-* WARP hides your address from peers and trackers and your traffic from the
-  local network and ISP. It is not an anonymity network; Cloudflare can see your
-  traffic at its edge.
-* The default SOCKS5 path resolves hostnames through the tunnel, so DNS does not
-  leak. The opt-in interface mode (`QBT_WARP_MODE=interface`) does not bind the
-  resolver, so use it only with system DNS already routed through WARP.
-* The engine helpers and the optional helper scripts are Linux-only. The
-  in-client enforcement itself is cross-platform.
+See [warp/README.md](warp/README.md) for how it works, configuration, verification
+and advanced setups.
 
 ### Installation:
-Prebuilt binaries are published on the
+Prebuilt binaries are on the
 [Releases](https://github.com/Project516/qbittorrent-warp/releases) page as a
 single self-contained AppImage. Download the latest one, make it executable and
 run it:
@@ -77,102 +39,21 @@ run it:
     chmod +x qBittorrent-WARP-*-x86_64.AppImage
     ./qBittorrent-WARP-*-x86_64.AppImage
 
-Nothing needs to be installed. A `profile` folder holding all configuration, data
-and the WARP engine is created next to the AppImage file, and nothing is written
-to system locations. A `SHA256SUMS` file is attached to each release for
-verification.
+Nothing needs to be installed; a `profile` folder is created beside the AppImage,
+and each release attaches a `SHA256SUMS` file for verification. To build from
+source instead, see [warp/README.md](warp/README.md#building-from-source).
 
-To build from source instead, the build dependencies are the same as upstream
-qBittorrent (Qt 6, libtorrent 2.0, Boost, OpenSSL, zlib) plus CMake and Ninja.
-Refer to the [INSTALL](INSTALL) file for the full list and platform notes.
-
-Fedora:
-
-    sudo dnf install -y gcc-c++ cmake ninja-build openssl-devel zlib-devel \
-        zlib-ng-compat-static boost-devel qt6-qtbase-devel qt6-qtbase-private-devel \
-        qt6-qttools-devel qt6-qtsvg-devel rb_libtorrent-devel
-
-Debian / Ubuntu:
-
-    sudo apt install -y build-essential cmake ninja-build libssl-dev zlib1g-dev \
-        libboost-dev qt6-base-dev qt6-base-private-dev qt6-tools-dev libqt6svg6-dev \
-        libtorrent-rasterbar-dev
-
-Configure and build:
-
-    cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-    cmake --build build
-
-Add `-DGUI=OFF` to build `qbittorrent-nox` (headless, Web UI only).
-
-The engine helpers (wgcf and wireproxy) are not bundled. The binary downloads
-them from their official upstream releases on first run and verifies each one
-against a pinned SHA-256 before running it, so the build needs no extra steps.
-The pinned versions, URLs, checksums and licenses are in
-[warp/THIRD-PARTY-NOTICES.md](warp/THIRD-PARTY-NOTICES.md).
-
-### Usage:
-Run the binary. There is nothing to configure:
-
-    ./qbittorrent
-
-On the first launch it downloads and verifies the engine helpers, registers a
-free Cloudflare WARP account, starts the tunnel and creates a `profile` folder
-beside the binary holding all configuration, data and the engine. Subsequent
-launches reuse them. The log shows the progress:
-
-    [WARP] Fetching engine helper (first run only): https://github.com/...
-    [WARP] Registering a free Cloudflare WARP account (first run only)...
-    [WARP] Userspace WARP tunnel engine started; SOCKS5 on 127.0.0.1:40000.
-    [WARP] Tunnel restored. Resuming BitTorrent traffic.
-
-Until the tunnel reports reachable the kill switch keeps all transfers paused.
-
-Environment variables (optional):
-
-    QBT_WARP_MODE         interface | socks5 | both    (default: socks5)
-    QBT_WARP_INTERFACE    WARP interface name           (default: warp)
-    QBT_WARP_SOCKS_HOST   SOCKS5 host                   (default: 127.0.0.1)
-    QBT_WARP_SOCKS_PORT   SOCKS5 port                   (default: 40000)
-    QBT_WARP_KILLSWITCH   0 to disable the kill switch  (default: 1)
-    QBT_WARP_DISABLE      1 to disable enforcement entirely (development only)
-
-On start-up the log shows a line beginning with `[WARP]` describing the active
-configuration.
-
-### Advanced (optional):
-The built-in engine makes the helper scripts in `warp/` unnecessary for normal
-use. They remain for advanced setups: `warp-provision.sh` provisions WARP with an
-external `wgcf`/`wireproxy`, and `qbt-warp-netns.sh` runs the client inside a
-network namespace whose only route is WARP (the strongest, fully kernel-level
-isolation). Point the client at an external endpoint with the environment
-variables above.
-
-### Updating to a new qBittorrent release:
-This is handled automatically. A scheduled GitHub Actions workflow
-(`.github/workflows/auto_update.yaml`) checks weekly for the latest upstream
-stable release, opens a pull request that merges it into the `warp` branch, and
-merges that pull request on its own when there are no conflicts. When a release
-would conflict (normally only in `src/base/bittorrent/sessionimpl.cpp`) the pull
-request is left open for manual resolution. The workflow can also be run on
-demand from the Actions tab.
-
-Each change produces a new release. Versions follow the upstream release the build
-is based on plus a fork patch number, written `X.Y.Z.W`: `X.Y.Z` is the upstream
-base and `W` is incremented for each fork build of that base, so a new upstream
-release restarts `W` at 1. A scheduled workflow (`.github/workflows/release.yaml`)
-builds the AppImage and publishes it to the Releases page automatically. The
-client's built-in *Check for Updates* tracks this fork's releases and tells you
-when a newer one is available.
-
-The fork-specific changes are a small set of commits on top of the upstream
-release, so updates stay simple. For a manual, rebase-based update instead of a
-merge, `warp/update-from-upstream.sh` rebases the fork onto a release tag.
+### Documentation:
+* [warp/README.md](warp/README.md) - the WARP engine, configuration, verification,
+  building and advanced use.
+* [warp/THIRD-PARTY-NOTICES.md](warp/THIRD-PARTY-NOTICES.md) - bundled helper
+  versions, checksums and licenses.
+* `doc/` - qBittorrent man pages.
 
 ### Misc:
 This is an unofficial fork and is not affiliated with or endorsed by the
-qBittorrent project. Report problems with the fork to this repository, not to
-the upstream qBittorrent trackers.
+qBittorrent project. Report problems with the fork to this repository, not to the
+upstream qBittorrent trackers.
 
 Upstream project: https://www.qbittorrent.org
 Upstream wiki:    https://wiki.qbittorrent.org
