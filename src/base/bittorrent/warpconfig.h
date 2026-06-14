@@ -36,6 +36,12 @@
 //     WARP (warp-cli proxy mode or wireproxy, default 127.0.0.1:40000) with
 //     proxy_hostnames enabled so even DNS for trackers resolves through WARP.
 //
+// The default mode is SOCKS5: libtorrent is kept pointed at the loopback proxy
+// even while it is down, so a dropped tunnel makes every connection fail instead
+// of falling back to a direct route. "interface" and "both" stay available via
+// QBT_WARP_MODE for setups that provide a real WARP interface (e.g. the
+// qbt-warp-netns.sh wrapper).
+//
 // Note: binding egress to the WARP interface and connecting to a loopback SOCKS5
 // proxy are mutually exclusive on the same socket (binding the local endpoint to
 // the WARP IP breaks the connection to 127.0.0.1). Therefore in "both" mode the
@@ -66,7 +72,7 @@ namespace BitTorrent::Warp
     QString socksHost();
     int socksPort();
 
-    // Enforcement mode. Default Both. Override with
+    // Enforcement mode. Default Socks5. Override with
     // env QBT_WARP_MODE = interface | socks5 | both.
     Mode mode();
 

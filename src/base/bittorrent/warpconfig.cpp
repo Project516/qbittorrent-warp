@@ -67,9 +67,11 @@ namespace BitTorrent::Warp
         const QString value = qEnvironmentVariable("QBT_WARP_MODE").trimmed().toLower();
         if (value == u"interface"_s)
             return Mode::Interface;
-        if (value == u"socks5"_s)
-            return Mode::Socks5;
-        return Mode::Both;
+        if (value == u"both"_s)
+            return Mode::Both;
+        // Default to SOCKS5: it is the only egress path the self-contained build
+        // has, and it fails closed when the tunnel is down (see useSocks()).
+        return Mode::Socks5;
     }
 
     bool killSwitchEnabled()
@@ -100,10 +102,22 @@ namespace BitTorrent::Warp
 
     bool useSocks()
     {
-        const Mode m = mode();
-        if ((m != Mode::Socks5) && (m != Mode::Both))
+        switch (mode())
+        {
+        case Mode::Socks5:
+            // The SOCKS5 proxy is the committed egress path: route through it even
+            // while it is (re)starting or down, so libtorrent fails closed on an
+            // unreachable proxy instead of being handed proxy_type=none and going
+            // out directly.
+            return true;
+        case Mode::Both:
+            // Prefer the proxy when reachable; otherwise fall back to binding the
+            // WARP interface (see applyWarpProxy / applyNetworkInterfacesSettings).
+            return isSocksReachable();
+        case Mode::Interface:
+        default:
             return false;
-        return isSocksReachable();
+        }
     }
 
     bool isHealthy()

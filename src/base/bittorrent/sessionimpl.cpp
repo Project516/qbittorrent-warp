@@ -698,7 +698,9 @@ SessionImpl::SessionImpl(QObject *parent)
     {
         LogMsg(tr("[WARP] qBittorrent-WARP routing enforcement is ACTIVE. %1").arg(Warp::describe()), Log::INFO);
         m_warpWatchdog = new QTimer(this);
-        m_warpWatchdog->setInterval(5s);
+        // Poll briskly so traffic is paused quickly if the tunnel drops; routing
+        // already fails closed in the meantime (see Warp::useSocks).
+        m_warpWatchdog->setInterval(2s);
         connect(m_warpWatchdog, &QTimer::timeout, this, &SessionImpl::checkWarpHealth);
         m_warpWatchdog->start();
         checkWarpHealth();

@@ -43,9 +43,12 @@ release is whatever the git history is currently rebased onto.
 * Portable by default: configuration, data, logs and the engine are stored in a
   `profile` folder next to the binary instead of system locations.
 
-As a fallback, if the SOCKS5 endpoint is not reachable the client can instead
-bind directly to a WARP WireGuard interface named `warp` (see `QBT_WARP_MODE`);
-when an interface is named but down, libtorrent fails closed rather than leaking.
+By default all egress is routed through the SOCKS5 endpoint, and the client stays
+pointed at it even while it is unreachable, so a dropped tunnel makes connections
+fail rather than leak to a direct route. Setups that provide a real `warp`
+WireGuard interface (such as the `qbt-warp-netns.sh` wrapper) can switch to
+interface binding with `QBT_WARP_MODE` (see below); a named-but-down interface
+also fails closed.
 The fork-specific code is in `src/base/bittorrent/warpconfig.{h,cpp}`,
 `src/base/bittorrent/warpengine.{h,cpp}` and the hooks in
 `src/base/bittorrent/sessionimpl.cpp`.
@@ -60,8 +63,8 @@ The fork-specific code is in `src/base/bittorrent/warpconfig.{h,cpp}`,
   local network and ISP. It is not an anonymity network; Cloudflare can see your
   traffic at its edge.
 * The default SOCKS5 path resolves hostnames through the tunnel, so DNS does not
-  leak. The manual interface fallback (`QBT_WARP_MODE=interface`) does not bind
-  the resolver, so use it only with system DNS already routed through WARP.
+  leak. The opt-in interface mode (`QBT_WARP_MODE=interface`) does not bind the
+  resolver, so use it only with system DNS already routed through WARP.
 * The engine helpers and the optional helper scripts are Linux-only. The
   in-client enforcement itself is cross-platform.
 
@@ -127,7 +130,7 @@ Until the tunnel reports reachable the kill switch keeps all transfers paused.
 
 Environment variables (optional):
 
-    QBT_WARP_MODE         interface | socks5 | both    (default: both)
+    QBT_WARP_MODE         interface | socks5 | both    (default: socks5)
     QBT_WARP_INTERFACE    WARP interface name           (default: warp)
     QBT_WARP_SOCKS_HOST   SOCKS5 host                   (default: 127.0.0.1)
     QBT_WARP_SOCKS_PORT   SOCKS5 port                   (default: 40000)
