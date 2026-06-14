@@ -1,8 +1,9 @@
 name: Stale bot
 
+# The private fork does not triage a public issue/PR tracker, so the stale bot
+# runs on demand only instead of daily.
 on:
-  schedule:
-    - cron: '0 0 * * *'
+  workflow_dispatch
 
 permissions: {}
 

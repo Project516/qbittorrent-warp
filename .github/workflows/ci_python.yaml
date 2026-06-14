@@ -1,6 +1,9 @@
 name: CI - Python
 
-on: [pull_request, push]
+# The fork does not modify the Python search engine or the auxiliary scripts, so
+# this only ever tests upstream code; failures are upstream issues, fixed
+# upstream and pulled in by the auto-update merge. Run on demand only.
+on: workflow_dispatch
 
 permissions: {}
 

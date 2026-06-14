@@ -1,9 +1,9 @@
 name: Coverity Scan
 
+# Coverity scans the whole (overwhelmingly upstream) codebase and needs a
+# Coverity project token, so the fork runs it on demand only rather than monthly.
 on:
-  schedule:
-    - cron: '0 0 1 * *' # Monthly (1st day of month at midnight)
-  workflow_dispatch: # Mainly for testing. Don't forget the Coverity usage limits.
+  workflow_dispatch: # Don't forget the Coverity usage limits.
 
 permissions: {}
 

@@ -1,6 +1,10 @@
 name: CI - WebUI
 
-on: [pull_request, push]
+# The qBittorrent-WARP fork does not modify the Web UI, so this only ever tests
+# upstream code; any failure here is an upstream issue, fixed upstream and pulled
+# in by the auto-update merge. Run on demand only to conserve a private repo's
+# Actions minutes.
+on: workflow_dispatch
 
 permissions: {}
 
