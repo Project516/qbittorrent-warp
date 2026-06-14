@@ -793,6 +793,11 @@ void SessionImpl::setDHTEnabled(bool enabled)
 
 bool SessionImpl::isLSDEnabled() const
 {
+    // WARP fork: Local Service Discovery is force-disabled under enforcement (it
+    // would broadcast torrent activity on the LAN), so report the enforced value
+    // rather than the stored preference.
+    if (Warp::isEnforced())
+        return false;
     return m_isLSDEnabled;
 }
 
@@ -3077,6 +3082,13 @@ void SessionImpl::enablePortMapping()
 {
     invokeAsync([this]
     {
+        // WARP fork: UPnP/NAT-PMP talk to the local router on the real network and
+        // are useless over WARP (it has no inbound). Keep them off under enforcement
+        // so the client never announces itself on the LAN. Without this the port
+        // forwarder re-enables them after applyWarpProxy has switched them off.
+        if (Warp::isEnforced())
+            return;
+
         if (m_isPortMappingEnabled)
             return;
 
@@ -4828,6 +4840,11 @@ void SessionImpl::setSocketBacklogSize(const int value)
 
 bool SessionImpl::isAnonymousModeEnabled() const
 {
+    // WARP fork: anonymous mode is forced on under enforcement (it is what keeps
+    // libtorrent from leaking identity or making unproxied connections), so report
+    // the enforced value rather than the stored preference.
+    if (Warp::isEnforced())
+        return true;
     return m_isAnonymousModeEnabled;
 }
 
