@@ -64,16 +64,33 @@ jobs:
 
           branch="auto-update/${tag}"
 
-          # (Re)point the update branch at the upstream release commit. Merging it
-          # into warp brings the upstream changes in; conflicts surface on the PR.
-          git push --force origin "${tagsha}:refs/heads/${branch}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Build the update as an ordinary descendant of warp, then push that.
+          # Pushing the upstream commit directly fails ("fatal error in
+          # commit_refs"): it is foreign history carrying its own
+          # .github/workflows files, which a token may not introduce that way.
+          # Merging it on the runner keeps the push a normal branch update, and
+          # the merge result tells us locally whether it was clean.
+          git checkout -B "$branch" warp
+          if git merge --no-edit "$tagsha"; then
+            conflicts=0
+          else
+            # Commit the conflicted tree so the markers show up on the PR for a
+            # person to resolve; this case is never merged automatically below.
+            conflicts=1
+            git add -A
+            git commit --no-edit
+          fi
+          git push --force origin "$branch"
 
           # Open the PR if one does not already exist for this branch.
           if ! gh pr view "$branch" --json number >/dev/null 2>&1; then
             printf '%s\n' \
               "Automated sync of upstream qBittorrent stable \`${tag}\` into the \`warp\` branch." \
               "" \
-              "This PR is merged automatically when it has no conflicts. If it shows conflicts, they need manual resolution (usually only in \`src/base/bittorrent/sessionimpl.cpp\`)." \
+              "This PR is merged automatically when the merge is clean. When it conflicts the conflict markers are committed to the branch for manual resolution (usually only in \`src/base/bittorrent/sessionimpl.cpp\`)." \
               > pr-body.md
             gh pr create \
               --base warp --head "$branch" \
@@ -81,18 +98,14 @@ jobs:
               --body-file pr-body.md
           fi
 
-          # GitHub computes mergeability asynchronously; wait for it to settle.
-          state="UNKNOWN"
-          for _ in $(seq 1 12); do
-            state="$(gh pr view "$branch" --json mergeable --jq .mergeable)"
-            [ "$state" != "UNKNOWN" ] && break
-            sleep 6
-          done
-          echo "Mergeable state: $state"
-
-          if [ "$state" = "MERGEABLE" ]; then
+          if [ "$conflicts" -eq 0 ]; then
+            # Wait for GitHub to finish computing mergeability before merging.
+            for _ in $(seq 1 12); do
+              [ "$(gh pr view "$branch" --json mergeable --jq .mergeable)" != "UNKNOWN" ] && break
+              sleep 6
+            done
             gh pr merge "$branch" --merge --delete-branch
             echo "Merged ${tag} into warp."
           else
-            echo "::warning::${tag} does not merge cleanly into warp (state: ${state}). The pull request has been left open for manual resolution."
+            echo "::warning::${tag} does not merge cleanly into warp. The conflict markers are committed to the pull request, which has been left open for manual resolution."
           fi
