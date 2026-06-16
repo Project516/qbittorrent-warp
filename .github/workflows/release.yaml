@@ -13,13 +13,13 @@ name: Release
 # keeps version.h.in conflict-free when merging upstream.
 #
 # Triggers:
-#   * push to warp touching source        -> release fork-side changes (W bumps);
-#   * workflow_run after "Auto-update ..." -> release upstream syncs. A merge pushed
-#     by auto_update with the built-in GITHUB_TOKEN does NOT itself fire `push`
-#     (GitHub anti-recursion), so this trigger covers that case;
-#   * workflow_dispatch                    -> on demand.
-# The dedup guard (a release tag already on HEAD) makes overlapping triggers and
-# no-op runs harmless: each commit is released at most once.
+#   * push to warp touching source -> release the pushed change. auto_update
+#     merges upstream with a personal token (AUTOUPDATE_TOKEN), so that merge
+#     fires `push` like any other and is released the same way; fork-side changes
+#     bump W;
+#   * workflow_dispatch            -> on demand.
+# The dedup guard (a release tag already on HEAD) makes a no-op or repeated run
+# harmless: each commit is released at most once.
 
 on:
   push:
@@ -30,9 +30,6 @@ on:
       - 'dist/**'
       - 'CMakeLists.txt'
       - '.github/workflows/release.yaml'
-  workflow_run:
-    workflows: ["Auto-update from upstream"]
-    types: [completed]
   workflow_dispatch:
 
 permissions:
