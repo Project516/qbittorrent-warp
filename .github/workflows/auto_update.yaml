@@ -7,11 +7,13 @@ name: Auto-update from upstream
 # only in src/base/bittorrent/sessionimpl.cpp) the pull request is left open for
 # manual resolution.
 #
-# Note: the pull request is created with the built-in GITHUB_TOKEN, so it does
-# not trigger the CI workflows (a GitHub anti-recursion rule) and is merged on
-# the no-conflict check alone. To gate the merge on CI instead, create a
-# personal access token, store it as the secret AUTOUPDATE_TOKEN and use it for
-# the checkout and gh steps below.
+# Note: the checkout and gh steps below authenticate with a personal access
+# token stored as the secret AUTOUPDATE_TOKEN, falling back to the built-in
+# GITHUB_TOKEN when it is unset. The token needs the workflow scope: an upstream
+# release that changes a file under .github/workflows/ cannot be pushed with the
+# built-in token (GitHub forbids workflow edits without that scope). Using a
+# personal token also lets the pull request trigger the CI workflows, which the
+# built-in token suppresses (a GitHub anti-recursion rule).
 
 on:
   schedule:
@@ -37,10 +39,11 @@ jobs:
         with:
           ref: warp
           fetch-depth: 0
+          token: ${{ secrets.AUTOUPDATE_TOKEN || github.token }}
 
       - name: Open and (if clean) merge the upstream update
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN || github.token }}
         run: |
           set -euo pipefail
 
