@@ -85,17 +85,22 @@ jobs:
           fi
           git push --force origin "$branch"
 
-          # Open the PR if one does not already exist for this branch.
+          # Open the PR if one does not already exist for this branch. A freshly
+          # pushed branch can take a moment to become visible to the PR API, so
+          # retry until the create succeeds.
           if ! gh pr view "$branch" --json number >/dev/null 2>&1; then
             printf '%s\n' \
               "Automated sync of upstream qBittorrent stable \`${tag}\` into the \`warp\` branch." \
               "" \
               "This PR is merged automatically when the merge is clean. When it conflicts the conflict markers are committed to the branch for manual resolution (usually only in \`src/base/bittorrent/sessionimpl.cpp\`)." \
               > pr-body.md
-            gh pr create \
-              --base warp --head "$branch" \
-              --title "Update to qBittorrent ${tag}" \
-              --body-file pr-body.md
+            for _ in $(seq 1 10); do
+              gh pr create \
+                --base warp --head "$branch" \
+                --title "Update to qBittorrent ${tag}" \
+                --body-file pr-body.md && break
+              sleep 6
+            done
           fi
 
           if [ "$conflicts" -eq 0 ]; then
