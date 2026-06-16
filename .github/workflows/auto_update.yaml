@@ -44,6 +44,9 @@ jobs:
       - name: Open and (if clean) merge the upstream update
         env:
           GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN || github.token }}
+          # Pin gh to this repo; the script adds an "upstream" remote, which gh
+          # would otherwise treat as the pull request's base repository.
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
 
