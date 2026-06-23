@@ -9,7 +9,11 @@ against a hard-coded SHA-256 before it is executed (see
 src/base/bittorrent/warpengine.cpp). The downloads are stored in the portable
 profile directory and reused on later runs.
 
-To update a tool, bump its version, download URL and checksums together; the
+The fork ships an x86_64 desktop build and an arm64 build (the headless
+Raspberry Pi release), so each tool is pinned for both architectures and the
+matching asset is chosen at runtime.
+
+To update a tool, bump its version, download URLs and checksums together; the
 checksums are taken from each release's published checksums.txt.
 
 
@@ -19,8 +23,10 @@ Registers a free Cloudflare WARP account and generates a WireGuard profile.
 
 * Project:  https://github.com/ViRb3/wgcf
 * Version:  v2.2.31
-* Asset:    wgcf_2.2.31_linux_amd64
-* SHA-256:  69147e1a517c66129edd8ac8cb60484d6c9515178d7b4a2f95e3c925f225572a
+* Asset (amd64):   wgcf_2.2.31_linux_amd64
+* SHA-256 (amd64): 69147e1a517c66129edd8ac8cb60484d6c9515178d7b4a2f95e3c925f225572a
+* Asset (arm64):   wgcf_2.2.31_linux_arm64
+* SHA-256 (arm64): b9bdbdeaa3f9f4ba741ba55b8bd94c24f7166c27668eb7e8192ccf9746961182
 * License:  MIT
 
 MIT License
@@ -52,9 +58,12 @@ A userspace WireGuard client that exposes a local SOCKS5 proxy.
 
 * Project:  https://github.com/pufferffish/wireproxy
 * Version:  v1.1.2
-* Asset:    wireproxy_linux_amd64.tar.gz
-* SHA-256 (archive): b7dcff8f6e9d3410364e432aff24154eaa8db8206e0c6faac35d6c6ab06dac51
-* SHA-256 (binary):  b5a729f3606753ce4d4bfeb0f56d522e4aa0908aff8c7d55960fd4301cc58b11
+* Asset (amd64):            wireproxy_linux_amd64.tar.gz
+* SHA-256 (amd64, archive): b7dcff8f6e9d3410364e432aff24154eaa8db8206e0c6faac35d6c6ab06dac51
+* SHA-256 (amd64, binary):  b5a729f3606753ce4d4bfeb0f56d522e4aa0908aff8c7d55960fd4301cc58b11
+* Asset (arm64):            wireproxy_linux_arm64.tar.gz
+* SHA-256 (arm64, archive): aa234db9ef0b2774cb04a79f391bd41c2ededd815fc1a1c720cfdc693c70898d
+* SHA-256 (arm64, binary):  8258f5f7b6679c05a932eedf910f7edb74cf2d84043f394f94fc387681d3b0e3
 * License:  ISC
 
 Copyright (c) 2026 Tsz Fung Wong <im@windtfw.com>

@@ -62,6 +62,69 @@ them. The log shows the progress:
 
 Until the tunnel reports reachable the kill switch keeps all transfers paused.
 
+### Headless Raspberry Pi:
+The `aarch64` AppImage on the Releases page is the headless build
+(`qbittorrent-nox`). It has no graphical interface and is controlled through its
+Web UI in a browser, which suits a Raspberry Pi or any 64-bit ARM board running a
+64-bit operating system. Everything else, the WARP tunnel, the kill switch and
+the portable `profile` folder, works exactly as on the desktop build.
+
+AppImages need FUSE. Install it once with `sudo apt install libfuse2`, or run the
+AppImage with `--appimage-extract-and-run` to skip the dependency.
+
+Download the `aarch64` zip onto the Pi, extract it and start it. Pass
+`--confirm-legal-notice` so it does not wait for keyboard input on a machine you
+reach over SSH:
+
+    unzip qBittorrent-WARP-*-aarch64.AppImage.zip
+    chmod +x qBittorrent-WARP-*-aarch64.AppImage
+    ./qBittorrent-WARP-*-aarch64.AppImage --confirm-legal-notice
+
+The Web UI listens on port 8080. On the first start qbittorrent-nox prints a
+randomly generated password for the `admin` account to its log:
+
+    ******** Information: The WebUI administrator username is: admin
+    ******** Information: A temporary password is provided for this session: <password>
+
+Browse to `http://<pi-ip>:8080`, sign in with that password, then set your own
+under Tools, Options, Web UI. Give it a minute on first run while it downloads
+and verifies the engine helpers and brings the tunnel up; until then the kill
+switch keeps transfers paused.
+
+To start it automatically on boot, create a systemd service. Put the AppImage in
+its own directory (the `profile` folder is created next to it) and rename it to a
+stable name so updates do not change the path:
+
+    mkdir -p ~/qbittorrent-warp
+    mv qBittorrent-WARP-*-aarch64.AppImage ~/qbittorrent-warp/qBittorrent-WARP.AppImage
+
+Write `/etc/systemd/system/qbittorrent-warp.service`, adjusting the user and path
+to match your system:
+
+    [Unit]
+    Description=qBittorrent-WARP (headless)
+    Wants=network-online.target
+    After=network-online.target nss-lookup.target
+
+    [Service]
+    Type=simple
+    User=pi
+    WorkingDirectory=/home/pi/qbittorrent-warp
+    ExecStart=/home/pi/qbittorrent-warp/qBittorrent-WARP.AppImage --confirm-legal-notice
+    Restart=on-failure
+    TimeoutStopSec=1800
+
+    [Install]
+    WantedBy=multi-user.target
+
+Enable and start it, then read the first-run password from the journal:
+
+    sudo systemctl enable --now qbittorrent-warp
+    journalctl -u qbittorrent-warp | grep -i password
+
+The same peer-connectivity and magnet-link limitations below apply to the
+headless build. Use torrents with HTTP/HTTPS trackers.
+
 ### Verifying the tunnel:
 Confirm the SOCKS5 endpoint exits through WARP:
 

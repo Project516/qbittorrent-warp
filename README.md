@@ -32,9 +32,16 @@ and advanced setups.
 
 ### Installation:
 Prebuilt binaries are on the
-[Releases](https://github.com/Project516/qbittorrent-warp/releases) page as a
-single self-contained AppImage. Download the latest one, make it executable and
-run it:
+[Releases](https://github.com/Project516/qbittorrent-warp/releases) page as
+self-contained AppImages. Two builds are published:
+
+* `x86_64` - desktop build with the graphical interface, for 64-bit Linux PCs.
+* `aarch64` - headless build (`qbittorrent-nox`) for 64-bit ARM boards such as
+  the Raspberry Pi. It has no graphical interface and is used through its Web UI
+  in a browser. See [warp/README.md](warp/README.md#headless-raspberry-pi) for
+  headless setup.
+
+Download the one for your machine, make it executable and run it:
 
     chmod +x qBittorrent-WARP-*-x86_64.AppImage
     ./qBittorrent-WARP-*-x86_64.AppImage

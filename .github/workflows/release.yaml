@@ -253,11 +253,22 @@ jobs:
           bug="$(grep -oP '(?<=#define QBT_VERSION_BUGFIX )\d+' src/base/version.h.in)"
           base="${maj}.${min}.${bug}"
 
+          nox="qBittorrent-WARP-${version}-aarch64.AppImage"
+          nox_zip="${nox}.zip"
           {
             echo "Prebuilt qBittorrent-WARP \`${version}\`, based on upstream qBittorrent \`${base}\`."
             echo
+            echo "### Which build do I want?"
+            echo "* \`${zip}\` - desktop build with the full graphical interface, for"
+            echo "  64-bit Linux PCs (x86_64)."
+            echo "* \`${nox_zip}\` - headless build (qbittorrent-nox) for 64-bit ARM"
+            echo "  boards such as the Raspberry Pi. It has no graphical interface and is"
+            echo "  used through its Web UI in a browser. The arm64 asset is attached a few"
+            echo "  minutes after the release first appears."
+            echo
             echo "### Install"
-            echo "Download the zip, extract the AppImage, make it executable and run it:"
+            echo "Download the zip for your machine, extract the AppImage, make it"
+            echo "executable and run it:"
             echo '```'
             echo "unzip ${zip}"
             echo "chmod +x ${appimage}"
@@ -267,6 +278,15 @@ jobs:
             echo "configuration, data and the WARP engine is created next to the AppImage"
             echo "file. Nothing is written to system locations. Verify the download against"
             echo "\`SHA256SUMS\` if you wish."
+            echo
+            echo "### Headless / Raspberry Pi"
+            echo "The aarch64 build serves the Web UI on port 8080. Install \`libfuse2\`"
+            echo "(\`sudo apt install libfuse2\`) or run with \`--appimage-extract-and-run\`,"
+            echo "and pass \`--confirm-legal-notice\` the first time so it does not wait for"
+            echo "input. On first start it prints a randomly generated Web UI password to"
+            echo "the log; read it there, browse to \`http://<pi-ip>:8080\` and change it."
+            echo "See [warp/README.md](https://github.com/Project516/qbittorrent-warp/blob/warp/warp/README.md#headless-raspberry-pi)"
+            echo "for running it as a service."
             echo
             echo "Bundled helper licenses and pinned versions are listed in"
             echo "[warp/THIRD-PARTY-NOTICES.md](https://github.com/Project516/qbittorrent-warp/blob/warp/warp/THIRD-PARTY-NOTICES.md)."
@@ -279,3 +299,186 @@ jobs:
             --latest \
             "${zip}" \
             SHA256SUMS
+
+  release-aarch64:
+    name: Build and attach the headless arm64 AppImage
+    # Runs after the x86_64 release exists and attaches the headless arm64
+    # AppImage to it, so a failure here can never block or undo the desktop
+    # release: re-run this job alone to add the arm64 asset later. The binary is
+    # qbittorrent-nox, built for aarch64 (Raspberry Pi and other 64-bit ARM
+    # boards) and driven entirely through its Web UI.
+    needs: [prepare, release]
+    if: needs.prepare.outputs.skip != 'true'
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: write
+
+    env:
+      boost_path: "${{ github.workspace }}/../boost"
+      harden_flags: "-D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS"
+      libtorrent_path: "${{ github.workspace }}/../libtorrent"
+      libtorrent_version: "2.0.11"
+      qt_version: "6.8.1"
+      qt_path: "${{ github.workspace }}/../Qt"
+
+    steps:
+      - name: Checkout the released commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prepare.outputs.sha }}
+          persist-credentials: false
+
+      - name: Inject the fork patch number
+        run: |
+          set -euo pipefail
+          sed -i "s/#define QBT_VERSION_BUILD .*/#define QBT_VERSION_BUILD ${{ needs.prepare.outputs.build }}/" src/base/version.h.in
+          grep '#define QBT_VERSION_BUILD' src/base/version.h.in
+
+      - name: Install dependencies
+        run: |
+          set -euo pipefail
+          sudo apt update
+          sudo apt install -y \
+            build-essential cmake ninja-build \
+            libssl-dev zlib1g-dev python3-pip
+          # The official Qt linux_arm64 desktop binaries (Qt >= 6.7) are fetched
+          # with aqtinstall: the distro packages are older than the minimum Qt the
+          # build requires, and aqtinstall is the only source of prebuilt arm64 Qt.
+          pip install --break-system-packages aqtinstall
+
+      - name: Setup ccache
+        uses: Chocobo1/setup-ccache-action@v1
+        with:
+          update_packager_index: false
+          ccache_options: |
+            max_size=1G
+
+      - name: Install Qt
+        run: |
+          set -euo pipefail
+          # nox needs only qtbase (Core/Network/Sql/Xml/DBus) plus the Linguist
+          # tools for translations and ICU; the GUI archives are not pulled in.
+          python3 -m aqt install-qt linux_arm64 desktop "${qt_version}" linux_gcc_arm64 \
+            --outputdir "${qt_path}" \
+            --archives icu qtbase qttools
+          echo "${qt_path}/${qt_version}/gcc_arm64/bin" >> "$GITHUB_PATH"
+          echo "QMAKE=${qt_path}/${qt_version}/gcc_arm64/bin/qmake" >> "$GITHUB_ENV"
+
+      - name: Install boost
+        run: |
+          boost_url="https://archives.boost.io/release/1.77.0/source/boost_1_77_0.tar.gz"
+          boost_url2="https://sourceforge.net/projects/boost/files/boost/1.77.0/boost_1_77_0.tar.gz"
+          set +e
+          curl -L -o "${{ runner.temp }}/boost.tar.gz" "$boost_url"
+          tar -xf "${{ runner.temp }}/boost.tar.gz" -C "${{ github.workspace }}/.."; _exitCode="$?"
+          if [ "$_exitCode" -ne "0" ]; then
+            curl -L -o "${{ runner.temp }}/boost.tar.gz" "$boost_url2"
+            tar -xf "${{ runner.temp }}/boost.tar.gz" -C "${{ github.workspace }}/.."
+          fi
+          mv "${{ github.workspace }}/.."/boost_* "${{ env.boost_path }}"
+          cd "${{ env.boost_path }}"
+          ./bootstrap.sh
+          ./b2 stage --stagedir=./ --with-headers
+
+      - name: Install libtorrent
+        run: |
+          git clone \
+            --branch v${{ env.libtorrent_version }} \
+            --depth 1 \
+            --recurse-submodules \
+            https://github.com/arvidn/libtorrent.git \
+            ${{ env.libtorrent_path }}
+          cd ${{ env.libtorrent_path }}
+          CXXFLAGS="$CXXFLAGS ${{ env.harden_flags }}" \
+          cmake \
+            -B build \
+            -G "Ninja" \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_STANDARD=20 \
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" \
+            -Ddeprecated-functions=OFF
+          cmake --build build
+          sudo cmake --install build
+
+      - name: Build qBittorrent (headless)
+        run: |
+          set -euo pipefail
+          CXXFLAGS="$CXXFLAGS ${{ env.harden_flags }}" \
+          LDFLAGS="$LDFLAGS -gz" \
+          cmake \
+            -B build \
+            -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBOOST_ROOT="${{ env.boost_path }}/lib/cmake" \
+            -DCMAKE_PREFIX_PATH="${qt_path}/${qt_version}/gcc_arm64" \
+            -DCMAKE_INSTALL_PREFIX="/usr" \
+            -DGUI=OFF
+          cmake --build build --target qbt_update_translations
+          cmake --build build
+          build/qbittorrent-nox -v
+          build/qbittorrent-nox -v \
+            | grep -F "v${{ needs.prepare.outputs.version }}" \
+            || { echo "::error::built binary does not report v${{ needs.prepare.outputs.version }}"; exit 1; }
+          DESTDIR="qbittorrent" cmake --install build
+
+      - name: Install AppImage tooling
+        run: |
+          curl \
+            -L \
+            -Z \
+            -O https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-aarch64.AppImage \
+            -O https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-aarch64.AppImage \
+            -O https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-aarch64.AppImage
+          chmod +x \
+            linuxdeploy-aarch64.AppImage \
+            linuxdeploy-plugin-qt-aarch64.AppImage \
+            linuxdeploy-plugin-appimage-aarch64.AppImage
+
+      - name: Package AppImage
+        run: |
+          set -euo pipefail
+          # Run the linuxdeploy tools without FUSE on the runner; the produced
+          # AppImage still uses FUSE on the target unless run with extract-and-run.
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          # A nox install ships no desktop file or icon (those are GUI-only), but
+          # linuxdeploy needs both, so supply a headless desktop entry whose Exec
+          # points at qbittorrent-nox plus the project icon.
+          mkdir -p qbittorrent/usr/share/applications qbittorrent/usr/share/icons/hicolor/scalable/apps
+          cp .github/workflows/helper/appimage/org.qbittorrent.qBittorrent.desktop \
+            qbittorrent/usr/share/applications/org.qbittorrent.qBittorrent.desktop
+          cp dist/unix/menuicons/scalable/apps/qbittorrent.svg \
+            qbittorrent/usr/share/icons/hicolor/scalable/apps/qbittorrent.svg
+          rm -f "${qt_path}/${qt_version}/gcc_arm64/plugins/sqldrivers/libqsqlmimer.so"
+          ./linuxdeploy-aarch64.AppImage --appdir qbittorrent --plugin qt
+          mkdir -p qbittorrent/apprun-hooks
+          rm -f qbittorrent/apprun-hooks/*
+          cp .github/workflows/helper/appimage/export_vars.sh qbittorrent/apprun-hooks/export_vars.sh
+          appimage="qBittorrent-WARP-${{ needs.prepare.outputs.version }}-aarch64.AppImage"
+          NO_APPSTREAM=1 \
+            ARCH=aarch64 \
+            OUTPUT="${appimage}" \
+            ./linuxdeploy-aarch64.AppImage --appdir qbittorrent --output appimage
+          # Ship the AppImage inside a zip so the executable bit survives download
+          # (see the x86_64 job); the checksum covers the zip users download.
+          zip="${appimage}.zip"
+          zip -j "${zip}" "${appimage}"
+          echo "asset_zip=${zip}" >> "$GITHUB_ENV"
+
+      - name: Attach to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          tag: ${{ needs.prepare.outputs.tag }}
+        run: |
+          set -euo pipefail
+          zip="${asset_zip}"
+          gh release upload "${tag}" "${zip}" --clobber
+          # Add this asset's line to the shared SHA256SUMS without disturbing the
+          # x86_64 entry, and make a re-run replace its own line rather than
+          # duplicate it.
+          gh release download "${tag}" -p SHA256SUMS --dir . || touch SHA256SUMS
+          grep -v "  ${zip}\$" SHA256SUMS > SHA256SUMS.new || true
+          sha256sum "${zip}" >> SHA256SUMS.new
+          mv SHA256SUMS.new SHA256SUMS
+          cat SHA256SUMS
+          gh release upload "${tag}" SHA256SUMS --clobber

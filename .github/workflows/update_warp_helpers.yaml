@@ -12,9 +12,10 @@ name: Update WARP engine helpers
 # traffic, so a person approves each bump. Merging it is a normal push to warp,
 # which is what triggers release.yaml to publish a build with the new pins.
 #
-# Helpers tracked:
-#   * wgcf      - ViRb3/wgcf            (the asset is the linux/amd64 binary)
-#   * wireproxy - pufferffish/wireproxy (the asset is a .tar.gz of the binary)
+# Helpers tracked, pinned for both architectures the fork ships (x86_64 and
+# arm64):
+#   * wgcf      - ViRb3/wgcf            (each asset is the binary itself)
+#   * wireproxy - pufferffish/wireproxy (each asset is a .tar.gz of the binary)
 
 on:
   schedule:
@@ -66,39 +67,59 @@ jobs:
 
           work="$(mktemp -d)"
 
-          # wgcf: the release asset is the linux/amd64 binary itself.
-          wgcf_asset="wgcf_${wgcf_ver}_linux_amd64"
-          wgcf_url="https://github.com/ViRb3/wgcf/releases/download/${wgcf_tag}/${wgcf_asset}"
+          # Reads a SHA-256 out of a downloaded checksums.txt by asset name; fails
+          # if the asset is missing so a renamed release does not slip through.
+          sum_for() {
+            local sums="$1" asset="$2" sha
+            sha="$(awk -v f="$asset" '{n=$2; sub(/^\*/, "", n); if (n == f) print $1}' "$sums")"
+            [ -n "$sha" ] || { echo "::error::no checksum for ${asset}"; return 1; }
+            printf '%s' "$sha"
+          }
+
+          # Both helpers are pinned for the two architectures the fork ships:
+          # x86_64 (desktop) and arm64 (headless Raspberry Pi). The checksums come
+          # from each release's published checksums.txt and are pinned exactly as
+          # warpengine.cpp verifies them at runtime.
+
+          # wgcf: the release asset is the binary itself, one per architecture.
           curl -fsSL "https://github.com/ViRb3/wgcf/releases/download/${wgcf_tag}/checksums.txt" -o "${work}/wgcf.sums"
-          wgcf_sha="$(awk -v f="$wgcf_asset" '{n=$2; sub(/^\*/, "", n); if (n == f) print $1}' "${work}/wgcf.sums")"
-          [ -n "$wgcf_sha" ] || { echo "::error::no checksum for ${wgcf_asset}"; exit 1; }
-          curl -fsSL "$wgcf_url" -o "${work}/wgcf"
-          echo "${wgcf_sha}  ${work}/wgcf" | sha256sum -c -
+          wgcf_sha_amd64="$(sum_for "${work}/wgcf.sums" "wgcf_${wgcf_ver}_linux_amd64")"
+          wgcf_sha_arm64="$(sum_for "${work}/wgcf.sums" "wgcf_${wgcf_ver}_linux_arm64")"
+          curl -fsSL "https://github.com/ViRb3/wgcf/releases/download/${wgcf_tag}/wgcf_${wgcf_ver}_linux_amd64" -o "${work}/wgcf.amd64"
+          curl -fsSL "https://github.com/ViRb3/wgcf/releases/download/${wgcf_tag}/wgcf_${wgcf_ver}_linux_arm64" -o "${work}/wgcf.arm64"
+          echo "${wgcf_sha_amd64}  ${work}/wgcf.amd64" | sha256sum -c -
+          echo "${wgcf_sha_arm64}  ${work}/wgcf.arm64" | sha256sum -c -
 
           # wireproxy: the release asset is a .tar.gz holding the binary. Pin both
           # the archive sum (verified before unpacking) and the binary sum
-          # (verified before execution), exactly as warpengine.cpp checks them.
-          wp_asset="wireproxy_linux_amd64.tar.gz"
-          wp_url="https://github.com/pufferffish/wireproxy/releases/download/${wp_tag}/${wp_asset}"
+          # (verified before execution) for each architecture.
           curl -fsSL "https://github.com/pufferffish/wireproxy/releases/download/${wp_tag}/checksums.txt" -o "${work}/wp.sums"
-          wp_arc="$(awk -v f="$wp_asset" '{n=$2; sub(/^\*/, "", n); if (n == f) print $1}' "${work}/wp.sums")"
-          [ -n "$wp_arc" ] || { echo "::error::no checksum for ${wp_asset}"; exit 1; }
-          curl -fsSL "$wp_url" -o "${work}/wp.tar.gz"
-          echo "${wp_arc}  ${work}/wp.tar.gz" | sha256sum -c -
-          tar -xzf "${work}/wp.tar.gz" -C "${work}" wireproxy
-          wp_bin="$(sha256sum "${work}/wireproxy" | awk '{print $1}')"
+          wp_arc_amd64="$(sum_for "${work}/wp.sums" "wireproxy_linux_amd64.tar.gz")"
+          wp_arc_arm64="$(sum_for "${work}/wp.sums" "wireproxy_linux_arm64.tar.gz")"
+          curl -fsSL "https://github.com/pufferffish/wireproxy/releases/download/${wp_tag}/wireproxy_linux_amd64.tar.gz" -o "${work}/wp.amd64.tar.gz"
+          curl -fsSL "https://github.com/pufferffish/wireproxy/releases/download/${wp_tag}/wireproxy_linux_arm64.tar.gz" -o "${work}/wp.arm64.tar.gz"
+          echo "${wp_arc_amd64}  ${work}/wp.amd64.tar.gz" | sha256sum -c -
+          echo "${wp_arc_arm64}  ${work}/wp.arm64.tar.gz" | sha256sum -c -
+          tar -xzf "${work}/wp.amd64.tar.gz" -C "${work}" wireproxy && mv "${work}/wireproxy" "${work}/wireproxy.amd64"
+          tar -xzf "${work}/wp.arm64.tar.gz" -C "${work}" wireproxy && mv "${work}/wireproxy" "${work}/wireproxy.arm64"
+          wp_bin_amd64="$(sha256sum "${work}/wireproxy.amd64" | awk '{print $1}')"
+          wp_bin_arm64="$(sha256sum "${work}/wireproxy.arm64" | awk '{print $1}')"
 
-          # Smoke-test the way the client uses them: the downloads above are
-          # already verified, so just run each binary on the runner (linux/amd64,
-          # the release target) to catch a release whose layout or ABI changed.
-          chmod +x "${work}/wgcf" "${work}/wireproxy"
-          "${work}/wgcf" help >/dev/null 2>&1 \
+          # Smoke-test the binaries that match this runner (amd64): the downloads
+          # are already verified, so this only catches a release whose layout or
+          # ABI changed. The arm64 assets are pinned by checksum here and are
+          # exercised by the arm64 release build.
+          chmod +x "${work}/wgcf.amd64" "${work}/wireproxy.amd64"
+          "${work}/wgcf.amd64" help >/dev/null 2>&1 \
             || { echo "::error::wgcf ${wgcf_tag} did not run"; exit 1; }
-          "${work}/wireproxy" --version >/dev/null 2>&1 || "${work}/wireproxy" --help >/dev/null 2>&1 \
+          "${work}/wireproxy.amd64" --version >/dev/null 2>&1 || "${work}/wireproxy.amd64" --help >/dev/null 2>&1 \
             || { echo "::error::wireproxy ${wp_tag} did not run"; exit 1; }
 
-          WGCF_TAG="$wgcf_tag" WGCF_VER="$wgcf_ver" WGCF_SHA="$wgcf_sha" \
-          WP_TAG="$wp_tag" WP_VER="$wp_ver" WP_ARC="$wp_arc" WP_BIN="$wp_bin" \
+          WGCF_TAG="$wgcf_tag" WGCF_VER="$wgcf_ver" \
+          WGCF_SHA_AMD64="$wgcf_sha_amd64" WGCF_SHA_ARM64="$wgcf_sha_arm64" \
+          WP_TAG="$wp_tag" WP_VER="$wp_ver" \
+          WP_ARC_AMD64="$wp_arc_amd64" WP_BIN_AMD64="$wp_bin_amd64" \
+          WP_ARC_ARM64="$wp_arc_arm64" WP_BIN_ARM64="$wp_bin_arm64" \
             python3 warp/update-helper-pins.py
 
           if git diff --quiet; then

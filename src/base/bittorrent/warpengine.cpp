@@ -20,6 +20,7 @@
 #include "warpengine.h"
 
 #include <chrono>
+#include <optional>
 
 #include <QByteArray>
 #include <QCryptographicHash>
@@ -31,6 +32,7 @@
 #include <QProcess>
 #include <QSaveFile>
 #include <QStringList>
+#include <QSysInfo>
 #include <QTimer>
 #include <QUrl>
 
@@ -45,26 +47,66 @@ namespace
 {
     const int MAX_RESTARTS = 5;
 
-    // Pinned upstream engine helpers. They are downloaded from their official
-    // GitHub releases on first run and verified against these SHA-256 sums before
-    // they are ever executed. Bump the version, URL and checksums together when
-    // updating; the checksums come from each release's published checksums.txt.
+    // Pinned upstream engine helpers, kept per CPU architecture. They are
+    // downloaded from their official GitHub releases on first run and verified
+    // against these SHA-256 sums before they are ever executed. The matching
+    // asset is chosen at runtime from QSysInfo::currentCpuArchitecture(): the
+    // x86_64 desktop build and the arm64 build (used by the headless Raspberry
+    // Pi release) each fetch their own binary. Bump the version, URLs and
+    // checksums together when updating; the sums come from each release's
+    // published checksums.txt.
     //
     // wgcf 2.2.31 - MIT - https://github.com/ViRb3/wgcf
-    const QString WGCF_URL =
+    const QString WGCF_URL_AMD64 =
         u"https://github.com/ViRb3/wgcf/releases/download/v2.2.31/wgcf_2.2.31_linux_amd64"_s;
-    const QString WGCF_SHA256 =
+    const QString WGCF_SHA256_AMD64 =
         u"69147e1a517c66129edd8ac8cb60484d6c9515178d7b4a2f95e3c925f225572a"_s;
+    const QString WGCF_URL_ARM64 =
+        u"https://github.com/ViRb3/wgcf/releases/download/v2.2.31/wgcf_2.2.31_linux_arm64"_s;
+    const QString WGCF_SHA256_ARM64 =
+        u"b9bdbdeaa3f9f4ba741ba55b8bd94c24f7166c27668eb7e8192ccf9746961182"_s;
 
     // wireproxy 1.1.2 - ISC - https://github.com/pufferffish/wireproxy
-    const QString WIREPROXY_URL =
+    // For each architecture, the SHA-256 of the downloaded .tar.gz (verified
+    // before unpacking) and of the single binary it holds (verified after
+    // extraction, before execution).
+    const QString WIREPROXY_URL_AMD64 =
         u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.2/wireproxy_linux_amd64.tar.gz"_s;
-    // SHA-256 of the downloaded .tar.gz (from the release's checksums.txt)...
-    const QString WIREPROXY_ARCHIVE_SHA256 =
+    const QString WIREPROXY_ARCHIVE_SHA256_AMD64 =
         u"b7dcff8f6e9d3410364e432aff24154eaa8db8206e0c6faac35d6c6ab06dac51"_s;
-    // ...and of the single binary it contains, verified after extraction.
-    const QString WIREPROXY_BINARY_SHA256 =
+    const QString WIREPROXY_BINARY_SHA256_AMD64 =
         u"b5a729f3606753ce4d4bfeb0f56d522e4aa0908aff8c7d55960fd4301cc58b11"_s;
+    const QString WIREPROXY_URL_ARM64 =
+        u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.2/wireproxy_linux_arm64.tar.gz"_s;
+    const QString WIREPROXY_ARCHIVE_SHA256_ARM64 =
+        u"aa234db9ef0b2774cb04a79f391bd41c2ededd815fc1a1c720cfdc693c70898d"_s;
+    const QString WIREPROXY_BINARY_SHA256_ARM64 =
+        u"8258f5f7b6679c05a932eedf910f7edb74cf2d84043f394f94fc387681d3b0e3"_s;
+
+    // The pinned helper set for one CPU architecture.
+    struct HelperPins
+    {
+        QString wgcfUrl;
+        QString wgcfSha256;
+        QString wireproxyUrl;
+        QString wireproxyArchiveSha256;
+        QString wireproxyBinarySha256;
+    };
+
+    // Returns the helper pins for the architecture the application is running on,
+    // or nullopt on an architecture the fork ships no helpers for, so the kill
+    // switch keeps traffic blocked rather than running an unverified tool.
+    std::optional<HelperPins> pinsForCurrentArch()
+    {
+        const QString arch = QSysInfo::currentCpuArchitecture();
+        if (arch == u"x86_64"_s)
+            return HelperPins {WGCF_URL_AMD64, WGCF_SHA256_AMD64, WIREPROXY_URL_AMD64,
+                WIREPROXY_ARCHIVE_SHA256_AMD64, WIREPROXY_BINARY_SHA256_AMD64};
+        if (arch == u"arm64"_s)
+            return HelperPins {WGCF_URL_ARM64, WGCF_SHA256_ARM64, WIREPROXY_URL_ARM64,
+                WIREPROXY_ARCHIVE_SHA256_ARM64, WIREPROXY_BINARY_SHA256_ARM64};
+        return std::nullopt;
+    }
 }
 
 namespace BitTorrent::Warp
@@ -261,9 +303,17 @@ namespace BitTorrent::Warp
 
     bool Engine::ensureHelpers()
     {
-        const HelperSpec wgcf {m_wgcf, WGCF_URL, WGCF_SHA256, WGCF_SHA256, {}};
-        const HelperSpec wireproxy {m_wireproxy, WIREPROXY_URL, WIREPROXY_ARCHIVE_SHA256,
-            WIREPROXY_BINARY_SHA256, u"wireproxy"_s};
+        const std::optional<HelperPins> pins = pinsForCurrentArch();
+        if (!pins)
+        {
+            LogMsg(tr("[WARP] No verified WARP engine helpers are pinned for this CPU architecture (%1).")
+                .arg(QSysInfo::currentCpuArchitecture()), Log::CRITICAL);
+            return false;
+        }
+
+        const HelperSpec wgcf {m_wgcf, pins->wgcfUrl, pins->wgcfSha256, pins->wgcfSha256, {}};
+        const HelperSpec wireproxy {m_wireproxy, pins->wireproxyUrl, pins->wireproxyArchiveSha256,
+            pins->wireproxyBinarySha256, u"wireproxy"_s};
 
         return ensureHelper(wgcf) && ensureHelper(wireproxy);
     }
