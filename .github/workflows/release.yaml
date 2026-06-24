@@ -404,8 +404,8 @@ jobs:
       - name: Build qBittorrent (headless)
         run: |
           set -euo pipefail
-          CXXFLAGS="$CXXFLAGS ${{ env.harden_flags }}" \
-          LDFLAGS="$LDFLAGS -gz" \
+          CXXFLAGS="${CXXFLAGS:-} ${{ env.harden_flags }}" \
+          LDFLAGS="${LDFLAGS:-} -gz" \
           cmake \
             -B build \
             -G "Ninja" \
@@ -441,16 +441,17 @@ jobs:
           # Run the linuxdeploy tools without FUSE on the runner; the produced
           # AppImage still uses FUSE on the target unless run with extract-and-run.
           export APPIMAGE_EXTRACT_AND_RUN=1
-          # A nox install ships no desktop file or icon (those are GUI-only), but
-          # linuxdeploy needs both, so supply a headless desktop entry whose Exec
-          # points at qbittorrent-nox plus the project icon.
-          mkdir -p qbittorrent/usr/share/applications qbittorrent/usr/share/icons/hicolor/scalable/apps
-          cp .github/workflows/helper/appimage/org.qbittorrent.qBittorrent.desktop \
-            qbittorrent/usr/share/applications/org.qbittorrent.qBittorrent.desktop
-          cp dist/unix/menuicons/scalable/apps/qbittorrent.svg \
-            qbittorrent/usr/share/icons/hicolor/scalable/apps/qbittorrent.svg
           rm -f "${qt_path}/${qt_version}/gcc_arm64/plugins/sqldrivers/libqsqlmimer.so"
-          ./linuxdeploy-aarch64.AppImage --appdir qbittorrent --plugin qt
+          # A nox install ships no desktop file or icon (those are GUI-only), so
+          # hand linuxdeploy the headless desktop entry (its Exec is qbittorrent-nox),
+          # the project icon and the nox binary explicitly instead of relying on it
+          # discovering them in the AppDir.
+          ./linuxdeploy-aarch64.AppImage \
+            --appdir qbittorrent \
+            --executable qbittorrent/usr/bin/qbittorrent-nox \
+            --desktop-file .github/workflows/helper/appimage/org.qbittorrent.qBittorrent.desktop \
+            --icon-file dist/unix/menuicons/scalable/apps/qbittorrent.svg \
+            --plugin qt
           mkdir -p qbittorrent/apprun-hooks
           rm -f qbittorrent/apprun-hooks/*
           cp .github/workflows/helper/appimage/export_vars.sh qbittorrent/apprun-hooks/export_vars.sh
