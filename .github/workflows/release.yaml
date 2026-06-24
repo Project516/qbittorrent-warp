@@ -444,14 +444,20 @@ jobs:
           # Run the linuxdeploy tools without FUSE on the runner; the produced
           # AppImage still uses FUSE on the target unless run with extract-and-run.
           export APPIMAGE_EXTRACT_AND_RUN=1
+          # linuxdeploy resolves the binary's Qt libraries as ordinary shared-object
+          # dependencies, so the aqt Qt lib dir must be on the search path (the
+          # x86_64 job gets this from install-qt-action).
+          export LD_LIBRARY_PATH="${qt_path}/${qt_version}/gcc_arm64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          # Force in the plugins a headless client needs but that are easy to miss
+          # without a GUI: the TLS backend (HTTPS for tracker announces and the
+          # engine helper downloads) and the SQLite driver (the torrents database).
+          export EXTRA_QT_PLUGINS="sqldrivers;tls"
           rm -f "${qt_path}/${qt_version}/gcc_arm64/plugins/sqldrivers/libqsqlmimer.so"
           # A nox install ships no desktop file or icon (those are GUI-only), so
-          # hand linuxdeploy the headless desktop entry (its Exec is qbittorrent-nox),
-          # the project icon and the nox binary explicitly instead of relying on it
-          # discovering them in the AppDir.
+          # hand linuxdeploy the headless desktop entry (its Exec is qbittorrent-nox)
+          # and the project icon; the binary itself is picked up from the AppDir.
           ./linuxdeploy-aarch64.AppImage \
             --appdir qbittorrent \
-            --executable qbittorrent/usr/bin/qbittorrent-nox \
             --desktop-file .github/workflows/helper/appimage/org.qbittorrent.qBittorrent.desktop \
             --icon-file dist/unix/menuicons/scalable/apps/qbittorrent.svg \
             --plugin qt
