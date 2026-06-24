@@ -356,11 +356,14 @@ jobs:
       - name: Install Qt
         run: |
           set -euo pipefail
-          # nox needs only qtbase (Core/Network/Sql/Xml/DBus) plus the Linguist
-          # tools for translations and ICU; the GUI archives are not pulled in.
+          # nox links only qtbase (Core/Network/Sql/Xml/DBus), but the build also
+          # runs the Linguist tools (qttools) for translations, and lupdate loads
+          # libQt6Qml from qtdeclarative, so that archive is needed at build time
+          # even though the headless binary never links it. The GUI rendering
+          # archives (qtsvg, qtimageformats) are still left out.
           python3 -m aqt install-qt linux_arm64 desktop "${qt_version}" linux_gcc_arm64 \
             --outputdir "${qt_path}" \
-            --archives icu qtbase qttools
+            --archives icu qtbase qtdeclarative qttools
           echo "${qt_path}/${qt_version}/gcc_arm64/bin" >> "$GITHUB_PATH"
           echo "QMAKE=${qt_path}/${qt_version}/gcc_arm64/bin/qmake" >> "$GITHUB_ENV"
 
