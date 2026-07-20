@@ -57,13 +57,13 @@ wireproxy
 A userspace WireGuard client that exposes a local SOCKS5 proxy.
 
 * Project:  https://github.com/pufferffish/wireproxy
-* Version:  v1.1.2
+* Version:  v1.1.3
 * Asset (amd64):            wireproxy_linux_amd64.tar.gz
-* SHA-256 (amd64, archive): b7dcff8f6e9d3410364e432aff24154eaa8db8206e0c6faac35d6c6ab06dac51
-* SHA-256 (amd64, binary):  b5a729f3606753ce4d4bfeb0f56d522e4aa0908aff8c7d55960fd4301cc58b11
+* SHA-256 (amd64, archive): e88c1d090740373fc606c1bafd81d9a5eadc642cce5667616e20e9d7a444f51c
+* SHA-256 (amd64, binary):  70ae5e52223dac7974af8d98a321f14a0e1689d2b14655ebc8dadfa1ec69466d
 * Asset (arm64):            wireproxy_linux_arm64.tar.gz
-* SHA-256 (arm64, archive): aa234db9ef0b2774cb04a79f391bd41c2ededd815fc1a1c720cfdc693c70898d
-* SHA-256 (arm64, binary):  8258f5f7b6679c05a932eedf910f7edb74cf2d84043f394f94fc387681d3b0e3
+* SHA-256 (arm64, archive): 370e00bd2167960d1ecd1c3c1439715bbaa94a0a110a2040468670c9af6021b6
+* SHA-256 (arm64, binary):  5852e32671afb8918c39c59330b85f833c187ed41b6b1f683c90b6bfd320f3fa
 * License:  ISC
 
 Copyright (c) 2026 Tsz Fung Wong <im@windtfw.com>

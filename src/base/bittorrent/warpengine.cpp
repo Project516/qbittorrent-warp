@@ -66,22 +66,22 @@ namespace
     const QString WGCF_SHA256_ARM64 =
         u"b9bdbdeaa3f9f4ba741ba55b8bd94c24f7166c27668eb7e8192ccf9746961182"_s;
 
-    // wireproxy 1.1.2 - ISC - https://github.com/pufferffish/wireproxy
+    // wireproxy 1.1.3 - ISC - https://github.com/pufferffish/wireproxy
     // For each architecture, the SHA-256 of the downloaded .tar.gz (verified
     // before unpacking) and of the single binary it holds (verified after
     // extraction, before execution).
     const QString WIREPROXY_URL_AMD64 =
-        u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.2/wireproxy_linux_amd64.tar.gz"_s;
+        u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.3/wireproxy_linux_amd64.tar.gz"_s;
     const QString WIREPROXY_ARCHIVE_SHA256_AMD64 =
-        u"b7dcff8f6e9d3410364e432aff24154eaa8db8206e0c6faac35d6c6ab06dac51"_s;
+        u"e88c1d090740373fc606c1bafd81d9a5eadc642cce5667616e20e9d7a444f51c"_s;
     const QString WIREPROXY_BINARY_SHA256_AMD64 =
-        u"b5a729f3606753ce4d4bfeb0f56d522e4aa0908aff8c7d55960fd4301cc58b11"_s;
+        u"70ae5e52223dac7974af8d98a321f14a0e1689d2b14655ebc8dadfa1ec69466d"_s;
     const QString WIREPROXY_URL_ARM64 =
-        u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.2/wireproxy_linux_arm64.tar.gz"_s;
+        u"https://github.com/pufferffish/wireproxy/releases/download/v1.1.3/wireproxy_linux_arm64.tar.gz"_s;
     const QString WIREPROXY_ARCHIVE_SHA256_ARM64 =
-        u"aa234db9ef0b2774cb04a79f391bd41c2ededd815fc1a1c720cfdc693c70898d"_s;
+        u"370e00bd2167960d1ecd1c3c1439715bbaa94a0a110a2040468670c9af6021b6"_s;
     const QString WIREPROXY_BINARY_SHA256_ARM64 =
-        u"8258f5f7b6679c05a932eedf910f7edb74cf2d84043f394f94fc387681d3b0e3"_s;
+        u"5852e32671afb8918c39c59330b85f833c187ed41b6b1f683c90b6bfd320f3fa"_s;
 
     // The pinned helper set for one CPU architecture.
     struct HelperPins
