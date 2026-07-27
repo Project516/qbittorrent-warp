@@ -56,15 +56,15 @@ namespace
     // checksums together when updating; the sums come from each release's
     // published checksums.txt.
     //
-    // wgcf 2.2.31 - MIT - https://github.com/ViRb3/wgcf
+    // wgcf 2.2.32 - MIT - https://github.com/ViRb3/wgcf
     const QString WGCF_URL_AMD64 =
-        u"https://github.com/ViRb3/wgcf/releases/download/v2.2.31/wgcf_2.2.31_linux_amd64"_s;
+        u"https://github.com/ViRb3/wgcf/releases/download/v2.2.32/wgcf_2.2.32_linux_amd64"_s;
     const QString WGCF_SHA256_AMD64 =
-        u"69147e1a517c66129edd8ac8cb60484d6c9515178d7b4a2f95e3c925f225572a"_s;
+        u"2ff97f2201972ce582a424455d50a3719a380eef0cd1f3144f7779348e122a2c"_s;
     const QString WGCF_URL_ARM64 =
-        u"https://github.com/ViRb3/wgcf/releases/download/v2.2.31/wgcf_2.2.31_linux_arm64"_s;
+        u"https://github.com/ViRb3/wgcf/releases/download/v2.2.32/wgcf_2.2.32_linux_arm64"_s;
     const QString WGCF_SHA256_ARM64 =
-        u"b9bdbdeaa3f9f4ba741ba55b8bd94c24f7166c27668eb7e8192ccf9746961182"_s;
+        u"21fe21d9f61db9b381d71200f6f59c7949e0bb455446edcb33dda6ad6a8fcf8f"_s;
 
     // wireproxy 1.1.3 - ISC - https://github.com/pufferffish/wireproxy
     // For each architecture, the SHA-256 of the downloaded .tar.gz (verified
