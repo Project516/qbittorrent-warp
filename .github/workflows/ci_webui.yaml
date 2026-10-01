@@ -57,7 +57,7 @@ jobs:
           git diff --exit-code
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4.37.9
+        uses: github/codeql-action/init@v4.38.2
         if: ${{ !cancelled() && !github.event.repository.private }}
         with:
           config-file: .github/workflows/helper/codeql/js.yaml
@@ -65,4 +65,4 @@ jobs:
 
       - name: Run CodeQL analysis
         if: ${{ !cancelled() && !github.event.repository.private }}
-        uses: github/codeql-action/analyze@v4.37.9
+        uses: github/codeql-action/analyze@v4.38.2
