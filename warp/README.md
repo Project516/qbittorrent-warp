@@ -158,17 +158,17 @@ The build dependencies are the same as upstream qBittorrent (Qt 6, libtorrent
 2.0, Boost, OpenSSL, zlib) plus CMake and Ninja. See [INSTALL](../INSTALL) for the
 full list and platform notes.
 
-Fedora:
-
-    sudo dnf install -y gcc-c++ cmake ninja-build openssl-devel zlib-devel \
-        zlib-ng-compat-static boost-devel qt6-qtbase-devel qt6-qtbase-private-devel \
-        qt6-qttools-devel qt6-qtsvg-devel rb_libtorrent-devel
-
 Debian / Ubuntu:
 
     sudo apt install -y build-essential cmake ninja-build libssl-dev zlib1g-dev \
         libboost-dev qt6-base-dev qt6-base-private-dev qt6-tools-dev libqt6svg6-dev \
         libtorrent-rasterbar-dev
+
+Fedora:
+
+    sudo dnf install -y gcc-c++ cmake ninja-build openssl-devel zlib-devel \
+        zlib-ng-compat-static boost-devel qt6-qtbase-devel qt6-qtbase-private-devel \
+        qt6-qttools-devel qt6-qtsvg-devel rb_libtorrent-devel
 
 Configure and build:
 
@@ -187,21 +187,3 @@ inside a network namespace whose only route is WARP - the strongest, fully
 kernel-level isolation, and the only way to tunnel UDP (so magnet links and DHT
 work). Point the client at an external endpoint with the environment variables
 above.
-
-### Updating to a new qBittorrent release:
-This is handled automatically. A scheduled workflow
-(`.github/workflows/auto_update.yaml`) checks weekly for the latest upstream
-stable release, opens a pull request that merges it into the `warp` branch, and
-merges it on its own when there are no conflicts. When a release would conflict
-(normally only in `src/base/bittorrent/sessionimpl.cpp`) the pull request is left
-open for manual resolution. It can also be run on demand from the Actions tab.
-
-Each change produces a new release. Versions follow the upstream release the build
-is based on plus a fork patch number, written `X.Y.Z.W`: `X.Y.Z` is the upstream
-base and `W` is incremented for each fork build of that base, so a new upstream
-release restarts `W` at 1. `.github/workflows/release.yaml` builds the AppImage
-and publishes it automatically, and the client's built-in Check for Updates
-tracks this fork's releases.
-
-For a manual, rebase-based update instead of a merge, `update-from-upstream.sh`
-rebases the fork onto a release tag.
