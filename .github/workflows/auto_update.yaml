@@ -17,8 +17,8 @@ name: Auto-update from upstream
 
 on:
   schedule:
-    - cron: "0 6 * * 1"   # every Monday at 06:00 UTC
-  workflow_dispatch:        # also runnable on demand from the Actions tab
+    - cron: "0 6 * * *"   # everyday at 06:00 UTC
+  workflow_dispatch: # also runnable on demand from the Actions tab
 
 permissions:
   contents: write

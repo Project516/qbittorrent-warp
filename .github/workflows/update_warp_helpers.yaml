@@ -19,7 +19,7 @@ name: Update WARP engine helpers
 
 on:
   schedule:
-    - cron: "0 7 * * 1"   # every Monday at 07:00 UTC, after the upstream sync
+    - cron: "0 7 * * *"   # everyday at 07:00 UTC, after the upstream sync
   workflow_dispatch:
 
 permissions:
