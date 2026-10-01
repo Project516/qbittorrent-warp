@@ -535,7 +535,8 @@ void Application::processMessage(const QString &message)
 #ifndef DISABLE_GUI
     if (message.isEmpty())
     {
-        if (BitTorrent::Session::instance()->isRestored()) [[likely]]
+        if (const auto *btSession = BitTorrent::Session::instance();
+                btSession && btSession->isRestored()) [[likely]]
         {
             m_window->activate(); // show UI
         }
@@ -545,7 +546,7 @@ void Application::processMessage(const QString &message)
             m_startupProgressDialog->activateWindow();
             m_startupProgressDialog->raise();
         }
-        else
+        else if (m_desktopIntegration)
         {
             createStartupProgressDialog();
         }
