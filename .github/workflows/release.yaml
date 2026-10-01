@@ -239,7 +239,7 @@ jobs:
 
       - name: Create the GitHub release
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           version: ${{ needs.prepare.outputs.version }}
           tag: ${{ needs.prepare.outputs.tag }}
           sha: ${{ needs.prepare.outputs.sha }}
@@ -477,7 +477,7 @@ jobs:
 
       - name: Attach to the release
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           tag: ${{ needs.prepare.outputs.tag }}
         run: |
           set -euo pipefail
