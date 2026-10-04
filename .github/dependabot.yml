@@ -9,7 +9,10 @@ updates:
       github-actions:
         patterns:
           - "*"
+    cooldown:
+      default-days: 3
     labels:
       - "CI"
     schedule:
-      interval: "monthly"
+      interval: "daily"
+      time: "05:00" # UTC: 23:00 CST, 00:00 CDT

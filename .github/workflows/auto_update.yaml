@@ -1,23 +1,27 @@
 name: Auto-update from upstream
 
 # Tracks upstream qBittorrent and keeps the fork current without manual work.
-# On a schedule it finds the latest upstream STABLE release, opens a pull request
-# that merges it into the warp branch, and - if the merge is conflict-free -
-# merges that pull request automatically. When the merge would conflict (usually
-# only in src/base/bittorrent/sessionimpl.cpp) the pull request is left open for
-# manual resolution.
+# Every day it finds the latest upstream STABLE release and opens a pull request
+# that merges it into the warp branch. When the merge is conflict-free it arms
+# auto-merge, so GitHub merges the PR once the required checks pass and the
+# review bot approves the head commit (see the warp ruleset). The merge push
+# then triggers release.yaml. When the merge would conflict (usually only in
+# src/base/bittorrent/sessionimpl.cpp) the pull request is left open for manual
+# resolution and auto-merge is not armed.
 #
-# Note: the checkout and gh steps below authenticate with a personal access
-# token stored as the secret AUTOUPDATE_TOKEN, falling back to the built-in
-# GITHUB_TOKEN when it is unset. The token needs the workflow scope: an upstream
+# The checkout and gh steps authenticate with the personal access token in the
+# secret AUTOUPDATE_TOKEN. It needs the workflow scope, because an upstream
 # release that changes a file under .github/workflows/ cannot be pushed with the
-# built-in token (GitHub forbids workflow edits without that scope). Using a
-# personal token also lets the pull request trigger the CI workflows, which the
-# built-in token suppresses (a GitHub anti-recursion rule).
+# built-in token. It also makes the pull request trigger CI and the merge
+# trigger release.yaml, which the built-in token suppresses (GitHub's
+# anti-recursion rule).
+#
+# The upstream history must stay intact, so this PR is merged with a merge
+# commit, never squashed.
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # everyday at 06:00 UTC
+    - cron: "0 6 * * *"   # everyday at 06:00 UTC (00:00 CST, 01:00 CDT)
   workflow_dispatch: # also runnable on demand from the Actions tab
 
 permissions:
@@ -34,16 +38,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Require AUTOUPDATE_TOKEN
+        env:
+          AUTOUPDATE_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+        run: |
+          [ -n "$AUTOUPDATE_TOKEN" ] || { echo "::error::The AUTOUPDATE_TOKEN secret is not set."; exit 1; }
+
       - name: Checkout the warp branch
         uses: actions/checkout@v7
         with:
           ref: warp
           fetch-depth: 0
-          token: ${{ secrets.AUTOUPDATE_TOKEN || github.token }}
+          token: ${{ secrets.AUTOUPDATE_TOKEN }}
 
-      - name: Open and (if clean) merge the upstream update
+      - name: Open the upstream update and arm auto-merge
         env:
-          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN || github.token }}
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
           # Pin gh to this repo; the script adds an "upstream" remote, which gh
           # would otherwise treat as the pull request's base repository.
           GH_REPO: ${{ github.repository }}
@@ -66,6 +76,13 @@ jobs:
           fi
 
           branch="auto-update/${tag}"
+
+          # Leave an open PR alone: a daily force-push would restart CI and the
+          # review, and would overwrite a manual conflict resolution.
+          if [ "$(gh pr view "$branch" --json state --jq .state 2>/dev/null || true)" = "OPEN" ]; then
+            echo "A pull request for ${tag} is already open; nothing to do."
+            exit 0
+          fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -95,7 +112,7 @@ jobs:
             printf '%s\n' \
               "Automated sync of upstream qBittorrent stable \`${tag}\` into the \`warp\` branch." \
               "" \
-              "This PR is merged automatically when the merge is clean. When it conflicts the conflict markers are committed to the branch for manual resolution (usually only in \`src/base/bittorrent/sessionimpl.cpp\`)." \
+              "When the merge is clean, auto-merge is armed and GitHub merges this PR after the required checks pass and the review bot approves the head commit. When it conflicts, the conflict markers are committed to the branch for manual resolution (usually only in \`src/base/bittorrent/sessionimpl.cpp\`)." \
               > pr-body.md
             for _ in $(seq 1 10); do
               gh pr create \
@@ -107,13 +124,8 @@ jobs:
           fi
 
           if [ "$conflicts" -eq 0 ]; then
-            # Wait for GitHub to finish computing mergeability before merging.
-            for _ in $(seq 1 12); do
-              [ "$(gh pr view "$branch" --json mergeable --jq .mergeable)" != "UNKNOWN" ] && break
-              sleep 6
-            done
-            gh pr merge "$branch" --merge --delete-branch
-            echo "Merged ${tag} into warp."
+            warp/arm-automerge.sh "$branch" merge
+            echo "Auto-merge armed for ${tag}."
           else
             echo "::warning::${tag} does not merge cleanly into warp. The conflict markers are committed to the pull request, which has been left open for manual resolution."
           fi

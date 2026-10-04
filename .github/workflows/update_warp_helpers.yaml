@@ -1,16 +1,19 @@
 name: Update WARP engine helpers
 
-# Keeps the bundled Cloudflare WARP engine helpers current with minimal manual
-# work, in the spirit of auto_update.yaml. The fork does not ship the helpers; it
+# Keeps the bundled Cloudflare WARP engine helpers current with no manual work,
+# in the same way as auto_update.yaml. The fork does not ship the helpers; it
 # pins their versions, download URLs and SHA-256 sums in
 # src/base/bittorrent/warpengine.cpp and the client downloads and verifies them
-# at runtime (see warp/THIRD-PARTY-NOTICES.md). On a schedule this finds the
-# latest release of each helper, reads the published checksums, runs the binaries
-# once on the runner, rewrites the pins, and opens a pull request.
+# at runtime (see warp/THIRD-PARTY-NOTICES.md). Every day this finds the latest
+# release of each helper, reads the published checksums, runs the binaries once
+# on the runner, rewrites the pins, opens a pull request and arms auto-merge.
 #
-# The pull request is left open for review: these helpers carry all torrent
-# traffic, so a person approves each bump. Merging it is a normal push to warp,
-# which is what triggers release.yaml to publish a build with the new pins.
+# GitHub merges the PR once the required checks pass and the review bot
+# approves the head commit (see the warp ruleset). The merge is a push to warp
+# touching src/, which triggers release.yaml to publish a build with the new
+# pins. The steps authenticate with the AUTOUPDATE_TOKEN personal access token,
+# so the PR runs CI and the merge triggers the release workflow; the built-in
+# token does neither.
 #
 # Helpers tracked, pinned for both architectures the fork ships (x86_64 and
 # arm64):
@@ -19,7 +22,7 @@ name: Update WARP engine helpers
 
 on:
   schedule:
-    - cron: "0 7 * * *"   # everyday at 07:00 UTC, after the upstream sync
+    - cron: "0 7 * * *"   # everyday at 07:00 UTC (01:00 CST, 02:00 CDT)
   workflow_dispatch:
 
 permissions:
@@ -36,15 +39,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Require AUTOUPDATE_TOKEN
+        env:
+          AUTOUPDATE_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+        run: |
+          [ -n "$AUTOUPDATE_TOKEN" ] || { echo "::error::The AUTOUPDATE_TOKEN secret is not set."; exit 1; }
+
       - name: Checkout the warp branch
         uses: actions/checkout@v7
         with:
           ref: warp
           fetch-depth: 0
+          token: ${{ secrets.AUTOUPDATE_TOKEN }}
 
-      - name: Bump the helper pins and open a pull request
+      - name: Bump the helper pins, open a pull request and arm auto-merge
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
 
@@ -62,6 +73,15 @@ jobs:
 
           if [ "$wgcf_ver" = "$cur_wgcf" ] && [ "$wp_ver" = "$cur_wp" ]; then
             echo "Both helpers are already up to date; nothing to do."
+            exit 0
+          fi
+
+          branch="update-warp-helpers/wgcf-${wgcf_ver}-wireproxy-${wp_ver}"
+
+          # Leave an open PR alone so a daily force-push does not restart CI and
+          # the review.
+          if [ "$(gh pr view "$branch" --json state --jq .state 2>/dev/null || true)" = "OPEN" ]; then
+            echo "A pull request for wgcf ${wgcf_ver} and wireproxy ${wp_ver} is already open; nothing to do."
             exit 0
           fi
 
@@ -130,7 +150,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          branch="update-warp-helpers/wgcf-${wgcf_ver}-wireproxy-${wp_ver}"
           git checkout -b "$branch"
           git add "$src" warp/THIRD-PARTY-NOTICES.md
           git commit -m "Update WARP engine helpers (wgcf ${wgcf_ver}, wireproxy ${wp_ver})"
@@ -143,7 +162,7 @@ jobs:
               "* wgcf: \`${cur_wgcf}\` -> \`${wgcf_ver}\`" \
               "* wireproxy: \`${cur_wp}\` -> \`${wp_ver}\`" \
               "" \
-              "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. Review the version and checksum changes, then merge to publish a build with the new pins." \
+              "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. Auto-merge is armed: GitHub merges this PR after the required checks pass and the review bot approves the head commit, and the merge publishes a build with the new pins." \
               > "${work}/pr-body.md"
             gh pr create \
               --base warp --head "$branch" \
@@ -151,4 +170,5 @@ jobs:
               --body-file "${work}/pr-body.md"
           fi
 
-          echo "Opened a pull request for review: $(gh pr view "$branch" --json url --jq .url)"
+          warp/arm-automerge.sh "$branch" squash
+          echo "Opened $(gh pr view "$branch" --json url --jq .url) with auto-merge armed."
