@@ -9,21 +9,27 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: cancel-closed-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
 jobs:
   cancel:
     name: Cancel runs
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-slim
     permissions:
-      actions: write
+      actions: write # cancel runs
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
       BRANCH: ${{ github.event.pull_request.head.ref }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - name: Cancel pull request runs on the branch
         run: |
           for status in queued in_progress; do
-            gh run list --branch "$BRANCH" --event pull_request --status "$status" \
-              --json databaseId --jq '.[].databaseId'
+            gh api "repos/${GH_REPO}/actions/runs" -X GET \
+              -f event=pull_request -f branch="$BRANCH" -f status="$status" --paginate \
+              --jq ".workflow_runs[] | select(any(.pull_requests[]; .number == ${PR_NUMBER})) | .id"
           done | { grep -vx "$GITHUB_RUN_ID" || true; } | xargs -r -n1 gh run cancel

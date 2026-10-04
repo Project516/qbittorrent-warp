@@ -46,12 +46,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          gh pr list --base warp --state open --author "app/dependabot" \
-            --json number,headRefOid --jq '.[] | "\(.number) \(.headRefOid)"' |
+          failed=0
           while read -r pr head; do
-            warp/arm-automerge.sh "$pr" squash
-            reviewed="$(gh api "repos/${GH_REPO}/pulls/${pr}/reviews" \
-              --jq "[.[] | select(.user.login == \"project516-review-bot[bot]\" and (.body | contains(\"head=${head}\")))] | length")"
+            if ! warp/arm-automerge.sh "$pr" squash; then
+              echo "::error::PR #${pr}: could not arm auto-merge."
+              failed=1
+              continue
+            fi
+            reviewed="$(gh api "repos/${GH_REPO}/pulls/${pr}/reviews" --paginate \
+              --jq ".[] | select(.user.login == \"project516-review-bot[bot]\" and (.body | contains(\"head=${head}\"))) | .id" | wc -l)"
             if [ "$reviewed" = "0" ]; then
               gh pr comment "$pr" --body "/review"
               echo "PR #${pr}: asked the review bot to read ${head}."
@@ -59,4 +62,6 @@ jobs:
             else
               echo "PR #${pr}: the review bot already read ${head}."
             fi
-          done
+          done < <(gh pr list --base warp --state open --author "app/dependabot" --limit 100 \
+            --json number,headRefOid --jq '.[] | "\(.number) \(.headRefOid)"')
+          exit "$failed"

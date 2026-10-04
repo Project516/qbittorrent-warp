@@ -26,8 +26,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
+  pull-requests: read
 
 concurrency:
   group: update-warp-helpers
@@ -50,14 +50,18 @@ jobs:
         with:
           ref: warp
           fetch-depth: 0
-          token: ${{ secrets.AUTOUPDATE_TOKEN }}
+          persist-credentials: false
 
-      - name: Bump the helper pins, open a pull request and arm auto-merge
+      # The downloaded helper binaries run in this step, so it holds no
+      # personal access token and the checkout leaves no credentials behind.
+      - name: Find new helper releases and rewrite the pins
+        id: pins
         env:
-          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
+          echo "changed=false" >> "$GITHUB_OUTPUT"
 
           src="src/base/bittorrent/warpengine.cpp"
 
@@ -147,28 +151,51 @@ jobs:
             exit 0
           fi
 
+          {
+            echo "changed=true"
+            echo "branch=${branch}"
+            echo "wgcf_ver=${wgcf_ver}"
+            echo "wp_ver=${wp_ver}"
+            echo "cur_wgcf=${cur_wgcf}"
+            echo "cur_wp=${cur_wp}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open a pull request and arm auto-merge
+        if: ${{ steps.pins.outputs.changed == 'true' }}
+        env:
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: ${{ steps.pins.outputs.branch }}
+          WGCF_VER: ${{ steps.pins.outputs.wgcf_ver }}
+          WP_VER: ${{ steps.pins.outputs.wp_ver }}
+          CUR_WGCF: ${{ steps.pins.outputs.cur_wgcf }}
+          CUR_WP: ${{ steps.pins.outputs.cur_wp }}
+        run: |
+          set -euo pipefail
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git checkout -b "$branch"
-          git add "$src" warp/THIRD-PARTY-NOTICES.md
-          git commit -m "Update WARP engine helpers (wgcf ${wgcf_ver}, wireproxy ${wp_ver})"
-          git push --force origin "$branch"
+          git checkout -b "$BRANCH"
+          git add src/base/bittorrent/warpengine.cpp warp/THIRD-PARTY-NOTICES.md
+          git commit -m "Update WARP engine helpers (wgcf ${WGCF_VER}, wireproxy ${WP_VER})"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GH_REPO}.git" "$BRANCH"
 
-          if ! gh pr view "$branch" --json number >/dev/null 2>&1; then
+          if ! gh pr view "$BRANCH" --json number >/dev/null 2>&1; then
+            body="$(mktemp)"
             printf '%s\n' \
               "Automated bump of the bundled Cloudflare WARP engine helpers." \
               "" \
-              "* wgcf: \`${cur_wgcf}\` -> \`${wgcf_ver}\`" \
-              "* wireproxy: \`${cur_wp}\` -> \`${wp_ver}\`" \
+              "* wgcf: \`${CUR_WGCF}\` -> \`${WGCF_VER}\`" \
+              "* wireproxy: \`${CUR_WP}\` -> \`${WP_VER}\`" \
               "" \
               "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. Auto-merge is armed: GitHub merges this PR after the required checks pass and the review bot approves the head commit, and the merge publishes a build with the new pins." \
-              > "${work}/pr-body.md"
+              > "$body"
             gh pr create \
-              --base warp --head "$branch" \
-              --title "Update WARP engine helpers (wgcf ${wgcf_ver}, wireproxy ${wp_ver})" \
-              --body-file "${work}/pr-body.md"
+              --base warp --head "$BRANCH" \
+              --title "Update WARP engine helpers (wgcf ${WGCF_VER}, wireproxy ${WP_VER})" \
+              --body-file "$body"
           fi
 
-          warp/arm-automerge.sh "$branch" squash
-          echo "Opened $(gh pr view "$branch" --json url --jq .url) with auto-merge armed."
+          warp/arm-automerge.sh "$BRANCH" squash
+          echo "Opened $(gh pr view "$BRANCH" --json url --jq .url) with auto-merge armed."
