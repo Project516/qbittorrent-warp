@@ -34,27 +34,35 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update:
-    name: Bump wgcf and wireproxy
+  find:
+    name: Find and verify new helpers
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.pins.outputs.changed }}
+      branch: ${{ steps.pins.outputs.branch }}
+      cur_wgcf: ${{ steps.pins.outputs.cur_wgcf }}
+      cur_wp: ${{ steps.pins.outputs.cur_wp }}
+      wgcf_tag: ${{ steps.pins.outputs.wgcf_tag }}
+      wgcf_ver: ${{ steps.pins.outputs.wgcf_ver }}
+      wgcf_sha_amd64: ${{ steps.pins.outputs.wgcf_sha_amd64 }}
+      wgcf_sha_arm64: ${{ steps.pins.outputs.wgcf_sha_arm64 }}
+      wp_tag: ${{ steps.pins.outputs.wp_tag }}
+      wp_ver: ${{ steps.pins.outputs.wp_ver }}
+      wp_arc_amd64: ${{ steps.pins.outputs.wp_arc_amd64 }}
+      wp_bin_amd64: ${{ steps.pins.outputs.wp_bin_amd64 }}
+      wp_arc_arm64: ${{ steps.pins.outputs.wp_arc_arm64 }}
+      wp_bin_arm64: ${{ steps.pins.outputs.wp_bin_arm64 }}
 
     steps:
-      - name: Require AUTOUPDATE_TOKEN
-        env:
-          AUTOUPDATE_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
-        run: |
-          [ -n "$AUTOUPDATE_TOKEN" ] || { echo "::error::The AUTOUPDATE_TOKEN secret is not set."; exit 1; }
-
       - name: Checkout the warp branch
         uses: actions/checkout@v7
         with:
           ref: warp
-          fetch-depth: 0
           persist-credentials: false
 
-      # The downloaded helper binaries run in this step, so it holds no
-      # personal access token and the checkout leaves no credentials behind.
-      - name: Find new helper releases and rewrite the pins
+      # The downloaded helper binaries run in this job, which has no personal
+      # access token. The job that holds the token never runs them.
+      - name: Find new helper releases and verify them
         id: pins
         env:
           GH_TOKEN: ${{ github.token }}
@@ -139,37 +147,79 @@ jobs:
           "${work}/wireproxy.amd64" --version >/dev/null 2>&1 || "${work}/wireproxy.amd64" --help >/dev/null 2>&1 \
             || { echo "::error::wireproxy ${wp_tag} did not run"; exit 1; }
 
-          WGCF_TAG="$wgcf_tag" WGCF_VER="$wgcf_ver" \
-          WGCF_SHA_AMD64="$wgcf_sha_amd64" WGCF_SHA_ARM64="$wgcf_sha_arm64" \
-          WP_TAG="$wp_tag" WP_VER="$wp_ver" \
-          WP_ARC_AMD64="$wp_arc_amd64" WP_BIN_AMD64="$wp_bin_amd64" \
-          WP_ARC_ARM64="$wp_arc_arm64" WP_BIN_ARM64="$wp_bin_arm64" \
-            python3 warp/update-helper-pins.py
-
-          if git diff --quiet; then
-            echo "Pins already match the latest releases; nothing to commit."
-            exit 0
-          fi
-
           {
             echo "changed=true"
             echo "branch=${branch}"
-            echo "wgcf_ver=${wgcf_ver}"
-            echo "wp_ver=${wp_ver}"
             echo "cur_wgcf=${cur_wgcf}"
             echo "cur_wp=${cur_wp}"
+            echo "wgcf_tag=${wgcf_tag}"
+            echo "wgcf_ver=${wgcf_ver}"
+            echo "wgcf_sha_amd64=${wgcf_sha_amd64}"
+            echo "wgcf_sha_arm64=${wgcf_sha_arm64}"
+            echo "wp_tag=${wp_tag}"
+            echo "wp_ver=${wp_ver}"
+            echo "wp_arc_amd64=${wp_arc_amd64}"
+            echo "wp_bin_amd64=${wp_bin_amd64}"
+            echo "wp_arc_arm64=${wp_arc_arm64}"
+            echo "wp_bin_arm64=${wp_bin_arm64}"
           } >> "$GITHUB_OUTPUT"
 
+  pull-request:
+    name: Open the pull request
+    needs: find
+    if: ${{ needs.find.outputs.changed == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: ${{ needs.find.outputs.branch }}
+      CUR_WGCF: ${{ needs.find.outputs.cur_wgcf }}
+      CUR_WP: ${{ needs.find.outputs.cur_wp }}
+      WGCF_TAG: ${{ needs.find.outputs.wgcf_tag }}
+      WGCF_VER: ${{ needs.find.outputs.wgcf_ver }}
+      WGCF_SHA_AMD64: ${{ needs.find.outputs.wgcf_sha_amd64 }}
+      WGCF_SHA_ARM64: ${{ needs.find.outputs.wgcf_sha_arm64 }}
+      WP_TAG: ${{ needs.find.outputs.wp_tag }}
+      WP_VER: ${{ needs.find.outputs.wp_ver }}
+      WP_ARC_AMD64: ${{ needs.find.outputs.wp_arc_amd64 }}
+      WP_BIN_AMD64: ${{ needs.find.outputs.wp_bin_amd64 }}
+      WP_ARC_ARM64: ${{ needs.find.outputs.wp_arc_arm64 }}
+      WP_BIN_ARM64: ${{ needs.find.outputs.wp_bin_arm64 }}
+
+    steps:
+      - name: Require AUTOUPDATE_TOKEN
+        env:
+          AUTOUPDATE_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+        run: |
+          [ -n "$AUTOUPDATE_TOKEN" ] || { echo "::error::The AUTOUPDATE_TOKEN secret is not set."; exit 1; }
+
+      # A fresh checkout: nothing the verification job ran can have touched it.
+      - name: Checkout the warp branch
+        uses: actions/checkout@v7
+        with:
+          ref: warp
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate the verified values
+        run: |
+          set -euo pipefail
+          for tag in "$WGCF_TAG" "$WP_TAG"; do
+            [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::bad tag: ${tag}"; exit 1; }
+          done
+          [ "$WGCF_VER" = "${WGCF_TAG#v}" ] && [ "$WP_VER" = "${WP_TAG#v}" ] || { echo "::error::version does not match tag"; exit 1; }
+          for sum in "$WGCF_SHA_AMD64" "$WGCF_SHA_ARM64" "$WP_ARC_AMD64" "$WP_BIN_AMD64" "$WP_ARC_ARM64" "$WP_BIN_ARM64"; do
+            [[ "$sum" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::bad checksum: ${sum}"; exit 1; }
+          done
+
+      - name: Rewrite the pins
+        run: |
+          python3 warp/update-helper-pins.py
+          git diff --quiet && { echo "::error::The pins did not change."; exit 1; }
+          git diff --stat
+
       - name: Open a pull request and arm auto-merge
-        if: ${{ steps.pins.outputs.changed == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          BRANCH: ${{ steps.pins.outputs.branch }}
-          WGCF_VER: ${{ steps.pins.outputs.wgcf_ver }}
-          WP_VER: ${{ steps.pins.outputs.wp_ver }}
-          CUR_WGCF: ${{ steps.pins.outputs.cur_wgcf }}
-          CUR_WP: ${{ steps.pins.outputs.cur_wp }}
         run: |
           set -euo pipefail
 
