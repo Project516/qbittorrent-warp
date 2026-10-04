@@ -1,16 +1,19 @@
 name: Update WARP engine helpers
 
-# Keeps the bundled Cloudflare WARP engine helpers current with minimal manual
-# work, in the spirit of auto_update.yaml. The fork does not ship the helpers; it
+# Keeps the bundled Cloudflare WARP engine helpers current with no manual work,
+# in the same way as auto_update.yaml. The fork does not ship the helpers; it
 # pins their versions, download URLs and SHA-256 sums in
 # src/base/bittorrent/warpengine.cpp and the client downloads and verifies them
-# at runtime (see warp/THIRD-PARTY-NOTICES.md). On a schedule this finds the
-# latest release of each helper, reads the published checksums, runs the binaries
-# once on the runner, rewrites the pins, and opens a pull request.
+# at runtime (see warp/THIRD-PARTY-NOTICES.md). Every day this finds the latest
+# release of each helper, reads the published checksums, runs the binaries once
+# on the runner, rewrites the pins, opens a pull request and arms auto-merge.
 #
-# The pull request is left open for review: these helpers carry all torrent
-# traffic, so a person approves each bump. Merging it is a normal push to warp,
-# which is what triggers release.yaml to publish a build with the new pins.
+# GitHub merges the PR once the required checks pass and the review bot
+# approves the head commit (see the warp ruleset). The merge is a push to warp
+# touching src/, which triggers release.yaml to publish a build with the new
+# pins. The steps authenticate with the AUTOUPDATE_TOKEN personal access token,
+# so the PR runs CI and the merge triggers the release workflow; the built-in
+# token does neither.
 #
 # Helpers tracked, pinned for both architectures the fork ships (x86_64 and
 # arm64):
@@ -19,34 +22,54 @@ name: Update WARP engine helpers
 
 on:
   schedule:
-    - cron: "0 7 * * *"   # everyday at 07:00 UTC, after the upstream sync
+    - cron: "0 7 * * *"   # everyday at 07:00 UTC (01:00 CST, 02:00 CDT)
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read # the PAT does all writes
+  pull-requests: read # find an open PR for the branch
 
 concurrency:
   group: update-warp-helpers
   cancel-in-progress: false
 
 jobs:
-  update:
-    name: Bump wgcf and wireproxy
+  find:
+    name: Find and verify new helpers
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.pins.outputs.changed }}
+      branch: ${{ steps.pins.outputs.branch }}
+      cur_wgcf: ${{ steps.pins.outputs.cur_wgcf }}
+      cur_wp: ${{ steps.pins.outputs.cur_wp }}
+      wgcf_tag: ${{ steps.pins.outputs.wgcf_tag }}
+      wgcf_ver: ${{ steps.pins.outputs.wgcf_ver }}
+      wgcf_sha_amd64: ${{ steps.pins.outputs.wgcf_sha_amd64 }}
+      wgcf_sha_arm64: ${{ steps.pins.outputs.wgcf_sha_arm64 }}
+      wp_tag: ${{ steps.pins.outputs.wp_tag }}
+      wp_ver: ${{ steps.pins.outputs.wp_ver }}
+      wp_arc_amd64: ${{ steps.pins.outputs.wp_arc_amd64 }}
+      wp_bin_amd64: ${{ steps.pins.outputs.wp_bin_amd64 }}
+      wp_arc_arm64: ${{ steps.pins.outputs.wp_arc_arm64 }}
+      wp_bin_arm64: ${{ steps.pins.outputs.wp_bin_arm64 }}
 
     steps:
       - name: Checkout the warp branch
         uses: actions/checkout@v7
         with:
           ref: warp
-          fetch-depth: 0
+          persist-credentials: false
 
-      - name: Bump the helper pins and open a pull request
+      # The downloaded helper binaries run in this job, which has no personal
+      # access token. The job that holds the token never runs them.
+      - name: Find new helper releases and verify them
+        id: pins
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
+          echo "changed=false" >> "$GITHUB_OUTPUT"
 
           src="src/base/bittorrent/warpengine.cpp"
 
@@ -62,6 +85,15 @@ jobs:
 
           if [ "$wgcf_ver" = "$cur_wgcf" ] && [ "$wp_ver" = "$cur_wp" ]; then
             echo "Both helpers are already up to date; nothing to do."
+            exit 0
+          fi
+
+          branch="update-warp-helpers/wgcf-${wgcf_ver}-wireproxy-${wp_ver}"
+
+          # Leave an open PR alone so a daily force-push does not restart CI and
+          # the review.
+          if [ "$(gh pr view "$branch" --json state --jq .state 2>/dev/null || true)" = "OPEN" ]; then
+            echo "A pull request for wgcf ${wgcf_ver} and wireproxy ${wp_ver} is already open; nothing to do."
             exit 0
           fi
 
@@ -115,40 +147,105 @@ jobs:
           "${work}/wireproxy.amd64" --version >/dev/null 2>&1 || "${work}/wireproxy.amd64" --help >/dev/null 2>&1 \
             || { echo "::error::wireproxy ${wp_tag} did not run"; exit 1; }
 
-          WGCF_TAG="$wgcf_tag" WGCF_VER="$wgcf_ver" \
-          WGCF_SHA_AMD64="$wgcf_sha_amd64" WGCF_SHA_ARM64="$wgcf_sha_arm64" \
-          WP_TAG="$wp_tag" WP_VER="$wp_ver" \
-          WP_ARC_AMD64="$wp_arc_amd64" WP_BIN_AMD64="$wp_bin_amd64" \
-          WP_ARC_ARM64="$wp_arc_arm64" WP_BIN_ARM64="$wp_bin_arm64" \
-            python3 warp/update-helper-pins.py
+          {
+            echo "changed=true"
+            echo "branch=${branch}"
+            echo "cur_wgcf=${cur_wgcf}"
+            echo "cur_wp=${cur_wp}"
+            echo "wgcf_tag=${wgcf_tag}"
+            echo "wgcf_ver=${wgcf_ver}"
+            echo "wgcf_sha_amd64=${wgcf_sha_amd64}"
+            echo "wgcf_sha_arm64=${wgcf_sha_arm64}"
+            echo "wp_tag=${wp_tag}"
+            echo "wp_ver=${wp_ver}"
+            echo "wp_arc_amd64=${wp_arc_amd64}"
+            echo "wp_bin_amd64=${wp_bin_amd64}"
+            echo "wp_arc_arm64=${wp_arc_arm64}"
+            echo "wp_bin_arm64=${wp_bin_arm64}"
+          } >> "$GITHUB_OUTPUT"
 
-          if git diff --quiet; then
-            echo "Pins already match the latest releases; nothing to commit."
-            exit 0
-          fi
+  pull-request:
+    name: Open the pull request
+    needs: find
+    if: ${{ needs.find.outputs.changed == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: ${{ needs.find.outputs.branch }}
+      CUR_WGCF: ${{ needs.find.outputs.cur_wgcf }}
+      CUR_WP: ${{ needs.find.outputs.cur_wp }}
+      WGCF_TAG: ${{ needs.find.outputs.wgcf_tag }}
+      WGCF_VER: ${{ needs.find.outputs.wgcf_ver }}
+      WGCF_SHA_AMD64: ${{ needs.find.outputs.wgcf_sha_amd64 }}
+      WGCF_SHA_ARM64: ${{ needs.find.outputs.wgcf_sha_arm64 }}
+      WP_TAG: ${{ needs.find.outputs.wp_tag }}
+      WP_VER: ${{ needs.find.outputs.wp_ver }}
+      WP_ARC_AMD64: ${{ needs.find.outputs.wp_arc_amd64 }}
+      WP_BIN_AMD64: ${{ needs.find.outputs.wp_bin_amd64 }}
+      WP_ARC_ARM64: ${{ needs.find.outputs.wp_arc_arm64 }}
+      WP_BIN_ARM64: ${{ needs.find.outputs.wp_bin_arm64 }}
+
+    steps:
+      - name: Require AUTOUPDATE_TOKEN
+        env:
+          AUTOUPDATE_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+        run: |
+          [ -n "$AUTOUPDATE_TOKEN" ] || { echo "::error::The AUTOUPDATE_TOKEN secret is not set."; exit 1; }
+
+      # A fresh checkout: nothing the verification job ran can have touched it.
+      - name: Checkout the warp branch
+        uses: actions/checkout@v7
+        with:
+          ref: warp
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate the verified values
+        run: |
+          set -euo pipefail
+          for tag in "$WGCF_TAG" "$WP_TAG"; do
+            [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::bad tag: ${tag}"; exit 1; }
+          done
+          [ "$WGCF_VER" = "${WGCF_TAG#v}" ] && [ "$WP_VER" = "${WP_TAG#v}" ] || { echo "::error::version does not match tag"; exit 1; }
+          for sum in "$WGCF_SHA_AMD64" "$WGCF_SHA_ARM64" "$WP_ARC_AMD64" "$WP_BIN_AMD64" "$WP_ARC_ARM64" "$WP_BIN_ARM64"; do
+            [[ "$sum" =~ ^[0-9a-f]{64}$ ]] || { echo "::error::bad checksum: ${sum}"; exit 1; }
+          done
+
+      - name: Rewrite the pins
+        run: |
+          python3 warp/update-helper-pins.py
+          git diff --quiet && { echo "::error::The pins did not change."; exit 1; }
+          git diff --stat
+
+      - name: Open a pull request and arm auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          branch="update-warp-helpers/wgcf-${wgcf_ver}-wireproxy-${wp_ver}"
-          git checkout -b "$branch"
-          git add "$src" warp/THIRD-PARTY-NOTICES.md
-          git commit -m "Update WARP engine helpers (wgcf ${wgcf_ver}, wireproxy ${wp_ver})"
-          git push --force origin "$branch"
+          git checkout -b "$BRANCH"
+          git add src/base/bittorrent/warpengine.cpp warp/THIRD-PARTY-NOTICES.md
+          git commit -m "Update WARP engine helpers (wgcf ${WGCF_VER}, wireproxy ${WP_VER})"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GH_REPO}.git" "$BRANCH"
 
-          if ! gh pr view "$branch" --json number >/dev/null 2>&1; then
+          if ! gh pr view "$BRANCH" --json number >/dev/null 2>&1; then
+            body="$(mktemp)"
             printf '%s\n' \
               "Automated bump of the bundled Cloudflare WARP engine helpers." \
               "" \
-              "* wgcf: \`${cur_wgcf}\` -> \`${wgcf_ver}\`" \
-              "* wireproxy: \`${cur_wp}\` -> \`${wp_ver}\`" \
+              "* wgcf: \`${CUR_WGCF}\` -> \`${WGCF_VER}\`" \
+              "* wireproxy: \`${CUR_WP}\` -> \`${WP_VER}\`" \
               "" \
-              "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. Review the version and checksum changes, then merge to publish a build with the new pins." \
-              > "${work}/pr-body.md"
+              "Checksums are taken from each release's published \`checksums.txt\`; the binaries were downloaded, verified and run on the CI runner before this pull request was opened. Auto-merge is armed: GitHub merges this PR after the required checks pass and the review bot approves the head commit, and the merge publishes a build with the new pins." \
+              > "$body"
             gh pr create \
-              --base warp --head "$branch" \
-              --title "Update WARP engine helpers (wgcf ${wgcf_ver}, wireproxy ${wp_ver})" \
-              --body-file "${work}/pr-body.md"
+              --base warp --head "$BRANCH" \
+              --title "Update WARP engine helpers (wgcf ${WGCF_VER}, wireproxy ${WP_VER})" \
+              --body-file "$body"
           fi
 
-          echo "Opened a pull request for review: $(gh pr view "$branch" --json url --jq .url)"
+          warp/arm-automerge.sh "$BRANCH" squash
+          echo "Opened $(gh pr view "$BRANCH" --json url --jq .url) with auto-merge armed."

@@ -1,6 +1,9 @@
 name: CI - Ubuntu
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+    branches: [warp]
 
 permissions: {}
 
@@ -187,3 +190,16 @@ jobs:
         with:
           name: qBittorrent-CI_Ubuntu-x64_${{ matrix.qbt_gui }}_libtorrent-${{ matrix.libtorrent.version }}_Qt-${{ matrix.qt_version }}
           path: upload
+
+  # Stable required-check name; the matrix job names change with the versions.
+  result:
+    name: Build result
+    needs: ci
+    if: ${{ always() }}
+    runs-on: ubuntu-slim
+    permissions: {}
+    env:
+      BUILD_RESULT: ${{ needs.ci.result }}
+    steps:
+      - name: Check the build matrix result
+        run: test "$BUILD_RESULT" = "success"

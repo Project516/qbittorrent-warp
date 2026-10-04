@@ -1,0 +1,67 @@
+name: Auto-merge Dependabot updates
+
+# Dependabot opens the PR but cannot reach repository secrets, and the review
+# bot ignores its PRs. Every day this arms auto-merge on each open Dependabot PR
+# and asks the review bot for a review of any head commit it has not read.
+# GitHub then merges the PR once the required checks pass and the bot approves
+# that head commit (see the warp ruleset). The AUTOUPDATE_TOKEN personal access
+# token makes the merge trigger release.yaml and lets /review reach the bot as
+# the repository owner.
+
+on:
+  schedule:
+    - cron: "0 8 * * *"   # everyday at 08:00 UTC (02:00 CST, 03:00 CDT), after Dependabot
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: auto-merge-dependabot
+  cancel-in-progress: false
+
+jobs:
+  arm:
+    name: Arm auto-merge
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+
+    steps:
+      - name: Require AUTOUPDATE_TOKEN
+        env:
+          AUTOUPDATE_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+        run: |
+          [ -n "$AUTOUPDATE_TOKEN" ] || { echo "::error::The AUTOUPDATE_TOKEN secret is not set."; exit 1; }
+
+      - name: Checkout the warp branch
+        uses: actions/checkout@v7
+        with:
+          ref: warp
+          persist-credentials: false
+
+      - name: Arm auto-merge and request review
+        env:
+          GH_TOKEN: ${{ secrets.AUTOUPDATE_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          failed=0
+          while read -r pr head; do
+            if ! warp/arm-automerge.sh "$pr" squash; then
+              echo "::error::PR #${pr}: could not arm auto-merge."
+              failed=1
+              continue
+            fi
+            reviewed="$(gh api "repos/${GH_REPO}/pulls/${pr}/reviews" --paginate \
+              --jq ".[] | select(.user.login == \"project516-review-bot[bot]\" and (.body | contains(\"head=${head}\"))) | .id" | wc -l)"
+            if [ "$reviewed" = "0" ]; then
+              gh pr comment "$pr" --body "/review"
+              echo "PR #${pr}: asked the review bot to read ${head}."
+              sleep 20
+            else
+              echo "PR #${pr}: the review bot already read ${head}."
+            fi
+          done < <(gh pr list --base warp --state open --author "app/dependabot" --limit 100 \
+            --json number,headRefOid --jq '.[] | "\(.number) \(.headRefOid)"')
+          exit "$failed"

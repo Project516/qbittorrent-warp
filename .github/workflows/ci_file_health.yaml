@@ -1,6 +1,9 @@
 name: CI - File health
 
-on: [pull_request, push]
+on:
+  pull_request:
+  push:
+    branches: [warp]
 
 permissions: {}
 
