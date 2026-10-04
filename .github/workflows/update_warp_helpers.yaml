@@ -26,8 +26,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pull-requests: read
+  contents: read # the PAT does all writes
+  pull-requests: read # find an open PR for the branch
 
 concurrency:
   group: update-warp-helpers
