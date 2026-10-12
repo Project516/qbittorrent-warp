@@ -22,11 +22,11 @@ wgcf
 Registers a free Cloudflare WARP account and generates a WireGuard profile.
 
 * Project:  https://github.com/ViRb3/wgcf
-* Version:  v2.3.0
-* Asset (amd64):   wgcf_2.3.0_linux_amd64
-* SHA-256 (amd64): 01614e38c0eb5f3405232e71cfaf02d64d4809e4988ad8f5a8071af16d193405
-* Asset (arm64):   wgcf_2.3.0_linux_arm64
-* SHA-256 (arm64): dcadadc42bcc410a4032a6d1c0490ea510e199f0aaaee397dc1aa0fbd27038e8
+* Version:  v2.3.1
+* Asset (amd64):   wgcf_2.3.1_linux_amd64
+* SHA-256 (amd64): 4fb7a136aa470ece11d17949c7db07b040ec9c604742dc8680bcf1889f85d0c8
+* Asset (arm64):   wgcf_2.3.1_linux_arm64
+* SHA-256 (arm64): 710ab2d8ac145d81a4cf0c11bdb0e05914f77ae2a45f67b87e718d84b4cb7301
 * License:  MIT
 
 MIT License
