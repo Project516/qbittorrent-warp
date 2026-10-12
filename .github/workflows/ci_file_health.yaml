@@ -30,7 +30,7 @@ jobs:
           python-version: "*"
 
       - name: Check files
-        uses: j178/prek-action@v3.0.0
+        uses: j178/prek-action@v3.0.1
 
       - name: Check doc
         env:
