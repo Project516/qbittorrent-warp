@@ -109,7 +109,7 @@ jobs:
 
       # to avoid scanning 3rdparty codebases, initialize it just before building qbt
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4.38.2
+        uses: github/codeql-action/init@v4.38.3
         if: ${{ !github.event.repository.private && startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON') }}
         with:
           config-file: ./.github/workflows/helper/codeql/cpp.yaml
@@ -140,7 +140,7 @@ jobs:
           DESTDIR="qbittorrent" cmake --install build
 
       - name: Run CodeQL analysis
-        uses: github/codeql-action/analyze@v4.38.2
+        uses: github/codeql-action/analyze@v4.38.3
         if: ${{ !github.event.repository.private && startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON') }}
         with:
           category: ${{ github.base_ref || github.ref_name }}
