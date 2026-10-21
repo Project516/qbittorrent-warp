@@ -1,7 +1,7 @@
-qBittorrent-WARP - qBittorrent routed through Cloudflare WARP
--------------------------------------------------------------
+# qBittorrent-WARP - qBittorrent routed through Cloudflare WARP
 
-### Description:
+## Description
+
 qBittorrent-WARP is a fork of qBittorrent that forces all BitTorrent traffic
 through Cloudflare WARP. Peer connections, tracker announces and their DNS go
 through the tunnel, and a kill switch pauses all transfers whenever the tunnel is
@@ -16,7 +16,8 @@ binary.
 This fork exists for privacy. It is not intended for, and does not condone,
 copyright infringement.
 
-### What the fork changes:
+## What the fork changes
+
 * Routes libtorrent through a self-contained userspace WARP tunnel (SOCKS5), with
   DNS resolved through the tunnel. Routing is locked and cannot be overridden from
   the GUI, the Web UI or the configuration file.
@@ -30,7 +31,8 @@ copyright infringement.
 See [warp/README.md](warp/README.md) for how it works, configuration, verification
 and advanced setups.
 
-### Installation:
+## Installation
+
 Prebuilt binaries are on the
 [Releases](https://github.com/Project516/qbittorrent-warp/releases) page as
 self-contained AppImages. Two builds are published:
@@ -43,24 +45,28 @@ self-contained AppImages. Two builds are published:
 
 Download the one for your machine, make it executable and run it:
 
-    chmod +x qBittorrent-WARP-*-x86_64.AppImage
-    ./qBittorrent-WARP-*-x86_64.AppImage
+```bash
+chmod +x qBittorrent-WARP-*-x86_64.AppImage
+./qBittorrent-WARP-*-x86_64.AppImage
+```
 
 Nothing needs to be installed; a `profile` folder is created beside the AppImage,
 and each release attaches a `SHA256SUMS` file for verification. To build from
 source instead, see [warp/README.md](warp/README.md#building-from-source).
 
-### Documentation:
+## Documentation
+
 * [warp/README.md](warp/README.md) - the WARP engine, configuration, verification,
   building and advanced use.
 * [warp/THIRD-PARTY-NOTICES.md](warp/THIRD-PARTY-NOTICES.md) - bundled helper
   versions, checksums and licenses.
 * `doc/` - qBittorrent man pages.
 
-### Misc:
+## Misc
+
 This is an unofficial fork and is not affiliated with or endorsed by the
 qBittorrent project. Report problems with the fork to this repository, not to the
 upstream qBittorrent trackers.
 
-Upstream project: https://www.qbittorrent.org
-Upstream wiki:    https://wiki.qbittorrent.org
+Upstream project: <https://www.qbittorrent.org>
+Upstream wiki:    <https://wiki.qbittorrent.org>

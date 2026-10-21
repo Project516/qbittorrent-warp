@@ -21,6 +21,7 @@
 
 #include <chrono>
 #include <optional>
+#include <tuple>
 
 #include <QByteArray>
 #include <QCryptographicHash>
@@ -255,28 +256,28 @@ namespace BitTorrent::Warp
         {
             LogMsg(tr("[WARP] Checksum mismatch for %1 (expected %2, got %3); refusing to use it.")
                 .arg(spec.url, spec.downloadSha256, gotSha), Log::CRITICAL);
-            Utils::Fs::removeFile(downloadPath);
+            std::ignore = Utils::Fs::removeFile(downloadPath);
             return false;
         }
 
         if (spec.archiveMember.isEmpty())
         {
             // The downloaded artifact is the binary itself.
-            Utils::Fs::removeFile(spec.dest);
+            std::ignore = Utils::Fs::removeFile(spec.dest);
             if (!Utils::Fs::renameFile(downloadPath, spec.dest))
             {
                 LogMsg(tr("[WARP] Failed to install %1.").arg(spec.dest.toString()), Log::CRITICAL);
-                Utils::Fs::removeFile(downloadPath);
+                std::ignore = Utils::Fs::removeFile(downloadPath);
                 return false;
             }
         }
         else
         {
             // Extract the single member from the verified tarball into the bin dir.
-            Utils::Fs::removeFile(spec.dest);
+            std::ignore = Utils::Fs::removeFile(spec.dest);
             const bool extracted = runBlocking(Path(u"tar"_s),
                 {u"-xzf"_s, downloadPath.toString(), u"-C"_s, m_binDir.toString(), spec.archiveMember}, 60000);
-            Utils::Fs::removeFile(downloadPath);
+            std::ignore = Utils::Fs::removeFile(downloadPath);
             if (!extracted || !spec.dest.exists())
             {
                 LogMsg(tr("[WARP] Failed to unpack %1.").arg(spec.url), Log::CRITICAL);
@@ -294,7 +295,7 @@ namespace BitTorrent::Warp
         {
             LogMsg(tr("[WARP] Verification of %1 failed (expected %2, got %3); refusing to use it.")
                 .arg(spec.dest.toString(), spec.binarySha256, binSha), Log::CRITICAL);
-            Utils::Fs::removeFile(spec.dest);
+            std::ignore = Utils::Fs::removeFile(spec.dest);
             return false;
         }
 
@@ -355,7 +356,7 @@ namespace BitTorrent::Warp
                 return true;
 
             LogMsg(tr("[WARP] The stored WARP profile is missing or invalid; regenerating it."), Log::WARNING);
-            Utils::Fs::removeFile(m_profileConf);
+            std::ignore = Utils::Fs::removeFile(m_profileConf);
         }
 
         LogMsg(tr("[WARP] Registering a free Cloudflare WARP account (first run only)..."), Log::INFO);

@@ -76,7 +76,7 @@ def main():
         notices = handle.read()
 
     notices = sub_once(
-        r"(https://github\.com/ViRb3/wgcf\n\* Version:  )v\S+",
+        r"(https://github\.com/ViRb3/wgcf>\n\* Version: )v\S+",
         r"\g<1>v" + wgcf_ver, notices, "notices wgcf version", flags=re.S)
     notices = sub_once(
         r"(\* Asset \(amd64\):\s+wgcf_)\S+(_linux_amd64)",
@@ -92,19 +92,19 @@ def main():
         r"\g<1>" + wgcf_sha_arm64, notices, "notices wgcf arm64 sha")
 
     notices = sub_once(
-        r"(https://github\.com/pufferffish/wireproxy\n\* Version:  )v\S+",
+        r"(https://github\.com/pufferffish/wireproxy>\n\* Version: )v\S+",
         r"\g<1>v" + wp_ver, notices, "notices wireproxy version", flags=re.S)
     notices = sub_once(
         r"(\* SHA-256 \(amd64, archive\): )[0-9a-f]{64}",
         r"\g<1>" + wp_arc_amd64, notices, "notices wireproxy amd64 archive sha")
     notices = sub_once(
-        r"(\* SHA-256 \(amd64, binary\):  )[0-9a-f]{64}",
+        r"(\* SHA-256 \(amd64, binary\): )[0-9a-f]{64}",
         r"\g<1>" + wp_bin_amd64, notices, "notices wireproxy amd64 binary sha")
     notices = sub_once(
         r"(\* SHA-256 \(arm64, archive\): )[0-9a-f]{64}",
         r"\g<1>" + wp_arc_arm64, notices, "notices wireproxy arm64 archive sha")
     notices = sub_once(
-        r"(\* SHA-256 \(arm64, binary\):  )[0-9a-f]{64}",
+        r"(\* SHA-256 \(arm64, binary\): )[0-9a-f]{64}",
         r"\g<1>" + wp_bin_arm64, notices, "notices wireproxy arm64 binary sha")
 
     with open(NOTICES, "w", encoding="utf-8") as handle:
