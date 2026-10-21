@@ -54,6 +54,10 @@ configuration.
 
 ### First run
 
+The Linux runtime needs `tar` with gzip support on `PATH` to unpack wireproxy.
+If it is missing, helper installation logs an error and the kill switch keeps
+BitTorrent traffic paused.
+
 On the first launch the engine downloads and verifies the helpers, registers a
 free WARP account, starts the tunnel and creates a `profile` folder beside the
 binary holding all configuration, data and the engine. Subsequent launches reuse
