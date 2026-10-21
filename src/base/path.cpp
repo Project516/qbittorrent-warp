@@ -43,11 +43,8 @@
 #include "base/concepts/stringable.h"
 #include "base/utils/fs.h"
 
-<<<<<<< HEAD
-=======
 using namespace Qt::Literals::StringLiterals;
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 const int PATHLIST_TYPEID = qRegisterMetaType<PathList>("PathList");
 
 namespace

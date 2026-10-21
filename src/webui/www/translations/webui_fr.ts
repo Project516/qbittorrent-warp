@@ -199,19 +199,14 @@
         <translation>Limiter la vitesse de téléchargement</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1 (Espace libre sur le disque : %2)</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>Kio/s</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -221,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -494,13 +488,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>Exemples de configuration de proxy inverse</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Could not contact qBittorrent</source>
-        <translation>N'a pas pu contacter qBittorrent</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Remember choice</source>
         <translation>Se souvenir du choix</translation>
     </message>
@@ -605,21 +592,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>Le DSCP du pair doit être compris entre 0 et 255.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
-        <translation>Impossible d'enregistrer les préférences, qBittorrent est probablement inaccessible.</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to add torrents.</source>
         <translation>Impossible d'ajouter les torrents.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Error:</source>
-        <translation>Erreur :</translation>
-=======
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation>Impossible d'enregistrer les préférences, qBittorrent est probablement inaccessible.</translation>
     </message>
@@ -650,7 +626,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2328,22 +2303,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <translation>Point de code de services différenciés (DSCP) pour les connexions aux pairs</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>Le nom d'utilisateur de l'IU Web ne doit pas contenir de deux-points.</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation>Format de la date :</translation>
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation>Paramètres par défaut du navigateur</translation>
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation>Localisation</translation>
-=======
         <source>no encryption used when sending emails</source>
         <translation>Aucun chiffrement n'est utilisé lors de l'envoi des courriels.</translation>
     </message>
@@ -2358,7 +2317,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>Utilisez le chiffrement SMTPS lors de l'envoi de courriels.</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2369,8 +2327,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <translation>Densité de l'affichage :</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>SMTP encryption:</source>
         <translation>Chiffrement SMTP :</translation>
     </message>
@@ -2395,15 +2351,10 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <translation>Sélectionnez le type de chiffrement utilisé lors de l'envoi de courriels SMTP.</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
         <translation>Cela ajoute le texte au titre de la fenêtre pour aider à distinguer les instances de qBitTorrent</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Resolve peer host names:</source>
-        <translation>Résoudre les noms d'hôtes des pairs :</translation>
-=======
         <source>(last choice if no other option)</source>
         <translation>(dernier choix en l'absence d'autre option)</translation>
     </message>
@@ -2578,7 +2529,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2996,8 +2946,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <source>Availability:</source>
         <translation>Disponibilité :</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3010,7 +2958,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -4527,32 +4474,19 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <translation>Actualiser l'onglet</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-        <translation>Ouvrir la fenêtre de téléchargement</translation>
-=======
         <source>Stop search</source>
         <translation>Arrêter la recherche</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Use as search text</source>
         <translation>Utiliser comme texte de recherche</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Stop search</source>
-        <translation>Arrêter la recherche</translation>
-    </message>
-    <message>
-        <source>Open shared download window</source>
-=======
         <source>Open download window</source>
         <translation>Ouvrir la fenêtre de téléchargement</translation>
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4560,11 +4494,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4576,7 +4505,6 @@ Utiliser ';' pour diviser plusieurs entrées. Le caractère générique '*' peut
         <source>Open shared download window</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TorrentContentTreeView</name>
@@ -4973,11 +4901,6 @@ Les formats supportés : S01E01, 1x1, 2017.12.31 et 31.12.2017 (les formats date
         <translation>Ajouter arrêté :</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation>Confirmation de la suppression des épisodes téléchargés</translation>
-    </message>
-=======
         <source>Rule cloning</source>
         <translation>Clonage de règles</translation>
     </message>
@@ -4997,7 +4920,6 @@ Les formats supportés : S01E01, 1x1, 2017.12.31 et 31.12.2017 (les formats date
         <source>Import</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TrackerFiltersList</name>
@@ -5253,13 +5175,10 @@ Les formats supportés : S01E01, 1x1, 2017.12.31 et 31.12.2017 (les formats date
         <source>Category does not exist</source>
         <translation>La catégorie n'existe pas</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>CookiesDialog</name>
@@ -5620,8 +5539,6 @@ immédiatement</translation>
         <translation>Ajouter les liens de torrents</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5630,7 +5547,6 @@ immédiatement</translation>
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5639,23 +5555,9 @@ immédiatement</translation>
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>

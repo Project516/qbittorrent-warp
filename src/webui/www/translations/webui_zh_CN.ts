@@ -199,19 +199,14 @@
         <translation>限制下载速率</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1（剩余磁盘空间：%2）</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>KiB/s</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -221,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -598,25 +592,14 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>对等节点 DSCP 必须在 0 到 255 之间。</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Unable to add torrents.</source>
         <translation>无法添加种子文件</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation>无法保存偏好设置，qBittorrent 可能无法访问。</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to add torrents.</source>
-        <translation>无法添加种子文件。</translation>
-    </message>
-    <message>
-        <source>Error:</source>
-        <translation>错误：</translation>
-=======
         <source>Error:</source>
         <translation>错误：</translation>
     </message>
@@ -643,7 +626,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2322,22 +2304,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <translation>与对等节点连接的区分服务代码点 (DSCP)</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>WebUI 用户名不得包含冒号。</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation>日期格式：</translation>
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation>浏览器默认</translation>
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation>本地化</translation>
-=======
         <source>no encryption used when sending emails</source>
         <translation>发送电子邮件时不使用加密</translation>
     </message>
@@ -2352,7 +2318,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>发送电子邮件时使用 SMTPS 加密</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2363,8 +2328,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <translation>显示密度：</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>SMTP encryption:</source>
         <translation>SMTP 加密：</translation>
     </message>
@@ -2389,15 +2352,10 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <translation>选择发送 SMTP 电子邮件时使用的加密类型</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
         <translation>它将文本附加到窗口标题来区分不同的 qBittorrent 实例</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Resolve peer host names:</source>
-        <translation>解析对等主机名：</translation>
-=======
         <source>(last choice if no other option)</source>
         <translation>(last choice if no other option)</translation>
     </message>
@@ -2572,7 +2530,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2990,8 +2947,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <source>Availability:</source>
         <translation>可用性：</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3004,7 +2959,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -4521,32 +4475,19 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <translation>刷新标签页</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-        <translation>打开下载窗口</translation>
-=======
         <source>Stop search</source>
         <translation>停止搜索</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Use as search text</source>
         <translation>用作搜索关键词</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Stop search</source>
-        <translation>停止搜索</translation>
-    </message>
-    <message>
-        <source>Open shared download window</source>
-=======
         <source>Open download window</source>
         <translation>打开下载窗口</translation>
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4554,11 +4495,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4570,7 +4506,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</source>
         <source>Open shared download window</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TorrentContentTreeView</name>
@@ -4967,11 +4902,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>添加已停止的：</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation>清除已下载剧集确认</translation>
-    </message>
-=======
         <source>Rule cloning</source>
         <translation>规则复制</translation>
     </message>
@@ -4991,7 +4921,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Import</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TrackerFiltersList</name>
@@ -5247,13 +5176,10 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Category does not exist</source>
         <translation>分类不存在</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>CookiesDialog</name>
@@ -5609,8 +5535,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>添加 Torrent 链接</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5619,7 +5543,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5628,23 +5551,9 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>

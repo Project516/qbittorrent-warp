@@ -55,12 +55,8 @@ namespace Http
         void closed();
 
     private:
-<<<<<<< HEAD
-        static bool acceptsGzipEncoding(QString encodings);
-=======
         void abort(const ResponseStatus &responseStatus);
         bool processRequest();
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         void read();
 
         QTcpSocket *m_socket = nullptr;

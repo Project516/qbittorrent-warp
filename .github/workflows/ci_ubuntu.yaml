@@ -28,24 +28,11 @@ jobs:
         # is dropped. GUI=ON/OFF stays to keep both the GUI and the nox build of
         # the fork's base-layer WARP code compiling.
         libtorrent:
-          - version: "2.1.2"
-            boost_major_version: "1"
-            boost_minor_version: "77"
-            boost_patch_version: "0"
-<<<<<<< HEAD
-=======
-            libt_build_flags: ""
-          - version: "2.0.15"
+          - version: "2.0.11"
             boost_major_version: "1"
             boost_minor_version: "77"
             boost_patch_version: "0"
             libt_build_flags: ""
-          - version: "1.2.20"
-            boost_major_version: "1"
-            boost_minor_version: "77"
-            boost_patch_version: "0"
-            libt_build_flags: ""
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         qbt_gui: ["GUI=ON", "GUI=OFF"]
         qt_version: ["6.6.3"]
 
@@ -125,13 +112,8 @@ jobs:
 
       # to avoid scanning 3rdparty codebases, initialize it just before building qbt
       - name: Initialize CodeQL
-<<<<<<< HEAD
         uses: github/codeql-action/init@v4.38.3
         if: ${{ !github.event.repository.private && startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON') }}
-=======
-        uses: github/codeql-action/init@v4
-        if: startsWith(matrix.libtorrent.version, '2.0') && (matrix.qbt_gui == 'GUI=ON')
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         with:
           config-file: ./.github/workflows/helper/codeql/cpp.yaml
           languages: cpp
@@ -162,13 +144,8 @@ jobs:
           DESTDIR="qbittorrent" cmake --install build
 
       - name: Run CodeQL analysis
-<<<<<<< HEAD
         uses: github/codeql-action/analyze@v4.38.3
         if: ${{ !github.event.repository.private && startsWith(matrix.libtorrent.version, 2) && (matrix.qbt_gui == 'GUI=ON') }}
-=======
-        uses: github/codeql-action/analyze@v4
-        if: startsWith(matrix.libtorrent.version, '2.0') && (matrix.qbt_gui == 'GUI=ON')
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         with:
           category: ${{ github.base_ref || github.ref_name }}
           output: sarif-results

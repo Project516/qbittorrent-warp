@@ -65,14 +65,10 @@ class QNetworkCookie;
 class APIController;
 class AuthController;
 class ClientDataStorage;
-<<<<<<< HEAD
-class WebApplication;
-=======
 class SearchJobManager;
 class WebSession;
 
 enum class WebSessionType : qint8;
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 namespace BitTorrent
 {

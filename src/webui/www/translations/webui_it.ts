@@ -199,19 +199,14 @@
         <translation>Limita velocità download</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1 (spazio libero disco: %2)</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>KiB/s</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -221,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -598,21 +592,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>DSCP peer deve essere compreso tra 0 e 255.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
-        <translation>Impossibile salvare le preferenze, qBittorrent probabilmente non è raggiungibile.</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to add torrents.</source>
         <translation>Impossibile aggiungere torrent.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Error:</source>
-        <translation>Errore:</translation>
-=======
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation>Impossibile salvare le preferenze, qBittorrent probabilmente non è raggiungibile.</translation>
     </message>
@@ -643,7 +626,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2186,13 +2168,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <translation>Esegui al completamento del torrent:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Attempted to send email. Check your inbox to confirm success</source>
-        <translation>Tentativo di invio email. Controlla la posta in arrivo per confermare la ricezione</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Automatically append trackers from URL to new downloads:</source>
         <translation>Aggiungi automaticamente ai nuovi download i tracker dall'URL:</translation>
     </message>
@@ -2329,22 +2304,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <translation>DSCP (Differentiated Services Code Point) per connessioni ai peer</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>Il nome utente del WebUI non può contenere i due punti</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation>Formato data:</translation>
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation>Predefinita browser</translation>
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation>Localizzazione</translation>
-=======
         <source>no encryption used when sending emails</source>
         <translation>nessuna crittografia usata per l'invio dell'email</translation>
     </message>
@@ -2359,7 +2318,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>Nell'invio delle email usa la crittografia SMTPS</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2370,10 +2328,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <translation>Densità schermo:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
-        <translation>Aggiungi il testo al titolo della finestra per aiutare a distinguere le istanze di qBittorrent</translation>
-=======
         <source>SMTP encryption:</source>
         <translation>Criptazione SMTP</translation>
     </message>
@@ -2412,13 +2366,10 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
     <message>
         <source>Browser default</source>
         <translation>Predefinita browser</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Resolve peer host names:</source>
         <translation>Risolvi nomi host peer:</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Pread/pwrite</source>
@@ -2579,7 +2530,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2997,8 +2947,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <source>Availability:</source>
         <translation>Disponibilità:</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3011,7 +2959,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -4528,24 +4475,10 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <translation>Scheda Aggiorna</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-        <translation>Apri finestra download</translation>
-    </message>
-    <message>
-        <source>Use as search text</source>
-        <translation>Usare come testo per la ricerca</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Stop search</source>
         <translation>Ferma ricerca</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open shared download window</source>
-=======
         <source>Use as search text</source>
         <translation>Usa come testo per la ricerca</translation>
     </message>
@@ -4555,7 +4488,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4563,11 +4495,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4579,7 +4506,6 @@ Per dividere voci multiple usa ';'. Si può usare il carattere jolly '*'.</trans
         <source>Open shared download window</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TorrentContentTreeView</name>
@@ -4975,11 +4901,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>Aggiungi Fermato:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation>Cancella conferma episodi scaricati</translation>
-    </message>
-=======
         <source>Rule cloning</source>
         <translation>Clonazione regola</translation>
     </message>
@@ -4999,7 +4920,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Import</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TrackerFiltersList</name>
@@ -5255,13 +5175,10 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Category does not exist</source>
         <translation>Categoria non esistente</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>CookiesDialog</name>
@@ -5622,8 +5539,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>Aggiungi collegamenti torrent</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5632,7 +5547,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5641,23 +5555,9 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>
@@ -5746,8 +5646,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Rotate this API key? The current key will immediately stop working and a new key will be generated.</source>
         <translation>Vuoi ruotare questa chiave API? La chiave attuale smetterà immediatamente di funzionare e verrà generata una nuova chiave.</translation>
-<<<<<<< HEAD
-=======
     </message>
 </context>
 <context>
@@ -5873,7 +5771,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Not available for folders</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 </TS>

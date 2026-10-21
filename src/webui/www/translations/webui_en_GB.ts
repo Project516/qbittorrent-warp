@@ -199,19 +199,14 @@
         <translation>Limit download rate</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1 (Free space on disk: %2)</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>KiB/s</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -221,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -598,21 +592,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>Peer DSCP must be between 0 and 255.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
-        <translation>Unable to save preferences, qBittorrent is probably unreachable.</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to add torrents.</source>
         <translation>Unable to add torrents.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Error:</source>
-        <translation>Error:</translation>
-=======
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation>Unable to save preferences, qBittorrent is probably unreachable.</translation>
     </message>
@@ -643,7 +626,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -903,8 +885,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Filter feed items...</source>
         <translation>Filter feed items...</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Info Hash v1</source>
@@ -953,7 +933,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Resume Session</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2265,13 +2244,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Log Files</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Enable optimized table rendering (experimental)</source>
-        <translation>Enable optimised table rendering (experimental)</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Note: The password is saved unencrypted</source>
         <translation>Note: The password is saved unencrypted</translation>
     </message>
@@ -2332,22 +2304,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Differentiated Services Code Point (DSCP) for connections to peers</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>The WebUI username must not contain a colon.</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation>Date format:</translation>
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation>Browser default</translation>
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation>Localisation</translation>
-=======
         <source>no encryption used when sending emails</source>
         <translation>no encryption used when sending emails</translation>
     </message>
@@ -2362,7 +2318,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>use SMTPS encryption when sending emails</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2373,8 +2328,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Display density:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>SMTP encryption:</source>
         <translation>SMTP encryption:</translation>
     </message>
@@ -2399,15 +2352,10 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Select the encryption type used when sending SMTP emails</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
         <translation>It appends the text to the window title to help distinguish qBittorrent instances</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Resolve peer host names:</source>
-        <translation>Resolve peer host names:</translation>
-=======
         <source>(last choice if no other option)</source>
         <translation>(last choice if no other option)</translation>
     </message>
@@ -2582,7 +2530,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -3000,8 +2947,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <source>Availability:</source>
         <translation>Availability:</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3014,7 +2959,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -4531,24 +4475,10 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Refresh tab</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-        <translation>Open download window</translation>
-    </message>
-    <message>
-        <source>Use as search text</source>
-        <translation>Use as search text</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Stop search</source>
         <translation>Stop search</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open shared download window</source>
-=======
         <source>Use as search text</source>
         <translation>Use as search text</translation>
     </message>
@@ -4558,7 +4488,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4566,9 +4495,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4578,7 +4504,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     </message>
     <message>
         <source>Open shared download window</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
 </context>
@@ -4977,11 +4902,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>Add Stopped:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation>Clear downloaded episodes confirmation</translation>
-    </message>
-=======
         <source>Rule cloning</source>
         <translation>Rule cloning</translation>
     </message>
@@ -5001,7 +4921,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Import</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TrackerFiltersList</name>
@@ -5040,13 +4959,10 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Other error</source>
         <translation>Other error</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Force start torrents</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5260,13 +5176,10 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Category does not exist</source>
         <translation>Category does not exist</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>CookiesDialog</name>
@@ -5388,11 +5301,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Private
                 torrent (Won't distribute on DHT network)</source>
-<<<<<<< HEAD
-        <translation>Private
-=======
         <translation type="vanished">Private
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 torrent (Won't distribute on DHT network)</translation>
     </message>
     <message>
@@ -5446,11 +5355,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Align to piece boundary for files larger
                 than:</source>
-<<<<<<< HEAD
-        <translation>Align to piece boundary for files larger
-=======
         <translation type="vanished">Align to piece boundary for files larger
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 than:</translation>
     </message>
     <message>
@@ -5480,11 +5385,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Optimize
                     alignment</source>
-<<<<<<< HEAD
-        <translation>Optimise
-=======
         <translation type="vanished">Optimise
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                     alignment</translation>
     </message>
     <message>
@@ -5523,11 +5424,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Start
                 seeding
                 immediately</source>
-<<<<<<< HEAD
-        <translation>Start
-=======
         <translation type="vanished">Start
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 seeding
                 immediately</translation>
     </message>
@@ -5578,8 +5475,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Export Torrent</source>
         <translation>Export Torrent</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Yes</source>
@@ -5616,7 +5511,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>If checked, filenames starting with a period punctuation mark `.` will not be added to the created torrent.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5646,8 +5540,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>Add Torrent Links</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5656,7 +5548,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5665,23 +5556,9 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>
@@ -5770,8 +5647,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Rotate this API key? The current key will immediately stop working and a new key will be generated.</source>
         <translation>Rotate this API key? The current key will immediately stop working and a new key will be generated.</translation>
-<<<<<<< HEAD
-=======
     </message>
 </context>
 <context>
@@ -5897,7 +5772,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     <message>
         <source>Not available for folders</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 </TS>

@@ -24,10 +24,7 @@ set(testFiles
     testutilshashvalue.cpp
     testutilsio.cpp
     testutilsmisc.cpp
-<<<<<<< HEAD
-=======
     testutilsnet.cpp
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     testutilsnumber.cpp
     testutilsstring.cpp
     testutilsversion.cpp

@@ -31,11 +31,7 @@ LangString inst_requires_64bit ${LANG_THAI} "โปรแกรมติดต�
 ;LangString inst_requires_win10 ${LANG_ENGLISH} "This installer requires at least Windows 10 (1809) / Windows Server 2019."
 LangString inst_requires_win10 ${LANG_THAI}  "โปรแกรมติดตั้งนี้ต้องการระบบปฏิบัติการ Windows 10 (1809) หรือ Windows Server 2019 ขึ้นไป"
 ;LangString inst_uninstall_link_description ${LANG_ENGLISH} "Uninstall qBittorrent"
-<<<<<<< HEAD
-LangString inst_uninstall_link_description ${LANG_THAI} "Uninstall qBittorrent"
-=======
 LangString inst_uninstall_link_description ${LANG_THAI} "ถอนการติดตั้ง qBittorrent"
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 ;LangString inst_arch_mismatch_arm64_on_x64 ${LANG_ENGLISH} "This ARM64 version of qBittorrent cannot run on x64 systems. Please download the x64 installer."
 LangString inst_arch_mismatch_arm64_on_x64 ${LANG_THAI} "qBittorrent เวอร์ชัน ARM64 นี้ไม่สามารถใช้งานบนระบบ x64 ได้ โปรดดาวน์โหลดตัวติดตั้งเวอร์ชัน x64 แทน"
 

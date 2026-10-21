@@ -1,11 +1,7 @@
 /*
  * Bittorrent Client using Qt and libtorrent.
  * Copyright (C) 2026  Vladimir Golovnev <glassez@yandex.ru>
-<<<<<<< HEAD:src/app/qtlocalpeer/qtlocalpeer.h
- * Copyright (C) 2019  Mike Tzou (Chocobo1)
-=======
  * Copyright (C) 2019-2026  Mike Tzou (Chocobo1)
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:src/app/localpeer.h
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,10 +69,7 @@
 
 #pragma once
 
-<<<<<<< HEAD:src/app/qtlocalpeer/qtlocalpeer.h
-=======
 #include <chrono>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:src/app/localpeer.h
 #include <optional>
 
 #include <QLockFile>
@@ -114,11 +107,7 @@ private:
 
     std::optional<LockInfo> getLockInfo() const;
 
-<<<<<<< HEAD:src/app/qtlocalpeer/qtlocalpeer.h
-    QString m_socketName;
-=======
     const QString m_socketName;
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:src/app/localpeer.h
     QLocalServer *m_server = nullptr;
     QLockFile m_lockFile;
 };

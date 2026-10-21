@@ -415,56 +415,7 @@ void Net::SMTPClient::readyRead()
     }
 }
 
-<<<<<<< HEAD:src/base/net/smtp.cpp
-QByteArray Smtp::encodeMimeHeader(const QString &key, const QString &value, const QByteArray &prefix)
-{
-    QByteArray rv = "";
-    QByteArray line = key.toLatin1() + ": ";
-    if (!prefix.isEmpty()) line += prefix;
-    if (!value.contains(u"=?") && canEncodeAsASCII(value))
-    {
-        bool firstWord = true;
-        for (const QByteArray &word : asConst(value.toLatin1().split(' ')))
-        {
-            if (line.size() > 78)
-            {
-                rv = rv + line + "\r\n";
-                line.clear();
-            }
-            if (firstWord)
-                line += word;
-            else
-                line += ' ' + word;
-            firstWord = false;
-        }
-    }
-    else
-    {
-        // The text contains non-ASCII characters. Therefore, we
-        // must use base64 encoding.
-        const QByteArray utf8 = value.toUtf8();
-        // Use base64 encoding
-        const QByteArray base64 = utf8.toBase64();
-        const qsizetype ct = base64.length();
-        line += "=?utf-8?b?";
-        for (int i = 0; i < ct; i += 4)
-        {
-            /*if (line.length() > 72)
-            {
-               rv += line + "?\n\r";
-               line = " =?utf-8?b?";
-               }*/
-            line = line + base64.mid(i, 4);
-        }
-        line += "?="; // end encoded-word atom
-    }
-    return rv + line + "\r\n";
-}
-
-void Smtp::ehlo()
-=======
 void Net::SMTPClient::ehlo()
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:src/base/net/smtpclient.cpp
 {
     const QByteArray address = determineFQDN();
     m_socket->write("ehlo " + address + "\r\n");

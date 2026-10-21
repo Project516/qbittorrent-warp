@@ -81,12 +81,6 @@ QString ReverseResolution::resolve(const QHostAddress &ip)
     const QString *hostname = m_cache.object(ip);
     if (hostname)
         return *hostname;
-<<<<<<< HEAD
-
-    // do reverse lookup: IP -> hostname
-    const int lookupId = QHostInfo::lookupHost(ip.toString(), this, &ReverseResolution::hostResolved);
-    m_lookups.insert(lookupId, ip);
-=======
 
     // in-flight requests
     if (const auto &byAddress = m_lookups.get<ByAddress>(); byAddress.find(ip) != byAddress.end())
@@ -96,7 +90,6 @@ QString ReverseResolution::resolve(const QHostAddress &ip)
     const int lookupId = QHostInfo::lookupHost(ip.toString(), this, &ReverseResolution::hostResolved);
     m_lookups.insert({.id = lookupId, .address = ip});
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     return {};
 }
 

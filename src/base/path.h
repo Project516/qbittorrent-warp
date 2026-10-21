@@ -42,11 +42,8 @@ class QStringView;
 class Path final
 {
 public:
-<<<<<<< HEAD
-=======
     class Iterator;
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 #if defined(Q_OS_WIN)
     static const Qt::CaseSensitivity CASE_SENSITIVITY = Qt::CaseInsensitive;
 #else

@@ -14,11 +14,7 @@
 ; 4.5.1.3 -> good
 ; 4.5.1.3.2 -> bad
 ; 4.5.0beta -> bad
-<<<<<<< HEAD
-!define /ifndef QBT_VERSION "5.2.4"
-=======
 !define /ifndef QBT_VERSION "5.3.0"
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 ; Option that controls the installer's window name
 ; If set, its value will be used like this:

@@ -81,12 +81,6 @@ window.qBittorrent.DynamicTable ??= (() => {
             this.dynamicTableDiv = document.getElementById(dynamicTableDivId);
             this.useVirtualList = clientData.get("use_virtual_list") ?? true;
             this.fixedTableHeader = document.querySelector(`#${dynamicTableFixedHeaderDivId} thead tr`);
-<<<<<<< HEAD
-            this.table = this.dynamicTableDiv.querySelector("table");
-            this.colgroup = document.createElement("colgroup");
-            this.table.prepend(this.colgroup);
-            this.tableBody = this.dynamicTableDiv.querySelector("tbody");
-=======
             // the body table is the direct child; the fixed header table is nested in a child div
             this.table = this.dynamicTableDiv.querySelector(":scope > table");
             this.colgroup = document.createElement("colgroup");
@@ -95,7 +89,6 @@ window.qBittorrent.DynamicTable ??= (() => {
             this.fixedTableHeaderColgroup = document.createElement("colgroup");
             this.fixedTableHeader.closest("table").prepend(this.fixedTableHeaderColgroup);
             this.tableBody = this.table.querySelector("tbody");
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
             this.rowHeight = (clientData.get("display_density") === "compact") ? 22 : 26;
             this.rows = new Map();
             this.cachedElements = [];
@@ -456,10 +449,7 @@ window.qBittorrent.DynamicTable ??= (() => {
             const style = `width: ${column.width}px; ${column.style}`;
             this.getRowCells(this.fixedTableHeader)[pos].style.cssText = style;
             this.colgroup.children[pos].style.width = `${column.width}px`;
-<<<<<<< HEAD
-=======
             this.fixedTableHeaderColgroup.children[pos].style.width = `${column.width}px`;
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
             // rerender on column resize
             if (this.useVirtualList)
                 this.rerender();
@@ -628,14 +618,11 @@ window.qBittorrent.DynamicTable ??= (() => {
             const col = document.createElement("col");
             col.style.width = `${column.width}px`;
             this.colgroup.append(col);
-<<<<<<< HEAD
-=======
 
             const headerCol = document.createElement("col");
             headerCol.style.width = `${column.width}px`;
             this.fixedTableHeaderColgroup.append(headerCol);
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
             this.fixedTableHeader.append(document.createElement("th"));
         }
 
@@ -681,11 +668,6 @@ window.qBittorrent.DynamicTable ??= (() => {
         updateTableHeaders() {
             this.updateHeader(this.fixedTableHeader);
             const cols = this.colgroup.children;
-<<<<<<< HEAD
-            for (let i = 0; i < this.columns.length; ++i) {
-                cols[i].style.width = `${this.columns[i].width}px`;
-                cols[i].classList.toggle("invisible", !this.columns[i].isVisible());
-=======
             const headerCols = this.fixedTableHeaderColgroup.children;
             for (let i = 0; i < this.columns.length; ++i) {
                 const width = `${this.columns[i].width}px`;
@@ -694,7 +676,6 @@ window.qBittorrent.DynamicTable ??= (() => {
                 cols[i].classList.toggle("invisible", !visible);
                 headerCols[i].style.width = width;
                 headerCols[i].classList.toggle("invisible", !visible);
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
             }
             this.setSortedColumnIcon(this.sortedColumn, null, (this.reverseSort === "1"));
         }
@@ -728,10 +709,7 @@ window.qBittorrent.DynamicTable ??= (() => {
             const action = column.isVisible() ? "remove" : "add";
             fths[pos].classList[action]("invisible");
             this.colgroup.children[pos].classList[action]("invisible");
-<<<<<<< HEAD
-=======
             this.fixedTableHeaderColgroup.children[pos].classList[action]("invisible");
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
             for (const tr of this.getTrs()) {
                 const td = this.getRowCells(tr)[pos];
@@ -832,11 +810,7 @@ window.qBittorrent.DynamicTable ??= (() => {
         }
 
         deselectAll() {
-<<<<<<< HEAD
-            this.selectedRows.empty();
-=======
             this.selectedRows.length = 0;
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         }
 
         selectRow(rowId) {
@@ -978,16 +952,7 @@ window.qBittorrent.DynamicTable ??= (() => {
         updateTable(fullUpdate = false) {
             const rows = this.getFilteredAndSortedRows();
             const rowIds = new Set(rows.map(row => row.rowId));
-<<<<<<< HEAD
-            for (let i = 0; i < this.selectedRows.length; ++i) {
-                if (!rowIds.has(this.selectedRows[i])) {
-                    this.selectedRows.splice(i, 1);
-                    --i;
-                }
-            }
-=======
             window.qBittorrent.Misc.filterInPlace(this.selectedRows, (selectedRow => rowIds.has(selectedRow)));
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
             if (this.useVirtualList) {
                 // rerender on table update
@@ -1575,20 +1540,6 @@ window.qBittorrent.DynamicTable ??= (() => {
 
             // creation_date
             this.columns["creation_date"].updateTd = displayDate;
-
-            // creation_date
-            this.columns["creation_date"].updateTd = function(td, row) {
-                const val = this.getRowValue(row);
-                if ((val === 0xffffffff) || (val < 0)) {
-                    td.textContent = "";
-                    td.title = "";
-                }
-                else {
-                    const date = window.qBittorrent.Misc.formatDate(new Date(this.getRowValue(row) * 1000));
-                    td.textContent = date;
-                    td.title = date;
-                }
-            };
 
             // added on
             this.columns["added_on"].updateTd = displayDate;
@@ -2453,11 +2404,7 @@ window.qBittorrent.DynamicTable ??= (() => {
         collapseState = new Map();
         fileNameColumn = "name";
         headerCheckboxClickHandler = null;
-<<<<<<< HEAD
-        headerCheckboxId = "tristate_cb";
-=======
         headerCheckboxId = "tristateCb";
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
         updateHeaderCheckbox() {
             const checkbox = document.getElementById(this.headerCheckboxId);
@@ -2626,13 +2573,6 @@ window.qBittorrent.DynamicTable ??= (() => {
                 return;
 
             const node = this.getNode(id);
-<<<<<<< HEAD
-            if (node.isFolder) {
-                this.collapseNode(node.rowId);
-                if (this.useVirtualList)
-                    this.rerender();
-            }
-=======
             if (node.isFolder && !this.isCollapsed(node.rowId)) {
                 this.collapseNode(node.rowId);
                 if (this.useVirtualList)
@@ -2649,7 +2589,6 @@ window.qBittorrent.DynamicTable ??= (() => {
             this.deselectAll();
             this.selectRow(parentRowId);
             this.getTrByRowId(parentRowId)?.focus({ preventScroll: true });
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         }
 
         isAllCheckboxesChecked() {
@@ -3051,10 +2990,7 @@ window.qBittorrent.DynamicTable ??= (() => {
          * Toggles the global checkbox and all checkboxes underneath
          */
         toggleHeaderCheckbox() {
-<<<<<<< HEAD
-=======
             const TriState = window.qBittorrent.FileTree.TriState;
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
             const checkbox = document.getElementById(this.headerCheckboxId);
             const isChecked = checkbox.checked || checkbox.indeterminate;
 
@@ -3089,17 +3025,6 @@ window.qBittorrent.DynamicTable ??= (() => {
                 this.toggleNodeTreeCheckbox(node.children[i].rowId, checkState);
         }
 
-<<<<<<< HEAD
-        isAllCheckboxesChecked() {
-            return this.fileTree.toArray().every((node) => node.checked === 0);
-        }
-
-        isAllCheckboxesUnchecked() {
-            return this.fileTree.toArray().every((node) => node.checked !== 0);
-        }
-
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         initColumnsFunctions() {
             const that = this;
             const TriState = window.qBittorrent.FileTree.TriState;

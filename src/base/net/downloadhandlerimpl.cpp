@@ -231,10 +231,6 @@ void Net::DownloadHandlerImpl::handleRedirection(const QUrl &newUrl)
     }
 
     // SSRF protection: strict scheme whitelist
-<<<<<<< HEAD
-    const QString scheme = resolvedUrl.scheme();
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     if ((scheme != u"http") && (scheme != u"https"))
     {
         setError(tr("Redirect to unsupported or dangerous protocol: '%1'.").arg(scheme));
@@ -242,8 +238,6 @@ void Net::DownloadHandlerImpl::handleRedirection(const QUrl &newUrl)
         return;
     }
 
-<<<<<<< HEAD
-=======
     if (!m_downloadRequest.allowInsecureRedirect()
         && (m_reply->url().scheme() == u"https") && (scheme != u"https"))
     {
@@ -252,7 +246,6 @@ void Net::DownloadHandlerImpl::handleRedirection(const QUrl &newUrl)
         return;
     }
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     m_redirectionHandler = static_cast<DownloadHandlerImpl *>(
             m_manager->download(DownloadRequest(m_downloadRequest).url(newUrlString), useProxy()));
     m_redirectionHandler->m_redirectionCount = m_redirectionCount + 1;

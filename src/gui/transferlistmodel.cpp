@@ -643,21 +643,12 @@ void TransferListModel::addTorrents(const QList<BitTorrent::Torrent *> &torrents
     if (torrents.isEmpty())
         return;
 
-<<<<<<< HEAD
-    qsizetype row = m_torrentList.size();
-    const qsizetype total = row + torrents.size();
-
-    beginInsertRows({}, row, (total - 1));
-
-    m_torrentList.reserve(total);
-=======
     qsizetype row = m_torrents.size();
     const qsizetype total = row + torrents.size();
 
     beginInsertRows({}, row, (total - 1));
     m_torrents.get<ByIndex>().reserve(total);
     m_torrents.get<ByHandle>().reserve(total);
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     for (BitTorrent::Torrent *torrent : torrents)
     {
         Q_ASSERT(m_torrents.get<ByHandle>().find(torrent) == m_torrents.get<ByHandle>().end());  // TODO: use `contains()` with boost >= 1.84

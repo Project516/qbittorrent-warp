@@ -872,31 +872,18 @@ void SyncController::torrentPeersAction()
         }
         else
         {
-<<<<<<< HEAD
-            peer[KEY_PEER_IP] = pi.address().ip.toString();
-            peer[KEY_PEER_PORT] = pi.address().port;
-
-            peer[KEY_PEER_HOST_NAME] = resolvePeerHostNames
-                ? Net::ReverseResolution::instance()->resolve(pi.address().ip)
-=======
             peer[KEY_PEER_IP] = address.ip.toString();
             peer[KEY_PEER_PORT] = address.port;
 
             peer[KEY_PEER_HOST_NAME] = resolvePeerHostNames
                 ? Net::ReverseResolution::instance()->resolve(address.ip)
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 : QString();
 
             if (resolvePeerCountries)
             {
-<<<<<<< HEAD
-                peer[KEY_PEER_COUNTRY_CODE] = pi.country().toLower();
-                peer[KEY_PEER_COUNTRY] = Net::GeoIPManager::CountryName(pi.country());
-=======
                 const QString country = pi.country();
                 peer[KEY_PEER_COUNTRY_CODE] = country.toLower();
                 peer[KEY_PEER_COUNTRY] = Net::GeoIPManager::CountryName(country);
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
             }
             else
             {
@@ -904,11 +891,7 @@ void SyncController::torrentPeersAction()
                 peer[KEY_PEER_COUNTRY] = {};
             }
 
-<<<<<<< HEAD
-            peers[pi.address().toString()] = peer;
-=======
             peers[address.toString()] = peer;
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         }
     }
     data[u"peers"_s] = peers;

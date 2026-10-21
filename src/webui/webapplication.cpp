@@ -70,11 +70,8 @@
 #include "api/torrentscontroller.h"
 #include "api/transfercontroller.h"
 #include "clientdatastorage.h"
-<<<<<<< HEAD
-=======
 #include "searchjobmanager.h"
 #include "websession.h"
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 const int MAX_ALLOWED_FILESIZE = 10 * 1024 * 1024;
 const QString SESSION_COOKIE_NAME_PREFIX = u"QBT_SID_"_s;
@@ -818,30 +815,7 @@ void WebApplication::cookieSessionInitialize(const QString &authScheme, const QS
     }
 }
 
-<<<<<<< HEAD
-void WebApplication::setSessionCookie()
-{
-    // 'Permanent Cookie' still require an expiration date so set it to a date in the distant future
-    const std::chrono::seconds expireDuration = (m_sessionTimeout > 0s) ? m_sessionTimeout : std::chrono::years(1);
-
-    QNetworkCookie cookie {m_sessionCookieName.toLatin1(), m_currentSession->id().toLatin1()};
-    cookie.setExpirationDate(QDateTime::currentDateTime().addDuration(expireDuration));
-    cookie.setHttpOnly(true);
-    cookie.setSecure(m_isSecureCookieEnabled && isOriginTrustworthy());  // [rfc6265] 4.1.2.5. The Secure Attribute
-    cookie.setPath(u"/"_s);
-    if (m_isCSRFProtectionEnabled)
-        cookie.setSameSitePolicy(QNetworkCookie::SameSite::Lax);
-    else if (cookie.isSecure())
-        cookie.setSameSitePolicy(QNetworkCookie::SameSite::None);
-
-    setHeader({Http::HEADER_SET_COOKIE, QString::fromLatin1(cookie.toRawForm())});
-    m_currentSession->setCookieRefreshTime(expireDuration);
-}
-
-void WebApplication::apiKeySessionInitialize()
-=======
 void WebApplication::apiKeySessionInitialize(const QString &apiKey)
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 {
     Q_ASSERT(!m_currentSession);
 
@@ -935,25 +909,6 @@ void WebApplication::sessionStartImpl(const QString &sessionId, const WebSession
     if (sessionType == WebSessionType::CookieBased)
         m_cookieBasedSessionStateChange = SessionStateChange::Start;
 
-<<<<<<< HEAD
-    m_currentSession->registerAPIController(u"app"_s, new AppController(app(), m_currentSession));
-    m_currentSession->registerAPIController(u"clientdata"_s, new ClientDataController(m_clientDataStorage, app(), m_currentSession));
-    m_currentSession->registerAPIController(u"log"_s, new LogController(app(), m_currentSession));
-    m_currentSession->registerAPIController(u"torrentcreator"_s, new TorrentCreatorController(m_torrentCreationManager, app(), m_currentSession));
-    m_currentSession->registerAPIController(u"rss"_s, new RSSController(app(), m_currentSession));
-    m_currentSession->registerAPIController(u"search"_s, new SearchController(app(), m_currentSession));
-    m_currentSession->registerAPIController(u"torrents"_s, new TorrentsController(app(), m_currentSession));
-    m_currentSession->registerAPIController(u"transfer"_s, new TransferController(app(), m_currentSession));
-
-    const auto *btSession = BitTorrent::Session::instance();
-    auto *syncController = new SyncController(app(), m_currentSession);
-    syncController->updateFreeDiskSpace(btSession->freeDiskSpace());
-    connect(btSession, &BitTorrent::Session::freeDiskSpaceChecked, syncController, &SyncController::updateFreeDiskSpace);
-    m_currentSession->registerAPIController(u"sync"_s, syncController);
-
-    if (useCookie)
-        setSessionCookie();
-=======
     m_currentSession->registerAPIController(u"app"_s, [app = app(), parent = m_currentSession] { return new AppController(app, parent); });
     m_currentSession->registerAPIController(u"log"_s, [app = app(), parent = m_currentSession] { return new LogController(app, parent); });
     m_currentSession->registerAPIController(u"rss"_s, [app = app(), parent = m_currentSession] { return new RSSController(app, parent); });
@@ -982,7 +937,6 @@ void WebApplication::sessionStartImpl(const QString &sessionId, const WebSession
         connect(btSession, &BitTorrent::Session::freeDiskSpaceChecked, syncController, &SyncController::updateFreeDiskSpace);
         return syncController;
     });
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 }
 
 void WebApplication::sessionEnd()
@@ -1027,8 +981,6 @@ bool WebApplication::isCrossSiteRequest(const Http::Request &request) const
     const QString targetOrigin = m_isReverseProxySupportEnabled
         ? request.headers.value(Http::HEADER_X_FORWARDED_HOST, request.headers.value(Http::HEADER_HOST))
         : request.headers.value(Http::HEADER_HOST);
-<<<<<<< HEAD
-=======
 
     // Prefer 'Sec-Fetch-Site' when present: it is set by the browser itself, cannot be suppressed or tampered with
     // by the requesting page, and doesn't rely on the 'Host' header (e.g. behind a reverse proxy).
@@ -1047,7 +999,6 @@ bool WebApplication::isCrossSiteRequest(const Http::Request &request) const
         return !isValid;
     }
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     const QString originValue = request.headers.value(Http::HEADER_ORIGIN);
     const QString refererValue = request.headers.value(Http::HEADER_REFERER);
 

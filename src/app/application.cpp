@@ -80,11 +80,7 @@
 #include "base/net/geoipmanager.h"
 #include "base/net/proxyconfigurationmanager.h"
 #include "base/net/reverseresolution.h"
-<<<<<<< HEAD
-#include "base/net/smtp.h"
-=======
 #include "base/net/smtpclient.h"
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 #include "base/preferences.h"
 #include "base/profile.h"
 #include "base/rss/rss_autodownloader.h"

@@ -29,15 +29,9 @@
 import argparse
 import re
 import sys
-<<<<<<< HEAD
-import xml.etree.ElementTree as ElementTree
-from collections.abc import Sequence
-from typing import Optional
-=======
 from collections.abc import Sequence
 from typing import Optional
 from xml.etree import ElementTree
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 
 def escapeNewlineCharacters(element: ElementTree.Element) -> None:
@@ -73,10 +67,7 @@ def defuseTranslationPayload(element: ElementTree.Element) -> None:
     translation = element.find('translation')
     if (translation is None) or (translation.text is None):
         return
-<<<<<<< HEAD
-=======
     translationText = translation.text
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
     escapePatterns = {
         '${',  # JS template interpolation. Should not be used.
@@ -88,11 +79,7 @@ def defuseTranslationPayload(element: ElementTree.Element) -> None:
     for entity in escapePatterns:
         if entity not in source.text:
             pattern = rf"(?<!\\){re.escape(entity)}"
-<<<<<<< HEAD
-            translation.text = re.sub(pattern, f'\\{entity}', translation.text)  # pyright: ignore[reportArgumentType, reportCallIssue]
-=======
             translationText = re.sub(pattern, f'\\{entity}', translationText)
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
     removePatterns = {
         '\u2028',  # Line Separator. Not in use.
@@ -102,13 +89,9 @@ def defuseTranslationPayload(element: ElementTree.Element) -> None:
     for entity in removePatterns:
         if entity not in source.text:
             pattern = rf"(?<!\\){re.escape(entity)}"
-<<<<<<< HEAD
-            translation.text = re.sub(pattern, '', translation.text)  # pyright: ignore[reportArgumentType, reportCallIssue]
-=======
             translationText = re.sub(pattern, '', translationText)
 
     translation.text = translationText
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 
 def fixTrailingSpaces(element: ElementTree.Element) -> None:

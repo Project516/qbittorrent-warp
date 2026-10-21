@@ -326,19 +326,8 @@ void OptionsDialog::loadBehaviorTabOptions()
 #endif
     m_ui->windowStateComboBox->setCurrentIndex(m_ui->windowStateComboBox->findData(QVariant::fromValue(app()->startUpWindowState())));
 
-<<<<<<< HEAD
-#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS))
-    m_ui->groupFileAssociation->setVisible(false);
-#endif
-    // qBittorrent-WARP: the in-client update check is enabled on Linux too, so the
-    // matching preference stays visible there; only hide it where it does nothing.
-#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX))
-    m_ui->checkProgramUpdates->setVisible(false);
-#endif
-=======
     m_ui->checkProgramExitConfirm->setChecked(pref->confirmOnExit());
     m_ui->checkProgramAutoExitConfirm->setChecked(!pref->dontConfirmAutoExit());
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 #ifdef Q_OS_MACOS
     m_ui->checkShowSystray->setVisible(false);

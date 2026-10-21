@@ -20,11 +20,7 @@
     </message>
     <message>
         <source>Skip hash check</source>
-<<<<<<< HEAD
-        <translation>Ohita tarkistus</translation>
-=======
         <translation type="vanished">Ohita tarkistussumman lasku</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Torrent Management Mode:</source>
@@ -203,19 +199,14 @@
         <translation>Rajoita latausnopeutta</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1 (Vapaata levytilaa: %2)</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>Kt/s</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -225,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -296,7 +286,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     <name>HttpServer</name>
     <message>
         <source>Exit qBittorrent</source>
-        <translation>Lopeta qBittorrent</translation>
+        <translation>Sulje qBittorrent</translation>
     </message>
     <message>
         <source>Global upload rate limit must be greater than 0 or disabled.</source>
@@ -496,13 +486,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Reverse proxy setup examples</source>
         <translation>Käänteisen välityspalvelimen määritysesimerkkejä</translation>
-<<<<<<< HEAD
-    </message>
-    <message>
-        <source>Could not contact qBittorrent</source>
-        <translation>qBittorrentiin ei saatu yhteyttä</translation>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Remember choice</source>
@@ -566,11 +549,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Unable to delete API key.</source>
-<<<<<<< HEAD
-        <translation>Toimintoa ei voitu suorittaa: delete API key.</translation>
-=======
         <translation>Toimintoa ei voitu suorittaa: poista API avain.</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Seeding time limit must not have a negative value.</source>
@@ -613,21 +592,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>vertainen DSCP täytyy olla välillä 0 and 255.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
-        <translation>Toimintoa ei voitu suorittaa: save preferences, qBittorrent is probably unreachable.</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to add torrents.</source>
         <translation>Torrentteja ei voitu lisätä.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Error:</source>
-        <translation>Virhe:</translation>
-=======
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation>Toimintoa ei voitu suorittaa: save preferences, qBittorrent is probably unreachable.</translation>
     </message>
@@ -658,7 +626,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -801,11 +768,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>To use this feature, the WebUI needs to be accessed over HTTPS</source>
-<<<<<<< HEAD
-        <translation>To use this feature, the WebUI needs to be accessed over HTTPS</translation>
-=======
         <translation>Käyttääksesi tätä toimintoa, the WebUI:n tarvitsee käyttää  HTTPS-yhteyttä</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Connection status: Firewalled</source>
@@ -922,8 +885,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Filter feed items...</source>
         <translation>Suodata syötteen kohteita...</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Info Hash v1</source>
@@ -972,7 +933,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Resume Session</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2157,11 +2117,7 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     </message>
     <message>
         <source>Transfer list</source>
-<<<<<<< HEAD
-        <translation>Siirtoluettelo</translation>
-=======
         <translation type="vanished">Siirtoluettelo</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>The announce port must be between 0 and 65535.</source>
@@ -2210,13 +2166,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     <message>
         <source>Run on torrent finished:</source>
         <translation>Suorita torrentin valmistuttua:</translation>
-<<<<<<< HEAD
-    </message>
-    <message>
-        <source>Attempted to send email. Check your inbox to confirm success</source>
-        <translation>Attempted to send email. Check your inbox to confirm success</translation>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Automatically append trackers from URL to new downloads:</source>
@@ -2293,13 +2242,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     <message>
         <source>Log Files</source>
         <translation>Lokitiedostot</translation>
-<<<<<<< HEAD
-    </message>
-    <message>
-        <source>Enable optimized table rendering (experimental)</source>
-        <translation>Ota optimoitu taulukon piirto käyttöön (kokeellinen)</translation>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Note: The password is saved unencrypted</source>
@@ -2362,22 +2304,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Differentiated Services Code Point (DSCP) for yhteydet to vertaiset</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>The WebUI käyttäjänimi must not contain a colon.</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation>Päivämäärän muoto:</translation>
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation>Selaimen oletus</translation>
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation>Lokalisointi</translation>
-=======
         <source>no encryption used when sending emails</source>
         <translation>no encryption used when sending emails</translation>
     </message>
@@ -2392,7 +2318,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>use SMTPS encryption when sending emails</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2403,8 +2328,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Näyttötiheys:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>SMTP encryption:</source>
         <translation>SMTP-salaus:</translation>
     </message>
@@ -2429,15 +2352,10 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Select the encryption type used when sending SMTP emails</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
         <translation>It appends the text to the window title to help distinguish qBittorrent instances</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Resolve peer host names:</source>
-        <translation>Selvitä vertaisten isäntänimet:</translation>
-=======
         <source>(last choice if no other option)</source>
         <translation>(last choice if no other option)</translation>
     </message>
@@ -2612,7 +2530,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -3030,8 +2947,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <source>Availability:</source>
         <translation>Saatavuus:</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3044,7 +2959,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -4561,24 +4475,10 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation>Päivitä välilehti</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-        <translation>Avaa latausikkuna</translation>
-    </message>
-    <message>
-        <source>Use as search text</source>
-        <translation>Käytä hakutekstinä</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Stop search</source>
         <translation>Pysäytä haku</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open shared download window</source>
-=======
         <source>Use as search text</source>
         <translation>Käytä hakutekstinä</translation>
     </message>
@@ -4588,7 +4488,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4596,9 +4495,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4608,7 +4504,6 @@ Use ';' to split multiple entries. Can use wildcard '*'.</translation>
     </message>
     <message>
         <source>Open shared download window</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
 </context>
@@ -5007,10 +4902,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
         <translation>Lisää pysäytettynä:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation>Ladattujen jaksojen tyhjennyksen vahvistus</translation>
-=======
         <source>Rule cloning</source>
         <translation>sääntö cloning</translation>
     </message>
@@ -5029,7 +4920,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Import</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5069,13 +4959,10 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Other error</source>
         <translation>Muu virhe</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Force start torrents</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5289,13 +5176,10 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
         <source>Category does not exist</source>
         <translation>Category does not exist</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>CookiesDialog</name>
@@ -5340,11 +5224,7 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     </message>
     <message>
         <source>Are you sure you want to enable Automatic Torrent Management for the selected torrent(s)? They may be relocated.</source>
-<<<<<<< HEAD
-        <translation>Haluatko varmasti ottaa käyttöön automaattiset muokkaukset valitulle torrentille? Ne voidaan sijoittaa uudelleen.</translation>
-=======
         <translation>Haluatko varmasti ottaa automaattisen torrentin hallinnan käyttöön? Ne saatetaan uudelleensijoittaa.</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5421,11 +5301,7 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Private
                 torrent (Won't distribute on DHT network)</source>
-<<<<<<< HEAD
-        <translation>Yksityinen
-=======
         <translation type="vanished">Yksityinen
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 torrent (ei jaeta DHT-verkossa)</translation>
     </message>
     <message>
@@ -5479,11 +5355,7 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Align to piece boundary for files larger
                 than:</source>
-<<<<<<< HEAD
-        <translation>Align to piece boundary for files larger
-=======
         <translation type="vanished">Align to piece boundary for files larger
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 than:</translation>
     </message>
     <message>
@@ -5513,11 +5385,7 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Optimize
                     alignment</source>
-<<<<<<< HEAD
-        <translation>Optimize
-=======
         <translation type="vanished">Optimize
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                     alignment</translation>
     </message>
     <message>
@@ -5556,11 +5424,7 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
         <source>Start
                 seeding
                 immediately</source>
-<<<<<<< HEAD
-        <translation>Aloita
-=======
         <translation type="vanished">Aloita
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
                 jakaminen
                 heti</translation>
     </message>
@@ -5611,8 +5475,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Export Torrent</source>
         <translation>Vie torrent</translation>
-<<<<<<< HEAD
-=======
     </message>
     <message>
         <source>Yes</source>
@@ -5649,7 +5511,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>If checked, filenames starting with a period punctuation mark `.` will not be added to the created torrent.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5679,8 +5540,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
         <translation>Lisää torrent-linkkejä</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5689,7 +5548,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5698,23 +5556,9 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>
@@ -5802,9 +5646,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     </message>
     <message>
         <source>Rotate this API key? The current key will immediately stop working and a new key will be generated.</source>
-<<<<<<< HEAD
-        <translation>Kierrätetäänkö tämä API-avain? Nykyinen avain lakkaa välittömästi toimimasta, ja uusi avain luodaan.</translation>
-=======
         <translation>Rotate this API avain? The current avain will immediately stop working and a new avain will be generated.</translation>
     </message>
 </context>
@@ -5931,7 +5772,6 @@ Nämä muodot ovat tuetut: S01E01, 1x1, 2017.12.31 ja 31.12.2017 (päiväysmuodo
     <message>
         <source>Not available for folders</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 </TS>

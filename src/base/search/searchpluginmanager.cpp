@@ -686,11 +686,7 @@ void SearchPluginManager::parseVersionInfo(const QByteArray &info)
             continue;
         }
 
-<<<<<<< HEAD
-        const auto version = PluginVersion::fromString(QString::fromLatin1(list.last().trimmed()));
-=======
         const auto version = SearchPluginVersion::fromString(QString::fromLatin1(list.last().trimmed()));
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         if (!version.isValid())
         {
             ++numInvalidData;

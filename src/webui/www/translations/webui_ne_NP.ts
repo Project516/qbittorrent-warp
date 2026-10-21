@@ -20,11 +20,7 @@
     </message>
     <message>
         <source>Skip hash check</source>
-<<<<<<< HEAD
-        <translation>ह्यास जाँच छोड्नुहोस्</translation>
-=======
         <translation type="vanished">ह्यास जाँच छोड्नुहोस्</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Torrent Management Mode:</source>
@@ -164,19 +160,11 @@
     </message>
     <message>
         <source>N/A</source>
-<<<<<<< HEAD
-        <translation>अनुपलब्ध</translation>
-    </message>
-    <message>
-        <source>Maximum</source>
-        <translation>सबै भन्दा धेरै</translation>
-=======
         <translation>लागू हुँदैन</translation>
     </message>
     <message>
         <source>Maximum</source>
         <translation>अधिकतम</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Do not download</source>
@@ -184,11 +172,7 @@
     </message>
     <message>
         <source>Download first and last pieces first</source>
-<<<<<<< HEAD
-        <translation>पहिलो र अन्तिम टुक्रा पहिले डाउनलोड गर</translation>
-=======
         <translation>पहिलो र अन्तिम टुक्रा पहिले डाउनलोड गर्नुहोस्</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Comment:</source>
@@ -215,19 +199,14 @@
         <translation>डाउनलोड दर सीमित गर्नुहोस्</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1 (डिस्कमा खाली ठाउँ: %2)</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>किबी/से</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -237,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -258,28 +236,13 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Uncategorized</source>
-<<<<<<< HEAD
-        <translation>श्रेणीबद्ध नगरिएका</translation>
-=======
         <translation>वर्गीकृत नगरिएको</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
     <name>CategoryFilterWidget</name>
     <message>
         <source>Add category...</source>
-<<<<<<< HEAD
-        <translation>श्रेणी थप्नुहोस्...</translation>
-    </message>
-    <message>
-        <source>Remove category</source>
-        <translation>श्रेणी हटाउनुहोस्</translation>
-    </message>
-    <message>
-        <source>Remove unused categories</source>
-        <translation>प्रयोगमा नरहेका श्रेणीहरू हटाउनुहोस्</translation>
-=======
         <translation>वर्ग थप्नुहोस्...</translation>
     </message>
     <message>
@@ -289,7 +252,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Remove unused categories</source>
         <translation>प्रयोग नगरिएका वर्गहरू हटाउनुहोस्</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>New Category</source>
@@ -297,11 +259,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Edit category...</source>
-<<<<<<< HEAD
-        <translation>श्रेणी सम्पादन गर्नुहोस्...</translation>
-=======
         <translation>वर्ग सम्पादन गर्नुहोस्...</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Remove torrents</source>
@@ -309,11 +267,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Add subcategory...</source>
-<<<<<<< HEAD
-        <translation>उपश्रेणी थप्नुहोस्...</translation>
-=======
         <translation>उपवर्ग थप्नुहोस्...</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Start torrents</source>
@@ -323,13 +277,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <source>Stop torrents</source>
         <translation>टोरेन्टहरू रोक्नुहोस्</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Force start torrents</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>HttpServer</name>
@@ -537,13 +488,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Could not contact qBittorrent</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Remember choice</source>
         <translation>विकल्प सम्झिनुहोस्</translation>
     </message>
@@ -648,22 +592,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to add torrents.</source>
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Error:</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation type="unfinished" />
     </message>
@@ -691,7 +623,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>MainWindow</name>
@@ -764,17 +695,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>होइन</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Global Upload Speed Limit</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-        <source>Global Download Speed Limit</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Are you sure you want to quit qBittorrent?</source>
         <translation>के तपाईं qBittorrent बन्द गर्न निश्चित हुनुहुन्छ?</translation>
     </message>
@@ -954,8 +874,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <source>Filter feed items...</source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Info Hash v1</source>
         <translation>जानकारी ह्यास v1</translation>
@@ -1004,7 +922,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <source>Resume Session</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>OptionsDialog</name>
@@ -1078,19 +995,11 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Copy .torrent files to:</source>
-<<<<<<< HEAD
-        <translation>मा .torrent फाइलहरू प्रतिलिपि गर्नुहोस्:</translation>
-    </message>
-    <message>
-        <source>Copy .torrent files for finished downloads to:</source>
-        <translation>डाउनलोड सकिएपछि .torrent फाइलहरू यहाँ प्रतिलिपि गर्नुहोस्:</translation>
-=======
         <translation type="vanished">मा .torrent फाइलहरू प्रतिलिपि गर्नुहोस्:</translation>
     </message>
     <message>
         <source>Copy .torrent files for finished downloads to:</source>
         <translation type="vanished">डाउनलोड सकिएपछि .torrent फाइलहरू यहाँ प्रतिलिपि गर्नुहोस्:</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Pre-allocate disk space for all files</source>
@@ -1109,13 +1018,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>SMTP सर्भर:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>This server requires a secure connection (SSL)</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Authentication</source>
         <translation>प्रमाणीकरण</translation>
     </message>
@@ -2163,11 +2065,7 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>Show external IP in status bar</source>
-<<<<<<< HEAD
-        <translation>स्थिति पट्टीमा बाह्य IP देखाउनुहोस्</translation>
-=======
         <translation type="vanished">स्थिति पट्टीमा बाह्य IP देखाउनुहोस्</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Fetched trackers</source>
@@ -2206,13 +2104,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation>URL:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Transfer list</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>The announce port must be between 0 and 65535.</source>
         <translation type="unfinished" />
     </message>
@@ -2261,13 +2152,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation>टोरेन्टमा चलाउने समाप्त भयो:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Attempted to send email. Check your inbox to confirm success</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Automatically append trackers from URL to new downloads:</source>
         <translation>URL बाट नयाँ डाउनलोडहरूमा ट्र्याकरहरू स्वचालित रूपमा थप्नुहोस्:</translation>
     </message>
@@ -2344,13 +2228,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Enable optimized table rendering (experimental)</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Note: The password is saved unencrypted</source>
         <translation>नोट: पासवर्ड इन्क्रिप्ट नगरी सुरक्षित गरिएको छ।</translation>
     </message>
@@ -2411,22 +2288,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation>पिअरहरूसँगको सम्बन्धको लागि विभेदित सेवा कोड पोइन्ट (DSCP)</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>WebUI प्रयोगकर्ता नाममा कोलोन हुनु हुँदैन।</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation type="unfinished" />
-=======
         <source>no encryption used when sending emails</source>
         <translation>इमेल पठाउँदा कुनै इन्क्रिप्शन प्रयोग गरिएन</translation>
     </message>
@@ -2441,7 +2302,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>इमेल पठाउँदा SMTPS इन्क्रिप्शन प्रयोग गर्नुहोस्</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2452,8 +2312,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>SMTP encryption:</source>
         <translation>SMTP इन्क्रिप्शन:</translation>
     </message>
@@ -2474,16 +2332,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation>SMTP इमेलहरू पठाउँदा प्रयोग गरिने इन्क्रिप्शन प्रकार चयन गर्नुहोस्</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
         <translation>यसले qBittorrent इन्स्ट्यान्सहरू छुट्याउन मद्दत गर्न विन्डो शीर्षकमा पाठ थप्छ।</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Resolve peer host names:</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>(last choice if no other option)</source>
         <translation>(अन्य विकल्प नभए अन्तिम विकल्प)</translation>
     </message>
@@ -2659,7 +2511,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>PeerListWidget</name>
@@ -2743,13 +2594,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>IP/Address</source>
         <translation>IP/ठेगाना</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Contribution</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>PropListDelegate</name>
@@ -3079,8 +2927,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Availability:</source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3093,7 +2939,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -3191,8 +3036,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Total queued size:</source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Tracker statistics</source>
         <translation type="unfinished" />
@@ -3209,7 +3052,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>The time it takes from receiving a request from a peer until we're sending the response back on the socket</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>StatusBar</name>
@@ -3345,13 +3187,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Stop torrents</source>
         <translation>टोरेन्टहरू रोक्नुहोस्</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Force start torrents</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TorrentContentModel</name>
@@ -4443,13 +4282,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Stop torrents</source>
         <translation>टोरेन्टहरू रोक्नुहोस्</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Force start torrents</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TagFilterModel</name>
@@ -4619,11 +4455,7 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-=======
         <source>Stop search</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4631,19 +4463,11 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Stop search</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-        <source>Open shared download window</source>
-=======
         <source>Open download window</source>
         <translation type="unfinished" />
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4651,11 +4475,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4667,7 +4486,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Open shared download window</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TorrentContentTreeView</name>
@@ -4802,13 +4620,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Author: </source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Blocked opening RSS article URL. Only http:// and https:// links can be opened.</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>AutomatedRssDownloader</name>
@@ -5067,11 +4882,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Rule cloning</source>
         <translation>नियम क्लोनिङ</translation>
     </message>
@@ -5091,7 +4901,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Import</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TrackerFiltersList</name>
@@ -5131,13 +4940,10 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Other error</source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Force start torrents</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>FeedListWidget</name>
@@ -5350,13 +5156,10 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Category does not exist</source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>CookiesDialog</name>
@@ -5476,14 +5279,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Private
-                torrent (Won't distribute on DHT network)</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to export torrent file</source>
         <translation type="unfinished" />
     </message>
@@ -5532,14 +5327,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>स्थिति</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Align to piece boundary for files larger
-                than:</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Select file/folder to share:</source>
         <translation type="unfinished" />
     </message>
@@ -5564,14 +5351,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Optimize
-                    alignment</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>N/A</source>
         <translation>अनुपलब्ध</translation>
     </message>
@@ -5604,15 +5383,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Start
-                seeding
-                immediately</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Format</source>
         <translation type="unfinished" />
     </message>
@@ -5660,8 +5430,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Export Torrent</source>
         <translation type="unfinished" />
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Yes</source>
         <translation type="unfinished" />
@@ -5698,7 +5466,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>If checked, filenames starting with a period punctuation mark `.` will not be added to the created torrent.</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>DownloadFromURLDialog</name>
@@ -5727,8 +5494,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5737,7 +5502,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5746,23 +5510,9 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>
@@ -5786,8 +5536,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>KiB/s</source>
         <translation>किबी/से</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Upload speed</source>
         <translation type="unfinished" />
@@ -5828,7 +5576,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Failed to set speed limits</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ListWidget</name>
@@ -5856,8 +5603,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>यो API कुञ्जी घुमाउने हो? हालको कुञ्जीले तुरुन्तै काम गर्न छोड्नेछ र नयाँ कुञ्जी उत्पन्न हुनेछ।</translation>
     </message>
 </context>
-<<<<<<< HEAD
-=======
 <context>
     <name>RSSCloneRule</name>
     <message>
@@ -5983,5 +5728,4 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
 </context>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </TS>

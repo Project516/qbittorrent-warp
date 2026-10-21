@@ -30,11 +30,7 @@ jobs:
           python-version: "*"
 
       - name: Check files
-<<<<<<< HEAD
         uses: j178/prek-action@v3.0.1
-=======
-        uses: j178/prek-action@v2
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
       - name: Check doc
         env:

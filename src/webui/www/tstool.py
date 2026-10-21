@@ -42,13 +42,8 @@ www_folder: str = "."
 ts_folder = os.path.join(www_folder, "translations")
 
 
-<<<<<<< HEAD
-def parseSource(filename, sources):
-    print("Parsing %s..." % (os.path.normpath(filename)))
-=======
 def parseSource(filename: str, sources: SourceDict) -> None:
     print(f"Parsing {os.path.normpath(filename)}...")
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     with open(filename, mode='r', encoding='utf-8') as file:
         regex = re.compile(
             r"QBT_TR\((([^\)]|\)(?!QBT_TR))+)\)QBT_TR\[CONTEXT=([a-zA-Z_][a-zA-Z0-9_]*)\]")

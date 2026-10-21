@@ -1,10 +1,6 @@
 /*
  * Bittorrent Client using Qt and libtorrent.
-<<<<<<<< HEAD:test/testutilsmisc.cpp
- * Copyright (C) 2026  Mark Yu (vafada)
-========
  * Copyright (C) 2026  Andy Ye
->>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:test/testutilsfs.cpp
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,37 +29,6 @@
 #include <QObject>
 #include <QTest>
 
-<<<<<<<< HEAD:test/testutilsmisc.cpp
-#include "base/utils/misc.h"
-
-class TestUtilsMisc final : public QObject
-{
-    Q_OBJECT
-    Q_DISABLE_COPY_MOVE(TestUtilsMisc)
-
-public:
-    TestUtilsMisc() = default;
-
-private slots:
-    void testfriendlyUnitCompact() const
-    {
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(500), (u"500" + QChar::Nbsp + u"B"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(1000), (u"0.97" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(5000), (u"4.88" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(10000), (u"9.76" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(15000), (u"14.6" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(100000), (u"97.6" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(150000), (u"146" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(1000000), (u"976" + QChar::Nbsp + u"K"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(10000000), (u"9.53" + QChar::Nbsp + u"M"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(15000000), (u"14.3" + QChar::Nbsp + u"M"));
-        QCOMPARE(Utils::Misc::friendlyUnitCompact(10000000000), (u"9.31" + QChar::Nbsp + u"G"));
-    }
-};
-
-QTEST_APPLESS_MAIN(TestUtilsMisc)
-#include "testutilsmisc.moc"
-========
 #include "base/global.h"
 #include "base/utils/fs.h"
 
@@ -87,4 +52,3 @@ private slots:
 
 QTEST_APPLESS_MAIN(TestUtilsFs)
 #include "testutilsfs.moc"
->>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:test/testutilsfs.cpp

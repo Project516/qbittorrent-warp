@@ -199,19 +199,14 @@
         <translation>다운로드 속도 제한</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>%1 (Free space on disk: %2)</source>
         <translation type="vanished">%1 (디스크 남은 용량: %2)</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>KiB/s</source>
         <translation>KiB/s</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
         <translation type="unfinished" />
@@ -221,7 +216,6 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Download</source>
         <translation type="unfinished" />
     </message>
@@ -598,21 +592,10 @@ The piece hash will be checked when it is requested for the first time by a peer
         <translation>피어 DSCP는 0에서 255 사이여야 합니다.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
-        <translation>기본 설정을 저장할 수 없어서 qBittorrent에 도달할 수 없을 것 같습니다.</translation>
-    </message>
-    <message>
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Unable to add torrents.</source>
         <translation>토렌트를 추가할 수 없습니다.</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Error:</source>
-        <translation>오류:</translation>
-=======
         <source>Unable to save preferences, qBittorrent is probably unreachable.</source>
         <translation>기본 설정을 저장할 수 없어서 qBittorrent에 도달할 수 없을 것 같습니다.</translation>
     </message>
@@ -643,7 +626,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Unable to pause the session.</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2322,22 +2304,6 @@ DNS 재결합 공격을 방어하기 위해
         <translation>피어 연결을 위한 차별화된 서비스 코드 포인트 (DSCP)</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>The WebUI username must not contain a colon.</source>
-        <translation>WebUI 사용자 이름에는 콜론이 포함되지 않아야 합니다.</translation>
-    </message>
-    <message>
-        <source>Date format:</source>
-        <translation>날짜 형식:</translation>
-    </message>
-    <message>
-        <source>Browser default</source>
-        <translation>브라우저 기본값</translation>
-    </message>
-    <message>
-        <source>Localization</source>
-        <translation>지역화</translation>
-=======
         <source>no encryption used when sending emails</source>
         <translation>이메일을 보낼 때 암호화가 사용되지 않음</translation>
     </message>
@@ -2352,7 +2318,6 @@ DNS 재결합 공격을 방어하기 위해
     <message>
         <source>use SMTPS encryption when sending emails</source>
         <translation>이메일을 보낼 때 SMTPS 암호화 사용</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Compact</source>
@@ -2363,8 +2328,6 @@ DNS 재결합 공격을 방어하기 위해
         <translation>표시 밀도:</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>SMTP encryption:</source>
         <translation>SMTP 암호화:</translation>
     </message>
@@ -2389,15 +2352,10 @@ DNS 재결합 공격을 방어하기 위해
         <translation>SMTP 이메일을 보낼 때 사용할 암호화 유형 선택</translation>
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>It appends the text to the window title to help distinguish qBittorrent instances</source>
         <translation>텍스트를 창 제목에 추가하여 qBittorrent 인스턴스를 구별하는 데 도움을 줍니다</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Resolve peer host names:</source>
-        <translation>피어 호스트 이름 확인:</translation>
-=======
         <source>(last choice if no other option)</source>
         <translation>(다른 옵션이 없는 경우 마지막 선택)</translation>
     </message>
@@ -2572,7 +2530,6 @@ DNS 재결합 공격을 방어하기 위해
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -2990,8 +2947,6 @@ DNS 재결합 공격을 방어하기 위해
         <source>Availability:</source>
         <translation>가용성:</translation>
     </message>
-<<<<<<< HEAD
-=======
     <message>
         <source>Copy path</source>
         <translation type="unfinished" />
@@ -3004,7 +2959,6 @@ DNS 재결합 공격을 방어하기 위해
         <source>Copy download URL</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>ScanFoldersModel</name>
@@ -3575,7 +3529,7 @@ DNS 재결합 공격을 방어하기 위해
     </message>
     <message>
         <source>Force reannounce to selected tracker(s)</source>
-        <translation>선택한 트래커에 강제로 다시 알림</translation>
+        <translation>선택된 트래커에 다시 알림 강제 실행</translation>
     </message>
     <message>
         <source>Min Announce</source>
@@ -3583,7 +3537,7 @@ DNS 재결합 공격을 방어하기 위해
     </message>
     <message>
         <source>Force reannounce to all trackers</source>
-        <translation>모든 트래커에 강제로 다시 알림</translation>
+        <translation>모든 트래커에 강제로 다시 알리기</translation>
     </message>
 </context>
 <context>
@@ -4521,32 +4475,19 @@ DNS 재결합 공격을 방어하기 위해
         <translation>탭 새로 고침</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open download window</source>
-        <translation>다운로드 창 열기</translation>
-=======
         <source>Stop search</source>
         <translation>검색 중지</translation>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
     <message>
         <source>Use as search text</source>
         <translation>검색 텍스트로 사용</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Stop search</source>
-        <translation>검색 중지</translation>
-    </message>
-    <message>
-        <source>Open shared download window</source>
-=======
         <source>Open download window</source>
         <translation>다운로드 창 열기</translation>
     </message>
     <message>
         <source>Blocked opening search result description page URL. Only http:// and https:// links can be opened.</source>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <translation type="unfinished" />
     </message>
     <message>
@@ -4554,11 +4495,6 @@ DNS 재결합 공격을 방어하기 위해
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Open separate download windows</source>
-        <translation type="unfinished" />
-    </message>
-=======
         <source>Search results are no longer available</source>
         <translation type="unfinished" />
     </message>
@@ -4570,7 +4506,6 @@ DNS 재결합 공격을 방어하기 위해
         <source>Open shared download window</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TorrentContentTreeView</name>
@@ -4967,11 +4902,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>중지됨 추가 :</translation>
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Clear downloaded episodes confirmation</source>
-        <translation>다운로드된 에피소드 확인 지우기</translation>
-    </message>
-=======
         <source>Rule cloning</source>
         <translation>규칙 복제</translation>
     </message>
@@ -4991,7 +4921,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <source>Import</source>
         <translation type="unfinished" />
     </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>TrackerFiltersList</name>
@@ -5229,7 +5158,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Category:</source>
-        <translation>범주:</translation>
+        <translation>카테고리:</translation>
     </message>
     <message>
         <source>No</source>
@@ -5245,15 +5174,11 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Category does not exist</source>
-<<<<<<< HEAD
-        <translation>범주가 존재하지 않습니다</translation>
-=======
         <translation>카테고리가 존재하지 않습니다</translation>
     </message>
     <message>
         <source>Torrent share limits</source>
         <translation type="unfinished" />
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     </message>
 </context>
 <context>
@@ -5332,7 +5257,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>JavaScript Required! You must enable JavaScript for the WebUI to work properly</source>
-        <translation>JavaScript 필수! WebUI가 제대로 작동하려면 JavaScript를 활성화해야 합니다</translation>
+        <translation>자바스크립트가 필요합니다! WebUI가 올바르게 작동하려면 자바스크립트를 활성화가 요구됨</translation>
     </message>
     <message>
         <source>Login</source>
@@ -5352,7 +5277,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Invalid Username or Password.</source>
-        <translation>잘못된 사용자 이름 또는 비밀번호입니다.</translation>
+        <translation>사용자 이름/암호가 올바르지 않습니다.</translation>
     </message>
 </context>
 <context>
@@ -5385,7 +5310,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Create New Torrent</source>
-        <translation>새 토렌트 만들기</translation>
+        <translation>새로운 토렌트 만들기</translation>
     </message>
     <message>
         <source>Comments:</source>
@@ -5405,7 +5330,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Failed</source>
-        <translation>실패</translation>
+        <translation>실패함</translation>
     </message>
     <message>
         <source>Comment</source>
@@ -5413,7 +5338,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Finished</source>
-        <translation>완료</translation>
+        <translation>완료됨</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -5603,7 +5528,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>One link per line (HTTP links, Magnet links and info-hashes are supported)</source>
-        <translation>한 줄당 하나의 링크 (HTTP 링크, 마그네틱 링크 및 인포 해시 지원)</translation>
+        <translation>한 줄에 링크 하나 (HTTP 링크, 마그넷 링크, 정보 해시 지원)</translation>
     </message>
     <message>
         <source>URLs</source>
@@ -5614,8 +5539,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation>토렌트 링크 추가</translation>
     </message>
     <message>
-<<<<<<< HEAD
-=======
         <source>Add %1 torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5624,7 +5547,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         <source>Add Torrents</source>
         <translation type="unfinished" />
     </message>
@@ -5633,23 +5555,9 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
         <translation type="unfinished" />
     </message>
     <message>
-<<<<<<< HEAD
-        <source>Add %1 torrents</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
         <translation type="unfinished" />
     </message>
-    <message>
-        <source>Open separate dialog for each torrent</source>
-        <translation type="unfinished" />
-    </message>
-=======
-        <source>All torrents will use a single options dialog. Check below to configure each one separately.</source>
-        <translation type="unfinished" />
-    </message>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 </context>
 <context>
     <name>SpeedLimit</name>

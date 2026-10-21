@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# VERSION: 1.53
-=======
 # VERSION: 1.54
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 
 # Author:
 #  Fabien Devaux <fab AT gnux DOT info>

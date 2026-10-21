@@ -66,9 +66,6 @@ namespace Net
 
         static ReverseResolution *m_instance;
 
-<<<<<<< HEAD
-        QHash<int, QHostAddress> m_lookups;  // <LookupID, IP>
-=======
         struct LookupRequest
         {
             int id = -1;  // lookup ID
@@ -82,7 +79,6 @@ namespace Net
                 boost::multi_index::hashed_unique<boost::multi_index::tag<struct ByAddress>, boost::multi_index::key<&LookupRequest::address>>>>;
         Lookups m_lookups;
 
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         QCache<QHostAddress, QString> m_cache;  // <IP, HostName>
     };
 }

@@ -30,14 +30,7 @@
 
 #include "connection.h"
 
-<<<<<<< HEAD
-#include <ranges>
-
-#include <QStringTokenizer>
-#include <QStringView>
-=======
 #include <QMetaObject>
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 #include <QTcpSocket>
 
 #include "constants.h"
@@ -187,37 +180,3 @@ bool Http::Connection::hasExpired(const qint64 timeout) const
         && (m_socket->bytesToWrite() == 0)
         && m_idleTimer.hasExpired(timeout);
 }
-<<<<<<< HEAD
-
-bool Connection::acceptsGzipEncoding(QString encodings)
-{
-    // [rfc7231] 5.3.4. Accept-Encoding
-
-    const auto matchEncoding = [](const QStringView encodingEntry, const QStringView encoding) -> bool
-    {
-        if (!encodingEntry.startsWith(encoding))
-            return false;
-
-        // without quality values
-        if (encodingEntry == encoding)
-            return true;
-
-        // [rfc7231] 5.3.1. Quality Values
-        const QStringView substr = encodingEntry.mid(encoding.size() + 3);  // ex. skip over "gzip;q="
-
-        bool ok = false;
-        const double qvalue = substr.toDouble(&ok);
-        if (ok && (qvalue > 0))
-            return true;
-
-        return false;
-    };
-
-    encodings.remove(u' ').remove(u'\t');
-    return std::ranges::any_of(qTokenize(encodings, u',', Qt::SkipEmptyParts), [&matchEncoding](const QStringView encodingEntry)
-    {
-        return matchEncoding(encodingEntry, u"gzip") || matchEncoding(encodingEntry, u"*");
-    });
-}
-=======
->>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
