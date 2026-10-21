@@ -217,10 +217,11 @@ void Net::DownloadHandlerImpl::handleRedirection(const QUrl &newUrl)
     // Resolve relative urls
     const QUrl resolvedUrl = newUrl.isRelative() ? m_reply->url().resolved(newUrl) : newUrl;
     const QString newUrlString = resolvedUrl.toString();
+    const QString scheme = resolvedUrl.scheme();
     qDebug("Redirecting from %s to %s...", qUtf8Printable(m_reply->url().toString()), qUtf8Printable(newUrlString));
 
     // Redirect to magnet workaround
-    if (newUrlString.startsWith(u"magnet:", Qt::CaseInsensitive))
+    if (scheme == u"magnet")
     {
         m_result.status = Net::DownloadStatus::RedirectedToMagnet;
         m_result.magnetURI = newUrlString;
@@ -230,7 +231,10 @@ void Net::DownloadHandlerImpl::handleRedirection(const QUrl &newUrl)
     }
 
     // SSRF protection: strict scheme whitelist
+<<<<<<< HEAD
     const QString scheme = resolvedUrl.scheme();
+=======
+>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     if ((scheme != u"http") && (scheme != u"https"))
     {
         setError(tr("Redirect to unsupported or dangerous protocol: '%1'.").arg(scheme));
@@ -238,6 +242,17 @@ void Net::DownloadHandlerImpl::handleRedirection(const QUrl &newUrl)
         return;
     }
 
+<<<<<<< HEAD
+=======
+    if (!m_downloadRequest.allowInsecureRedirect()
+        && (m_reply->url().scheme() == u"https") && (scheme != u"https"))
+    {
+        setError(tr("Redirect from a secure to an insecure protocol: '%1'.").arg(scheme));
+        finish();
+        return;
+    }
+
+>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     m_redirectionHandler = static_cast<DownloadHandlerImpl *>(
             m_manager->download(DownloadRequest(m_downloadRequest).url(newUrlString), useProxy()));
     m_redirectionHandler->m_redirectionCount = m_redirectionCount + 1;

@@ -32,12 +32,14 @@
 #include <QElapsedTimer>
 #include <QObject>
 
+#include "responsewriterimpl.h"
+
 class QTcpSocket;
 
 namespace Http
 {
     class IRequestHandler;
-    struct Response;
+    struct ResponseStatus;
 
     class Connection : public QObject
     {
@@ -53,13 +55,20 @@ namespace Http
         void closed();
 
     private:
+<<<<<<< HEAD
         static bool acceptsGzipEncoding(QString encodings);
+=======
+        void abort(const ResponseStatus &responseStatus);
+        bool processRequest();
+>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
         void read();
-        void sendResponse(const Response &response) const;
 
         QTcpSocket *m_socket = nullptr;
         IRequestHandler *m_requestHandler = nullptr;
         QByteArray m_receivedData;
         QElapsedTimer m_idleTimer;
+        bool m_isProcessingRequest = false;
+        bool m_isReadyRead = false;
+        ResponseWriterImpl m_responseWriter;
     };
 }

@@ -57,9 +57,27 @@ signals:
     void updateCheckFinished();
 
 private slots:
+<<<<<<< HEAD
     void downloadFinished(const Net::DownloadResult &result);
 
 private:
     Version m_remoteVersion;
     QUrl m_updateURL;
+=======
+    void fallbackDownloadFinished(const Net::DownloadResult &result, Version &version);
+
+private:
+    enum class RemoteSource
+    {
+        QbtMain,
+        QbtBackup
+    };
+
+    void handleFinishedRequest();
+    RemoteSource getLatestRemoteSource() const;
+
+    int m_pendingRequestCount = 0;
+    Version m_qbtMainVersion;
+    Version m_qbtBackupVersion;
+>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
 };

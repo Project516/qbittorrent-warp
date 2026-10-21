@@ -1,6 +1,10 @@
 /*
  * Bittorrent Client using Qt and libtorrent.
+<<<<<<<< HEAD:test/testutilsmisc.cpp
  * Copyright (C) 2026  Mark Yu (vafada)
+========
+ * Copyright (C) 2026  Andy Ye
+>>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:test/testutilsfs.cpp
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +33,7 @@
 #include <QObject>
 #include <QTest>
 
+<<<<<<<< HEAD:test/testutilsmisc.cpp
 #include "base/utils/misc.h"
 
 class TestUtilsMisc final : public QObject
@@ -58,3 +63,28 @@ private slots:
 
 QTEST_APPLESS_MAIN(TestUtilsMisc)
 #include "testutilsmisc.moc"
+========
+#include "base/global.h"
+#include "base/utils/fs.h"
+
+class TestUtilsFs final : public QObject
+{
+    Q_OBJECT
+    Q_DISABLE_COPY_MOVE(TestUtilsFs)
+
+public:
+    TestUtilsFs() = default;
+
+private slots:
+    void testToValidFileName() const
+    {
+        QCOMPARE(Utils::Fs::toValidFileName(u"///"_s), u"_"_s);
+        QCOMPARE(Utils::Fs::toValidFileName(u"///"_s, {}), QString());
+        QCOMPARE(Utils::Fs::toValidFileName(u"."_s, {}), QString());
+        QCOMPARE(Utils::Fs::toValidFileName(u" a/b "_s, {}), u"ab"_s);
+    }
+};
+
+QTEST_APPLESS_MAIN(TestUtilsFs)
+#include "testutilsfs.moc"
+>>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae:test/testutilsfs.cpp

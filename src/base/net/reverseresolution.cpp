@@ -31,6 +31,8 @@
 #include <QHostInfo>
 #include <QString>
 
+#include "base/utils/hashvalue.h"
+
 const int CACHE_SIZE = 2048;
 
 using namespace Net;
@@ -70,8 +72,8 @@ ReverseResolution::ReverseResolution()
 ReverseResolution::~ReverseResolution()
 {
     // abort on-going lookups instead of waiting them
-    for (auto iter = m_lookups.cbegin(); iter != m_lookups.cend(); ++iter)
-        QHostInfo::abortHostLookup(iter.key());
+    for (const LookupRequest &data : m_lookups)
+        QHostInfo::abortHostLookup(data.id);
 }
 
 QString ReverseResolution::resolve(const QHostAddress &ip)
@@ -79,16 +81,28 @@ QString ReverseResolution::resolve(const QHostAddress &ip)
     const QString *hostname = m_cache.object(ip);
     if (hostname)
         return *hostname;
+<<<<<<< HEAD
 
     // do reverse lookup: IP -> hostname
     const int lookupId = QHostInfo::lookupHost(ip.toString(), this, &ReverseResolution::hostResolved);
     m_lookups.insert(lookupId, ip);
+=======
+
+    // in-flight requests
+    if (const auto &byAddress = m_lookups.get<ByAddress>(); byAddress.find(ip) != byAddress.end())
+        return {};
+
+    // do reverse lookup: IP -> hostname
+    const int lookupId = QHostInfo::lookupHost(ip.toString(), this, &ReverseResolution::hostResolved);
+    m_lookups.insert({.id = lookupId, .address = ip});
+
+>>>>>>> 05fcaa8f505f0657d5cd7b7c377282b63855e8ae
     return {};
 }
 
 void ReverseResolution::hostResolved(const QHostInfo &host)
 {
-    const QHostAddress ip = m_lookups.take(host.lookupId());
+    const QHostAddress ip = m_lookups.get<ByLookupID>().extract(host.lookupId()).value().address;
 
     if (host.error() != QHostInfo::NoError)
     {
