@@ -132,6 +132,10 @@ input[type="radio"] {
     margin: 3px 3px 3px 4px;
 }
 
+input[type="range"] {
+    accent-color: var(--color-accent-blue);
+}
+
 input[type="button"],
 input[type="submit"],
 button {
@@ -689,7 +693,7 @@ td.noWrap {
     white-space: nowrap;
 }
 
-#tristate_cb {
+#tristateCb {
     margin-bottom: 0;
     margin-top: 0;
 }

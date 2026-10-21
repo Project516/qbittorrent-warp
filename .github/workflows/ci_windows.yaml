@@ -23,14 +23,21 @@ jobs:
       fail-fast: false
       matrix:
         libtorrent:
-          - version: "2.0.11"
+          - version: "2.1.2"
             boost_major_version: "1"
-            boost_minor_version: "90"
+            boost_minor_version: "91"
             boost_patch_version: "0"
+            libt_build_flags: ""
+          - version: "2.0.15"
+            boost_major_version: "1"
+            boost_minor_version: "91"
+            boost_patch_version: "0"
+            libt_build_flags: ""
           - version: "1.2.20"
             boost_major_version: "1"
             boost_minor_version: "86"
             boost_patch_version: "0"
+            libt_build_flags: ""
         config:
         - os: windows-latest
           arch: x64
@@ -56,7 +63,7 @@ jobs:
         run: |
           if ((Get-Command "ninja.exe" -ErrorAction SilentlyContinue) -eq $null)
           {
-             choco install ninja
+            choco install ninja
           }
           where.exe ninja
           ninja --version
@@ -120,7 +127,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: "6.10.1"
+          version: "6.10.3"
           arch: ${{ matrix.config.qt_arch }}
           archives: qtbase qtsvg qttools
           modules: qtimageformats
@@ -135,6 +142,7 @@ jobs:
             https://github.com/arvidn/libtorrent.git `
             ${{ env.libtorrent_path }}
           cd ${{ env.libtorrent_path }}
+          $env:CFLAGS+=" /guard:cf"
           $env:CXXFLAGS+=" /guard:cf"
           $env:LDFLAGS+=" /GUARD:CF"
           cmake `
@@ -149,7 +157,8 @@ jobs:
             -DBUILD_SHARED_LIBS=OFF `
             -Ddeprecated-functions=OFF `
             -Dstatic_runtime=OFF `
-            -DVCPKG_TARGET_TRIPLET=${{ matrix.config.arch }}-windows-static-md-release
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.config.arch }}-windows-static-md-release `
+            ${{ matrix.libtorrent.libt_build_flags }}
           cmake --build build
           cmake --install build
 
@@ -177,6 +186,7 @@ jobs:
         run: |
           mkdir upload
           mkdir upload/qBittorrent
+          # binaries
           copy build/qbittorrent.exe upload/qBittorrent
           copy build/qbittorrent.pdb upload/qBittorrent
           copy dist/windows/qt.conf upload/qBittorrent
@@ -230,10 +240,15 @@ jobs:
       - name: Create installer
         run: |
           7z x -o"dist/windows/" "dist/windows/NSISPlugins.zip"
-          makensis /DQBT_CPU_ARCH="${{ matrix.config.arch }}" /DQBT_DIST_DIR="../../upload/qBittorrent" /WX dist/windows/qbittorrent.nsi
+          makensis `
+            /DQBT_CPU_ARCH="${{ matrix.config.arch }}" `
+            /DQBT_DIST_DIR="../../upload/qBittorrent" `
+            /WX `
+            dist/windows/qbittorrent.nsi
+          move "dist/windows/qbittorrent_*_setup.exe" "qBittorrent-CI_Windows-${{ matrix.config.arch }}_libtorrent-${{ matrix.libtorrent.version }}-setup.exe"
 
       - name: Upload installer
         uses: actions/upload-artifact@v7
         with:
-          name: qBittorrent-CI_Windows-${{ matrix.config.arch }}_libtorrent-${{ matrix.libtorrent.version }}-setup
-          path: dist/windows/qbittorrent_*_setup.exe
+          archive: false
+          path: qBittorrent-CI_Windows-${{ matrix.config.arch }}_libtorrent-${{ matrix.libtorrent.version }}-setup.exe
