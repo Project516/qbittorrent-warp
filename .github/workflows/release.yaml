@@ -218,7 +218,9 @@ jobs:
           set -euo pipefail
           # A GUI install already provides the .desktop file and icons under
           # qbittorrent/usr/share, so linuxdeploy finds them on its own.
-          rm -f "${{ runner.workspace }}/Qt/${{ env.qt_version }}/gcc_64/plugins/sqldrivers/libqsqlmimer.so"
+          rm -f \
+            "${{ runner.workspace }}/Qt/${{ env.qt_version }}/gcc_64/plugins/sqldrivers/libqsqlmimer.so" \
+            "${{ runner.workspace }}/Qt/${{ env.qt_version }}/gcc_64/plugins/sqldrivers/libqsqlmysql.so"
           ./linuxdeploy-x86_64.AppImage --appdir qbittorrent --plugin qt
           mkdir -p qbittorrent/apprun-hooks
           rm -f qbittorrent/apprun-hooks/*
@@ -452,7 +454,9 @@ jobs:
           # without a GUI: the TLS backend (HTTPS for tracker announces and the
           # engine helper downloads) and the SQLite driver (the torrents database).
           export EXTRA_QT_PLUGINS="sqldrivers;tls"
-          rm -f "${qt_path}/${qt_version}/gcc_arm64/plugins/sqldrivers/libqsqlmimer.so"
+          rm -f \
+            "${qt_path}/${qt_version}/gcc_arm64/plugins/sqldrivers/libqsqlmimer.so" \
+            "${qt_path}/${qt_version}/gcc_arm64/plugins/sqldrivers/libqsqlmysql.so"
           # A nox install ships no desktop file or icon (those are GUI-only), so
           # hand linuxdeploy the headless desktop entry (its Exec is qbittorrent-nox)
           # and the project icon; the binary itself is picked up from the AppDir.
