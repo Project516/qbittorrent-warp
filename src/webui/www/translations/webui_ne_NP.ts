@@ -19,10 +19,6 @@
         <translation>टोरेन्ट सुरु गर्नुहोस्</translation>
     </message>
     <message>
-        <source>Skip hash check</source>
-        <translation type="vanished">ह्यास जाँच छोड्नुहोस्</translation>
-    </message>
-    <message>
         <source>Torrent Management Mode:</source>
         <translation>टोरेन्ट व्यवस्थापन तरिका:</translation>
     </message>
@@ -73,10 +69,6 @@
     <message>
         <source>Download in sequential order</source>
         <translation>क्रमिक क्रममा डाउनलोड गर्नुहोस्</translation>
-    </message>
-    <message>
-        <source>Size:</source>
-        <translation type="vanished">आकार:</translation>
     </message>
     <message>
         <source>Save at</source>
@@ -139,10 +131,6 @@
         <translation>फाइलहरू फिल्टर गर्नुहोस्...</translation>
     </message>
     <message>
-        <source>Add Torrent</source>
-        <translation type="vanished">टोरेन्ट थप्नुहोस्</translation>
-    </message>
-    <message>
         <source>Use another path for incomplete torrent</source>
         <translation>अपूर्ण टोरेन्टको लागि अर्को पाथ प्रयोग गर्नुहोस्</translation>
     </message>
@@ -199,10 +187,6 @@
         <translation>डाउनलोड दर सीमित गर्नुहोस्</translation>
     </message>
     <message>
-        <source>%1 (Free space on disk: %2)</source>
-        <translation type="vanished">%1 (डिस्कमा खाली ठाउँ: %2)</translation>
-    </message>
-    <message>
         <source>KiB/s</source>
         <translation>किबी/से</translation>
     </message>
@@ -217,7 +201,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished" />
+        <translation>डाउनलोड</translation>
     </message>
     <message>
         <source>%1 free</source>
@@ -988,18 +972,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Update my dynamic domain name</source>
         <translation type="unfinished" />
-    </message>
-    <message>
-        <source>Keep incomplete torrents in:</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
-        <source>Copy .torrent files to:</source>
-        <translation type="vanished">मा .torrent फाइलहरू प्रतिलिपि गर्नुहोस्:</translation>
-    </message>
-    <message>
-        <source>Copy .torrent files for finished downloads to:</source>
-        <translation type="vanished">डाउनलोड सकिएपछि .torrent फाइलहरू यहाँ प्रतिलिपि गर्नुहोस्:</translation>
     </message>
     <message>
         <source>Pre-allocate disk space for all files</source>
@@ -2064,10 +2036,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation>रङ योजना:</translation>
     </message>
     <message>
-        <source>Show external IP in status bar</source>
-        <translation type="vanished">स्थिति पट्टीमा बाह्य IP देखाउनुहोस्</translation>
-    </message>
-    <message>
         <source>Fetched trackers</source>
         <translation>प्राप्त गरिएका ट्र्याकरहरू</translation>
     </message>
@@ -2400,10 +2368,6 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <translation type="unfinished" />
     </message>
     <message>
-        <source>Attempted to send test email.&lt;br&gt;Check your inbox to confirm success.&lt;br&gt;Check the Execution Log for errors.</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>Sessions count limit:</source>
         <translation type="unfinished" />
     </message>
@@ -2413,7 +2377,7 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>Transfer List</source>
-        <translation type="unfinished" />
+        <translation>स्थानान्तरण सूची</translation>
     </message>
     <message>
         <source>Start BitTorrent session in paused state:</source>
@@ -2453,7 +2417,7 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished" />
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <source>BitTorrent session shutdown timeout [-1: unlimited]:</source>
@@ -2509,6 +2473,38 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Confirm removal of tracker from all torrents:</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Any of the above</source>
+        <translation>माथिका मध्ये कुनै</translation>
+    </message>
+    <message>
+        <source>All the above</source>
+        <translation>माथिका सबै</translation>
+    </message>
+    <message>
+        <source>Also when addition is cancelled</source>
+        <translation>जब थप्ने काम रद्द गरिन्छ</translation>
+    </message>
+    <message>
+        <source>Also delete .torrent files whose addition was cancelled</source>
+        <translation>थप रद्द गरिएका .torrent फाइलहरू पनि मेटाउनुहोस्।</translation>
+    </message>
+    <message>
+        <source>Use another path for incomplete torrents:</source>
+        <translation>अपूर्ण टोरेन्टहरूको लागि अर्को मार्ग प्रयोग गर्नुहोस्:</translation>
+    </message>
+    <message>
+        <source>Confirm removal of all tags:</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Attempted to send test email.\nCheck your inbox to confirm success.\nCheck the Execution Log for errors.</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -2933,7 +2929,7 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished" />
+        <translation>डाउनलोड</translation>
     </message>
     <message>
         <source>Copy download URL</source>
@@ -3838,6 +3834,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
         <source>Content Path</source>
         <translation type="unfinished" />
     </message>
+    <message>
+        <source>Remove all tags from selected torrents?</source>
+        <translation>चयन गरिएका टोरेन्टहरूबाट सबै ट्यागहरू हटाउने हो?</translation>
+    </message>
 </context>
 <context>
     <name>UpDownRatioDialog</name>
@@ -3891,6 +3891,22 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>Action when the limit is reached</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Default (Match any limit)</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Match all the limits</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Match any limit</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -4354,7 +4370,7 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>qBittorrent was built with the following libraries:</source>
-        <translation>qBittorrent निम्नानुसारका लाइब्रेरीहरूको प्रयोगद्वारा बनाइएको हो:</translation>
+        <translation type="vanished">qBittorrent निम्नानुसारका लाइब्रेरीहरूको प्रयोगद्वारा बनाइएको हो:</translation>
     </message>
     <message>
         <source>Nationality:</source>
@@ -4382,6 +4398,10 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>qBittorrent icon</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>qBittorrent is using the following libraries:</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -4622,6 +4642,18 @@ DNS रिबाइन्डिङ आक्रमणबाट बचाउन�
     </message>
     <message>
         <source>Blocked opening RSS article URL. Only http:// and https:// links can be opened.</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Add %1 torrents</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Open shared download window</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Open separate download windows</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -5158,7 +5190,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Torrent share limits</source>
-        <translation type="unfinished" />
+        <translation>टोरेन्ट साझा गर्ने सीमाहरू</translation>
     </message>
 </context>
 <context>
@@ -5432,7 +5464,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished" />
+        <translation>हो</translation>
     </message>
     <message>
         <source>Ignore dotfiles</source>
@@ -5460,7 +5492,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished" />
+        <translation>होइन</translation>
     </message>
     <message>
         <source>If checked, filenames starting with a period punctuation mark `.` will not be added to the created torrent.</source>
@@ -5469,10 +5501,6 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
 </context>
 <context>
     <name>DownloadFromURLDialog</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">डाउनलोड</translation>
-    </message>
     <message>
         <source>Magnet link</source>
         <translation>चुम्बक सूत्र</translation>
@@ -5558,11 +5586,11 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished" />
+        <translation>लागू गर्ने</translation>
     </message>
     <message>
         <source>Upload:</source>
-        <translation type="unfinished" />
+        <translation>अपलोड:</translation>
     </message>
     <message>
         <source>Alternative speed limits</source>
@@ -5570,7 +5598,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Download:</source>
-        <translation type="unfinished" />
+        <translation>डाउनलोड:</translation>
     </message>
     <message>
         <source>Failed to set speed limits</source>
@@ -5646,11 +5674,11 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished" />
+        <translation>डिफल्ट</translation>
     </message>
     <message>
         <source>Enable super seeding for torrent</source>
-        <translation type="unfinished" />
+        <translation>टोरेन्टको लागि सुपर सिडिङ सक्षम गर्नुहोस्</translation>
     </message>
     <message>
         <source>Inactive seeding time:</source>
@@ -5706,7 +5734,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Stop torrent</source>
-        <translation type="unfinished" />
+        <translation>टोरेन्ट रोक्नुहोस्</translation>
     </message>
     <message>
         <source>Mode:</source>
@@ -5714,7 +5742,7 @@ Supports the formats: S01E01, 1x1, 2017.12.31 and 31.12.2017 (Date formats also 
     </message>
     <message>
         <source>Remove torrent</source>
-        <translation type="unfinished" />
+        <translation>टोरेन्ट हटाउनुहोस्</translation>
     </message>
 </context>
 <context>

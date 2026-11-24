@@ -19,10 +19,6 @@
         <translation>Spustiť torrent</translation>
     </message>
     <message>
-        <source>Skip hash check</source>
-        <translation type="vanished">Preskočiť kontrolu hash</translation>
-    </message>
-    <message>
         <source>Torrent Management Mode:</source>
         <translation>Magnet mód torrentu</translation>
     </message>
@@ -73,10 +69,6 @@
     <message>
         <source>Download in sequential order</source>
         <translation>Stiahnuť v sekvenčnom poradí</translation>
-    </message>
-    <message>
-        <source>Size:</source>
-        <translation type="vanished">Veľkosť:</translation>
     </message>
     <message>
         <source>Save at</source>
@@ -139,10 +131,6 @@
         <translation>Filtruj súbory...</translation>
     </message>
     <message>
-        <source>Add Torrent</source>
-        <translation type="vanished">Pridať torrent</translation>
-    </message>
-    <message>
         <source>Use another path for incomplete torrent</source>
         <translation>Použiť inú cestu pre nedokončený torrent</translation>
     </message>
@@ -199,25 +187,22 @@
         <translation>Obmedziť rýchlosť sťahovania</translation>
     </message>
     <message>
-        <source>%1 (Free space on disk: %2)</source>
-        <translation type="vanished">%1 (Volné miesto na disku: %2)</translation>
-    </message>
-    <message>
         <source>KiB/s</source>
         <translation>KiB/s</translation>
     </message>
     <message>
         <source>If set, qBittorrent will assume that all files are present for this torrent and that they all match the hashes in the torrent file. The use case for this mode is if a torrent is created and seeded, or if the user already knows that all the files are complete, this is a way to perform only basic file checks and skip initial hash checks.
 The piece hash will be checked when it is requested for the first time by a peer. If a hash check fails, all files in this torrent will be rechecked.</source>
-        <translation type="unfinished" />
+        <translation>Ak je tento režim zapnutý, qBittorrent bude predpokladať, že všetky súbory pre tento torrent sú dostupné a že sa všetky zhodujú s hashmi v súbore torrentu. Príkladom použitia tohto režimu je, ak torrent je vytvorený a seedovaný, alebo ak už používateľ vie, že všetky súbory sú dokončené, tak toto je spôsob ako vykonať iba základnú kontrolu súborov a preskočiť úvodnú kontrolu hashov.
+Hash istej časti bude skontrolovaný pri prvom vyžiadaní peerom. Ak kontrola hashu zlyhá, všetky súbory v tomto torrente budú opätovne skontrolované.</translation>
     </message>
     <message>
         <source>Seed mode</source>
-        <translation type="unfinished" />
+        <translation>Režim seedovania</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished" />
+        <translation>Stiahnuť</translation>
     </message>
     <message>
         <source>%1 free</source>
@@ -279,7 +264,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Force start torrents</source>
-        <translation type="unfinished" />
+        <translation>Vynútiť spustenie torrentov</translation>
     </message>
 </context>
 <context>
@@ -684,7 +669,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Add Torrent Link...</source>
-        <translation>Pridať torrentový súbor...</translation>
+        <translation>Pridať odkaz na torrent...</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -693,14 +678,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>No</source>
         <translation>Nie</translation>
-    </message>
-    <message>
-        <source>Global Upload Speed Limit</source>
-        <translation type="vanished">Globálne rýchlostné obmedzenie nahrávania</translation>
-    </message>
-    <message>
-        <source>Global Download Speed Limit</source>
-        <translation type="vanished">Globálne rýchlostné obmedzenie sťahovania</translation>
     </message>
     <message>
         <source>Are you sure you want to quit qBittorrent?</source>
@@ -916,7 +893,7 @@ The piece hash will be checked when it is requested for the first time by a peer
     </message>
     <message>
         <source>Global Speed Limits</source>
-        <translation type="unfinished" />
+        <translation>Globálne rýchlostné limity</translation>
     </message>
     <message>
         <source>Pause session</source>
@@ -996,18 +973,6 @@ The piece hash will be checked when it is requested for the first time by a peer
     <message>
         <source>Update my dynamic domain name</source>
         <translation>Aktualizovať môj dynamický doménový názov</translation>
-    </message>
-    <message>
-        <source>Keep incomplete torrents in:</source>
-        <translation>Ponechať neúplné torrenty v:</translation>
-    </message>
-    <message>
-        <source>Copy .torrent files to:</source>
-        <translation type="vanished">Kopírovať .torrent súbory do:</translation>
-    </message>
-    <message>
-        <source>Copy .torrent files for finished downloads to:</source>
-        <translation type="vanished">Kopírovať .torrent súbory po dokončení sťahovania do:</translation>
     </message>
     <message>
         <source>Pre-allocate disk space for all files</source>
@@ -2072,10 +2037,6 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
         <translation>Schéma farieb:</translation>
     </message>
     <message>
-        <source>Show external IP in status bar</source>
-        <translation type="vanished">Zobraziť externú IP adresu v stavovom riadku</translation>
-    </message>
-    <message>
         <source>Fetched trackers</source>
         <translation>Získané trackery</translation>
     </message>
@@ -2110,10 +2071,6 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     <message>
         <source>URL:</source>
         <translation>URL:</translation>
-    </message>
-    <message>
-        <source>Transfer list</source>
-        <translation type="vanished">Zoznam prenosov</translation>
     </message>
     <message>
         <source>The announce port must be between 0 and 65535.</source>
@@ -2412,10 +2369,6 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
         <translation type="unfinished" />
     </message>
     <message>
-        <source>Attempted to send test email.&lt;br&gt;Check your inbox to confirm success.&lt;br&gt;Check the Execution Log for errors.</source>
-        <translation type="unfinished" />
-    </message>
-    <message>
         <source>Sessions count limit:</source>
         <translation type="unfinished" />
     </message>
@@ -2425,7 +2378,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Transfer List</source>
-        <translation type="unfinished" />
+        <translation>Zoznam prenosov</translation>
     </message>
     <message>
         <source>Start BitTorrent session in paused state:</source>
@@ -2449,7 +2402,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Display torrent content and some options</source>
-        <translation type="unfinished" />
+        <translation>Zobraziť obsah torrentu a ďalšie voľby</translation>
     </message>
     <message>
         <source>Separate multiple email addresses within each email with a comma.</source>
@@ -2465,7 +2418,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished" />
+        <translation>Vyhľadávanie</translation>
     </message>
     <message>
         <source>BitTorrent session shutdown timeout [-1: unlimited]:</source>
@@ -2473,7 +2426,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Example:</source>
-        <translation type="unfinished" />
+        <translation>Príklad:</translation>
     </message>
     <message>
         <source>Provide the SMTP server address for sending email notifications.</source>
@@ -2521,6 +2474,38 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>a@x.com;b@y.com,c@z.com - send two emails: the first to just a@x.com, the second to both b@y.com and c@z.com</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Confirm removal of tracker from all torrents:</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Any of the above</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>All the above</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Also when addition is cancelled</source>
+        <translation>Vymazať tiež ak bolo pridanie zrušené</translation>
+    </message>
+    <message>
+        <source>Also delete .torrent files whose addition was cancelled</source>
+        <translation>Vymazať tiež .torrent súbory, ktorých pridanie zlyhalo</translation>
+    </message>
+    <message>
+        <source>Use another path for incomplete torrents:</source>
+        <translation>Pre nedokončené torrenty použiť inú cestu:</translation>
+    </message>
+    <message>
+        <source>Confirm removal of all tags:</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Attempted to send test email.\nCheck your inbox to confirm success.\nCheck the Execution Log for errors.</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -2945,7 +2930,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished" />
+        <translation>Stiahnuť</translation>
     </message>
     <message>
         <source>Copy download URL</source>
@@ -3050,7 +3035,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Tracker statistics</source>
-        <translation type="unfinished" />
+        <translation>Štatistika trackera</translation>
     </message>
     <message>
         <source>Queued tracker announces:</source>
@@ -3201,7 +3186,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Force start torrents</source>
-        <translation type="unfinished" />
+        <translation>Vynútiť spustenie torrentov</translation>
     </message>
 </context>
 <context>
@@ -3850,6 +3835,10 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
         <source>Content Path</source>
         <translation type="unfinished" />
     </message>
+    <message>
+        <source>Remove all tags from selected torrents?</source>
+        <translation>Odstrániť všetky štítky z vybratých torrentov?</translation>
+    </message>
 </context>
 <context>
     <name>UpDownRatioDialog</name>
@@ -3903,6 +3892,22 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Action when the limit is reached</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Mode</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Default (Match any limit)</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Match all the limits</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Match any limit</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -4296,7 +4301,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Force start torrents</source>
-        <translation type="unfinished" />
+        <translation>Vynútiť spustenie torrentov</translation>
     </message>
 </context>
 <context>
@@ -4366,7 +4371,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>qBittorrent was built with the following libraries:</source>
-        <translation>qBittorrent bol vytvorený s následujúcimi knižnicami:</translation>
+        <translation type="vanished">qBittorrent bol vytvorený s následujúcimi knižnicami:</translation>
     </message>
     <message>
         <source>Nationality:</source>
@@ -4378,7 +4383,7 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>The free IP to Country Lite database by DB-IP is used for resolving the countries of peers. The database is licensed under the Creative Commons Attribution 4.0 International License</source>
-        <translation>Bezplatná databáza IP to Country Lite od DB-IP sa používa na riešenie krajín peerov. Databáza je licencovaná podľa medzinárodnej licencie Creative Commons Attribution 4.0</translation>
+        <translation>Bezplatná databáza IP to Country Lite od DB-IP sa používa na zisťovanie krajín peerov. Databáza je licencovaná podľa medzinárodnej licencie Creative Commons Attribution 4.0</translation>
     </message>
     <message>
         <source>Authors</source>
@@ -4395,6 +4400,10 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     <message>
         <source>qBittorrent icon</source>
         <translation>Ikona qBittorrentu</translation>
+    </message>
+    <message>
+        <source>qBittorrent is using the following libraries:</source>
+        <translation type="unfinished" />
     </message>
 </context>
 <context>
@@ -4634,6 +4643,18 @@ Použite ';' pre oddelenie viacerých položiek. Môžete použiť masku '*'.</t
     </message>
     <message>
         <source>Blocked opening RSS article URL. Only http:// and https:// links can be opened.</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Add %1 torrents</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Open shared download window</source>
+        <translation type="unfinished" />
+    </message>
+    <message>
+        <source>Open separate download windows</source>
         <translation type="unfinished" />
     </message>
 </context>
@@ -4911,7 +4932,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Import</source>
-        <translation type="unfinished" />
+        <translation>Importovať</translation>
     </message>
 </context>
 <context>
@@ -4954,7 +4975,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Force start torrents</source>
-        <translation type="unfinished" />
+        <translation>Vynútiť spustenie torrentov</translation>
     </message>
 </context>
 <context>
@@ -5170,7 +5191,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Torrent share limits</source>
-        <translation type="unfinished" />
+        <translation>Obmedzenia zdieľania torrentu</translation>
     </message>
 </context>
 <context>
@@ -5291,12 +5312,6 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
         <translation type="unfinished" />
     </message>
     <message>
-        <source>Private
-                torrent (Won't distribute on DHT network)</source>
-        <translation type="vanished">Súkromný
-                torrent (nebude sa šíriť pomocou siete DHT)</translation>
-    </message>
-    <message>
         <source>Unable to export torrent file</source>
         <translation>Nemožno exportovať torrent súbor.</translation>
     </message>
@@ -5401,14 +5416,6 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
         <translation>Webové Seedy</translation>
     </message>
     <message>
-        <source>Start
-                seeding
-                immediately</source>
-        <translation type="vanished">Začať
-                seedovať
-                okamžite</translation>
-    </message>
-    <message>
         <source>Format</source>
         <translation type="unfinished" />
     </message>
@@ -5458,7 +5465,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished" />
+        <translation>Áno</translation>
     </message>
     <message>
         <source>Ignore dotfiles</source>
@@ -5466,11 +5473,11 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Align to piece boundary for files larger than:</source>
-        <translation type="unfinished" />
+        <translation>Nastavte veľkosť dielčích súborov pre súbory väčšie ako:</translation>
     </message>
     <message>
         <source>Private torrent (Won't distribute on DHT network)</source>
-        <translation type="unfinished" />
+        <translation>Súkromný torrent (nebude sa šíriť pomocou siete DHT)</translation>
     </message>
     <message>
         <source>Ignore Dotfiles</source>
@@ -5478,15 +5485,15 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Start seeding immediately</source>
-        <translation type="unfinished" />
+        <translation>Začať seedovať ihneď</translation>
     </message>
     <message>
         <source>Optimize alignment</source>
-        <translation type="unfinished" />
+        <translation>Optimalizovať radenie súborov</translation>
     </message>
     <message>
         <source>No</source>
-        <translation type="unfinished" />
+        <translation>Nie</translation>
     </message>
     <message>
         <source>If checked, filenames starting with a period punctuation mark `.` will not be added to the created torrent.</source>
@@ -5495,10 +5502,6 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
 </context>
 <context>
     <name>DownloadFromURLDialog</name>
-    <message>
-        <source>Download</source>
-        <translation type="vanished">Stiahnuť</translation>
-    </message>
     <message>
         <source>Magnet link</source>
         <translation>Magnet link</translation>
@@ -5513,7 +5516,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>URLs</source>
-        <translation type="unfinished" />
+        <translation>URL adresy</translation>
     </message>
     <message>
         <source>Add Torrent Links</source>
@@ -5572,7 +5575,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Speed limits</source>
-        <translation type="unfinished" />
+        <translation>Rýchlostné obmedzenia</translation>
     </message>
     <message>
         <source>Alternative download speed</source>
@@ -5584,19 +5587,19 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished" />
+        <translation>Použiť</translation>
     </message>
     <message>
         <source>Upload:</source>
-        <translation type="unfinished" />
+        <translation>Odosielanie:</translation>
     </message>
     <message>
         <source>Alternative speed limits</source>
-        <translation type="unfinished" />
+        <translation>Alternatívne rýchlostné obmedzenia</translation>
     </message>
     <message>
         <source>Download:</source>
-        <translation type="unfinished" />
+        <translation>Sťahovanie:</translation>
     </message>
     <message>
         <source>Failed to set speed limits</source>
@@ -5668,19 +5671,19 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     <name>TorrentShareLimitsWidget</name>
     <message>
         <source>min</source>
-        <translation type="unfinished" />
+        <translation>min</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation type="unfinished" />
+        <translation>Predvolený</translation>
     </message>
     <message>
         <source>Enable super seeding for torrent</source>
-        <translation type="unfinished" />
+        <translation>Povoliť super seeding pre torrent</translation>
     </message>
     <message>
         <source>Inactive seeding time:</source>
-        <translation type="unfinished" />
+        <translation>Čas neaktívneho seedovania:</translation>
     </message>
     <message>
         <source>Match all the limits</source>
@@ -5688,7 +5691,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Ratio:</source>
-        <translation type="unfinished" />
+        <translation>Pomer:</translation>
     </message>
     <message>
         <source>Match any limit</source>
@@ -5696,7 +5699,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Remove torrent and its content</source>
-        <translation type="unfinished" />
+        <translation>Odstrániť torrent a jeho obsah</translation>
     </message>
     <message>
         <source>Share limit values cannot be empty or invalid.</source>
@@ -5704,7 +5707,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Action when the limit is reached:</source>
-        <translation type="unfinished" />
+        <translation>Akcia pri dosiahnutí limitu:</translation>
     </message>
     <message>
         <source>From category (%1)</source>
@@ -5712,7 +5715,7 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Set to</source>
-        <translation type="unfinished" />
+        <translation>Nastaviť na</translation>
     </message>
     <message>
         <source>From category</source>
@@ -5720,27 +5723,27 @@ Podporuje formáty: S01E01, 1x1, 2017.12.31 a 31.12.2017 (podporuje aj formáty 
     </message>
     <message>
         <source>Default (%1)</source>
-        <translation type="unfinished" />
+        <translation>Predvolená (%1)</translation>
     </message>
     <message>
         <source>Seeding time:</source>
-        <translation type="unfinished" />
+        <translation>Čas seedovania:</translation>
     </message>
     <message>
         <source>Unlimited</source>
-        <translation type="unfinished" />
+        <translation>Neobmedzené</translation>
     </message>
     <message>
         <source>Stop torrent</source>
-        <translation type="unfinished" />
+        <translation>Zastaviť torrent</translation>
     </message>
     <message>
         <source>Mode:</source>
-        <translation type="unfinished" />
+        <translation>Režim:</translation>
     </message>
     <message>
         <source>Remove torrent</source>
-        <translation type="unfinished" />
+        <translation>Odstrániť torrent</translation>
     </message>
 </context>
 <context>
